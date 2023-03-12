@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Limp" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Limp" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-w" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Limp" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="header" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add option="-lgdi32 -lcomdlg32 -lmingw32" />
+			<Add directory="lib" />
+		</Linker>
+		<Unit filename="header/Limp/alu.h" />
+		<Unit filename="header/Limp/api.h" />
+		<Unit filename="header/Limp/bus.h" />
+		<Unit filename="header/Limp/cpu.h" />
+		<Unit filename="header/Limp/defines.h" />
+		<Unit filename="header/Limp/instructions/format.h" />
+		<Unit filename="header/Limp/instructions/opcode07.h" />
+		<Unit filename="header/Limp/instructions/opcode0F.h" />
+		<Unit filename="header/Limp/instructions/opcode10.h" />
+		<Unit filename="header/Limp/instructions/opcode11.h" />
+		<Unit filename="header/Limp/instructions/opcode15.h" />
+		<Unit filename="header/Limp/instructions/opcode18.h" />
+		<Unit filename="header/Limp/instructions/opcode1A.h" />
+		<Unit filename="header/Limp/instructions/opcode1B.h" />
+		<Unit filename="header/Limp/instructions/opcode20.h" />
+		<Unit filename="header/Limp/instructions/opcode30.h" />
+		<Unit filename="header/Limp/instructions/opcode31.h" />
+		<Unit filename="header/Limp/instructions/opcode34.h" />
+		<Unit filename="header/Limp/instructions/table.h" />
+		<Unit filename="header/Limp/limp.h" />
+		<Unit filename="src/Limp/alu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/bus.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/cpu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode07.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode0F.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode10.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode11.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode15.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode18.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode1A.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode1B.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode20.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode30.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode31.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode34.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/gui.h" />
+		<Unit filename="src/guil.old.h" />
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/test.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

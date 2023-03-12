@@ -1,0 +1,581 @@
+# depslib dependency file v1.0
+1678106351 source:c:\users\erick\documents\meusprojetos\limp\src\main.c
+	<stdio.h>
+	<stdlib.h>
+	"test.h"
+
+1677677137 c:\users\erick\documents\meusprojetos\limp\header\limp\limp.h
+	<Limp/cpu.h>
+	<Limp/cpu.h>
+
+1678281510 c:\users\erick\documents\meusprojetos\limp\header\limp\api.h
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	<string.h>
+
+1677675459 source:c:\users\erick\documents\meusprojetos\limp\src\limp\bus.c
+	<Limp/bus.h>
+	<Limp/bus.h>
+
+1677675546 c:\users\erick\documents\meusprojetos\limp\header\limp\bus.h
+	<Limp/api.h>
+	<Limp/api.h>
+
+1678620493 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
+	<Limp/cpu.h>
+
+1678447684 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
+	<Limp/defines.h>
+	<Limp/bus.h>
+	<Limp/alu.h>
+	<Limp/instructions/table.h>
+
+1678106683 c:\users\erick\documents\meusprojetos\limp\src\test.h
+	<Limp/limp.h>
+	"gui.h"
+
+1678627850 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
+	<Limp/instructions/table.h>
+	<Limp/cpu.h>
+
+1678631129 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\table.h
+	<Limp/defines.h>
+	<Limp/instructions/format.h>
+	<Limp/instructions/opcode07.h>
+	<Limp/instructions/opcode0F.h>
+	<Limp/instructions/opcode10.h>
+	<Limp/instructions/opcode11.h>
+	<Limp/instructions/opcode15.h>
+	<Limp/instructions/opcode18.h>
+	<Limp/instructions/opcode1A.h>
+	<Limp/instructions/opcode1B.h>
+	<Limp/instructions/opcode20.h>
+	<Limp/instructions/opcode30.h>
+	<Limp/instructions/opcode31.h>
+	<Limp/instructions/opcode34.h>
+
+1678281249 source:c:\users\erick\documents\meusprojetos\limp\src\limp\alu.c
+	<Limp/alu.h>
+	<Limp/cpu.h>
+
+1678281247 c:\users\erick\documents\meusprojetos\limp\header\limp\alu.h
+	<Limp/defines.h>
+
+1678451031 c:\users\erick\documents\meusprojetos\limp\header\limp\defines.h
+	<Limp/api.h>
+
+1678048115 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\format.h
+	<Limp/api.h>
+
+1678052296 c:\users\erick\documents\meusprojetos\limp\include\nuklear.h
+	<stdarg.h>
+	<sal.h>
+	<stdint.h>
+	<stdbool.h>
+	<stdlib.h>
+	<stdio.h>
+	<stdarg.h>
+	<assert.h>
+	<stdlib.h>
+	<assert.h>
+	"stb_truetype.h"
+	<stdio.h>
+	"stb_truetype.h"
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<math.h>
+	<stdlib.h>
+	<assert.h>
+	<string.h>
+	<string.h>
+
+1678370608 c:\users\erick\documents\meusprojetos\limp\src\gui.h
+	<windows.h>
+	<commctrl.h>
+	<wchar.h>
+	<stdio.h>
+	<stdlib.h>
+	"test.h"
+
+1673613830 c:\users\erick\documents\meusprojetos\limp\include\nuklear_gdi.h
+	<windows.h>
+	<wingdi.h>
+	<stdlib.h>
+	<malloc.h>
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\_rc2bin\main.cpp
+	"winapi.hpp"
+	<stdio.h>
+	<stdlib.h>
+	"resources.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\_rc2bin\winapi.hpp
+	<windows.h>
+	<commctrl.h>
+	<uxtheme.h>
+	<windowsx.h>
+	<shobjidl.h>
+	<d2d1.h>
+	<d2d1helper.h>
+	<dwrite.h>
+	<stdint.h>
+	<string.h>
+	<wchar.h>
+	<stdarg.h>
+	<stdio.h>
+	<math.h>
+	<float.h>
+	<inttypes.h>
+	<vector>
+	<map>
+	<unordered_map>
+	<sstream>
+	<functional>
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\_rc2bin\resources.hpp
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\_rc2bin\resources.rc
+	"winapi.hpp"
+	"resources.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\areaevents.c
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\ui.h
+	<stddef.h>
+	<stdint.h>
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\common\uipriv.h
+	<stdarg.h>
+	<string.h>
+	"controlsigs.h"
+	"utf.h"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\common\controlsigs.h
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\common\utf.h
+	<stddef.h>
+	<stdint.h>
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\attribute.c
+	"../ui.h"
+	"uipriv.h"
+	"attrstr.h"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\common\attrstr.h
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\attrlist.c
+	"../ui.h"
+	"uipriv.h"
+	"attrstr.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\attrstr.c
+	"../ui.h"
+	"uipriv.h"
+	"attrstr.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\control.c
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\debug.c
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\matrix.c
+	<math.h>
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\opentype.c
+	<stdlib.h>
+	"../ui.h"
+	"uipriv.h"
+	"attrstr.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\shouldquit.c
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\tablemodel.c
+	"../ui.h"
+	"uipriv.h"
+	"table.h"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\common\table.h
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\tablevalue.c
+	"../ui.h"
+	"uipriv.h"
+	"table.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\userbugs.c
+	"../ui.h"
+	"uipriv.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\common\utf.c
+	"utf.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\alloc.cpp
+	"uipriv_windows.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\uipriv_windows.hpp
+	"winapi.hpp"
+	"../ui.h"
+	"../ui_windows.h"
+	"../common/uipriv.h"
+	"resources.hpp"
+	"compilerver.hpp"
+	"_uipriv_migrate.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\winapi.hpp
+	<windows.h>
+	<commctrl.h>
+	<uxtheme.h>
+	<vsstyle.h>
+	<vssym32.h>
+	<windowsx.h>
+	<shobjidl.h>
+	<d2d1.h>
+	<d2d1helper.h>
+	<dwrite.h>
+	<wincodec.h>
+	<stdint.h>
+	<string.h>
+	<wchar.h>
+	<stdarg.h>
+	<stdio.h>
+	<math.h>
+	<float.h>
+	<inttypes.h>
+	<vector>
+	<map>
+	<unordered_map>
+	<sstream>
+	<functional>
+	<utility>
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\ui_windows.h
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\resources.hpp
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\compilerver.hpp
+	<limits.h>
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\_uipriv_migrate.hpp
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\area.cpp
+	"uipriv_windows.hpp"
+	"area.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\area.hpp
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\areadraw.cpp
+	"uipriv_windows.hpp"
+	"area.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\areaevents.cpp
+	"uipriv_windows.hpp"
+	"area.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\areascroll.cpp
+	"uipriv_windows.hpp"
+	"area.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\areautil.cpp
+	"uipriv_windows.hpp"
+	"area.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\attrstr.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\attrstr.hpp
+	"../common/attrstr.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\box.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\button.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\checkbox.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\colorbutton.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\colordialog.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\combobox.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\container.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\control.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\d2dscratch.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\datetimepicker.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\debug.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\draw.cpp
+	"uipriv_windows.hpp"
+	"draw.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\draw.hpp
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\drawmatrix.cpp
+	"uipriv_windows.hpp"
+	"draw.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\drawpath.cpp
+	"uipriv_windows.hpp"
+	"draw.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\drawtext.cpp
+	"uipriv_windows.hpp"
+	"draw.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\dwrite.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\editablecombo.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\entry.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\events.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\fontbutton.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\fontdialog.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\fontmatch.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\form.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\graphemes.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\grid.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\group.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\image.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\init.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\label.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\main.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\menu.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\multilineentry.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\opentype.cpp
+	"uipriv_windows.hpp"
+	"attrstr.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\parent.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\progressbar.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\radiobuttons.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\resources.rc
+	"winapi.hpp"
+	"resources.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\separator.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\sizing.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\slider.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\spinbox.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\stddialogs.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tab.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\table.cpp
+	"uipriv_windows.hpp"
+	"table.hpp"
+
+1609565989 c:\users\erick\documents\meusprojetos\limp\ext_src\windows\table.hpp
+	"../common/table.h"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tabledispinfo.cpp
+	"uipriv_windows.hpp"
+	"table.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tabledraw.cpp
+	"uipriv_windows.hpp"
+	"table.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tableediting.cpp
+	"uipriv_windows.hpp"
+	"table.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tablemetrics.cpp
+	"uipriv_windows.hpp"
+	"table.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\tabpage.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\text.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\utf16.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\utilwin.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\window.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\winpublic.cpp
+	"uipriv_windows.hpp"
+
+1609565989 source:c:\users\erick\documents\meusprojetos\limp\ext_src\windows\winutil.cpp
+	"uipriv_windows.hpp"
+
+1678280419 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\o30.h
+
+1678280623 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode30.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678280929 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode30.c
+	<Limp/instructions/opcode30.h>
+	<Limp/cpu.h>
+
+1678448720 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode0f.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678447741 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode0f.c
+	<Limp/instructions/opcode0F.h>
+	<Limp/cpu.h>
+
+1678448736 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode07.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678449451 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode10.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678448936 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode07.c
+	<Limp/instructions/opcode07.h>
+	<Limp/cpu.h>
+
+1678450135 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode11.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678449744 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode10.c
+	<Limp/instructions/opcode10.h>
+	<Limp/cpu.h>
+
+1678450352 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode18.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678450246 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode11.c
+	<Limp/instructions/opcode11.h>
+	<Limp/cpu.h>
+
+1678450470 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode18.c
+	<Limp/instructions/opcode18.h>
+	<Limp/cpu.h>
+
+1678451294 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode20.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678451447 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode20.c
+	<Limp/instructions/opcode20.h>
+	<Limp/cpu.h>
+
+1678619227 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode15.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678619567 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode15.c
+	<Limp/instructions/opcode15.h>
+	<Limp/cpu.h>
+
+1678626851 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode31.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678627027 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode31.c
+	<Limp/instructions/opcode31.h>
+	<Limp/cpu.h>
+
+1678627794 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode34.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678628829 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode34.c
+	<Limp/instructions/opcode34.h>
+	<Limp/cpu.h>
+
+1678630569 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode1a.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678631038 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode1b.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678630786 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode1a.c
+	<Limp/instructions/opcode18.h>
+	<Limp/cpu.h>
+

@@ -1,0 +1,331 @@
+# Limp Cpu
+# amd => Addressing Mode Data
+
+@ 00 [JL]
+
+	- NOP
+		& Do not execute any operation
+
+@ 01
+
+@ 02
+
+@ 03
+
+@ 04
+
+@ 05
+
+@ 06
+
+@ 07
+
+	mode.0 - LDMB $amd, regd
+		& Loads a byte data from memory address to register
+	
+	mode.1 - LDMW $amd, regd
+		& Loads a word data from memory address to register
+	
+	mode.2 - LDMD $amd, regd
+		& Loads a dword data from memory address to register
+	
+	mode.3 - LDMQ $amd, regd
+		& Loads a dword data from memory address to double registers
+
+@ 08
+
+@ 09
+
+@ 0A
+
+@ 0B
+
+@ 0C
+
+@ 0D
+
+@ 0E
+
+@ 0F #ONLYADDRESS
+
+	mode.0 - STRB $amd, regd
+		& Stores a byte register data to memory address
+	
+	mode.1 - STRW $amd, regd
+		& Stores a word register data to memory address
+	
+	mode.2 - STRD $amd, regd
+		& Stores a dword register data to memory address
+	
+	mode.3 - STRQ $amd, regd
+		& Stores a double dword registers data to memory address
+
+@ 10
+
+	mode.0 - ADD regd, $amd
+		& Adds a value data to register
+	
+	mode.1 - ADC regd, $amd
+		& Adds a value data with carry to register
+	
+	mode.2 - SUB regd, $amd
+		& Subtracts a value data from register
+	
+	mode.3 - SBB regd, $amd
+		& Subtracts a value with borrow to register
+
+@ 11
+
+	mode.0 - MUL regd, $amd
+		& Multiplies a value data to register
+	
+	mode.1 - HMUL regd, $amd
+		& Multiplies a value data with register, and store the higher dword part to register
+	
+	mode.2 - DIV regd, $amd
+		& Divides a value data to register
+	
+	mode.3 - MOD regd, $amd
+		& Modules a value data to register
+
+@ 12
+
+@ 13
+
+@ 14
+
+@ 15
+
+	mode.0 - CMP regd, $amd
+		& Do a subtraction between a value data from register without saving the result, doing a comparation
+
+	mode.1 - CPB regd, $amd
+		& Do a subtraction with borrow between a value data from register without saving the result, doing a comparation
+
+@ 16
+
+@ 17
+
+@ 18
+
+	mode.0 - AND regd, $amd
+		& Do and bitwise value data to register
+	
+	mode.1 - OR regd, $amd
+		& Do or bitwise value data with register
+	
+	mode.2 - XOR regd, $amd
+		& Do xor bitwise value data to register
+	
+	mode.3 - NAND regd, $amd
+		& Do nand bitwise value data to register
+
+@ 19
+
+@ 1A
+
+	mode.0 - TEST $amd
+		& Test the data value and sets the bits acoordling
+
+	mode.1 - BIT regd, $amd
+		& Do and bitwise between regd and data, doing a bit test, without store the result
+
+@ 1B
+
+	mode.0 - LSHF regd, $amd
+		& Do a left shift in regd by data
+
+	mode.1 - RSHF regd, $amd
+		& Do a right shift in regd by data
+
+	mode.2 - LROT regd, $amd
+		& Do a left rotate in regd by data
+
+	mode.3 - RROT regd, $amd
+		& Do a right rotate in regd by data
+
+@ 1C
+
+@ 1D
+
+@ 1E
+
+@ 1F
+
+@ 20
+
+	mode.0 - JA imm16<2
+		& Jumps to a absolute address position
+	
+	mode.1 - BA imm16<2
+		& Branchs to a absolute address position
+
+@ 21
+
+@ 22
+
+@ 23
+
+@ 24
+
+@ 25
+
+@ 26
+
+@ 27
+
+@ 28
+
+@ 29
+
+@ 2A
+
+@ 2B
+
+@ 2C
+
+@ 2D
+
+@ 2E
+
+@ 2F
+
+@ 30 [IR]
+
+	mode.0 - MOV regd, regb
+		& Moves a value from one register to another
+	
+	mode.1 - MOVI regd, imm16
+		& Moves a immediate value to a register
+
+@ 31
+
+	mod.0 - CVBW regd, regb
+		& Converts a byte data to sign extended word to register
+
+	mod.1 - CVBD regd, regb
+		& Converts a byte data to sign extended dword to register
+
+	mod.2 - CVWD regd, regb
+		& Converts a word data to sign extended dword to register
+
+	mod.3 - CVWDI regd, regb
+		& Converts a word immediate data to sign extended dword to register
+
+@ 32
+
+@ 33
+
+@ 34
+
+	func.00 - STEQ regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is equal to regp
+
+	func.01 - STNE regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is not equal to regp
+
+	func.02 - STLT regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is less than regp
+
+	func.03 - STGT regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is greater than regp
+
+	func.04 - STLE regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is less or equal than regp
+
+	func.05 - STGE regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is greater or equal than regp
+
+	func.06 - STBL regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is below than regp
+
+	func.07 - STAB regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is above than regp
+
+	func.08 - STBE regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is below or equal than regp
+
+	func.09 - STAE regd, imm8, regb, regp
+		& Stores a immediate value to register if regb is above or equal than regp
+
+	func.0A - STEZI regd, imm8, regb
+		& Stores a immediate value to register if regb is equal to zero
+
+	func.0B - STNZI regd, imm8, regb
+		& Stores a immediate value to register if regb is not equal to zero
+
+	func.0C - STLTZI regd, imm8, regb
+		& Stores a immediate value to register if regb is less than zero
+
+	func.0D - STGTZI regd, imm8, regb
+		& Stores a immediate value to register if regb is greater than zero
+
+	func.0E - STLEZI regd, imm8, regb
+		& Stores a immediate value to register if regb is less or equal than zero
+
+	func.0F - STGEZI regd, imm8, regb
+		& Stores a immediate value to register if regb is greater or equal than zero
+
+	func.10 - STBLZI regd, imm8, regb
+		& Stores a immediate value to register if regb is below than zero
+
+	func.11 - STABZI regd, imm8, regb
+		& Stores a immediate value to register if regb is above than zero
+
+	func.12 - STBEZI regd, imm8, regb
+		& Stores a immediate value to register if regb is below or equal than zero
+
+	func.13 - STAEZI regd, imm8, regb
+		& Stores a immediate value to register if regb is above or equal than zero
+
+	func.14 - STEZ regd, regp, regb
+		& Stores regp value to register if regb is equal to zero
+
+	func.15 - STNZ regd, regp, regb
+		& Stores regp value to register if regb is not equal to zero
+
+	func.16 - STLTZ regd, regp, regb
+		& Stores regp value to register if regb is less than zero
+
+	func.17 - STGTZ regd, regp, regb
+		& Stores regp value to register if regb is greater than zero
+
+	func.18 - STLEZ regd, regp, regb
+		& Stores regp value to register if regb is less or equal than zero
+
+	func.19 - STGEZ regd, regp, regb
+		& Stores regp value to register if regb is greater or equal than zero
+
+	func.1A - STBLZ regd, regp, regb
+		& Stores regp value to register if regb is below than zero
+
+	func.1B - STABZ regd, regp, regb
+		& Stores regp value to register if regb is above than zero
+
+	func.1C - STBEZ regd, regp, regb
+		& Stores regp value to register if regb is below or equal than zero
+
+	func.1D - STAEZ regd, regp, regb
+		& Stores regp value to register if regb is above or equal than zero
+
+@ 35
+
+@ 36
+
+@ 37
+
+@ 38
+
+@ 39
+
+@ 3A
+
+@ 3B
+
+@ 3C
+
+@ 3D
+
+@ 3E
+
+@ 3F
