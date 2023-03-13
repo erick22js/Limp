@@ -18,7 +18,7 @@ void LIIsaDtb_opcode1A(LCpu *m_cpu){
 		break;
 		
 		default:{
-			/* TODO: Interruption -> Invalid Instruction */
+			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
 		}
 	}
 	

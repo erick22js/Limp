@@ -1,4 +1,20 @@
 #include <Limp/cpu.h>
+#include <Limp/coproc.h>
+#include <Limp/mmu.h>
+#include <Limp/pci.h>
+
+
+/**
+	DATA
+*/
+
+
+/* System Predefined Interruptions */
+
+const LIPInterruption LI_INT_PMVIOLATION = {0};
+const LIPInterruption LI_INT_INVALIDOPC = {2};
+const LIPInterruption LI_INT_ZERODIVISION = {7};
+const LIPInterruption LI_INT_DEBUGGING = {10};
 
 
 
@@ -22,50 +38,147 @@ void LCpu_init(LCpu *m_cpu, LBus *m_bus){
 
 /* Memory Access */
 
+
+Uint32 LCpu_tAddress(LCpu *m_cpu, Uint32 addr, LIPAdressAccess mode){
+	if(getBit(m_cpu->sregs.est, LI_CPU_VM)){
+		if(m_cpu->mmu){
+			return m_cpu->mmu->tAddr(addr, mode|m_cpu->sregs.est);
+		}
+	}
+	return addr;
+}
+
+
 Uint8 LCpu_readMem8(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus8(m_cpu, addr);
+	return LICPU_readBus8(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
 }
 
 Uint16 LCpu_readMem16(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus16(m_cpu, addr);
+	return LICPU_readBus16(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
 }
 
 Uint32 LCpu_readMem32(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus32(m_cpu, addr);
+	return LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
 }
 
 
 void LCpu_writeMem8(LCpu *m_cpu, Uint32 addr, Uint8 data){
-	LICPU_writeBus8(m_cpu, addr, data);
+	LICPU_writeBus8(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
 }
 
 void LCpu_writeMem16(LCpu *m_cpu, Uint32 addr, Uint16 data){
-	LICPU_writeBus16(m_cpu, addr, data);
+	LICPU_writeBus16(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
 }
 
 void LCpu_writeMem32(LCpu *m_cpu, Uint32 addr, Uint32 data){
-	LICPU_writeBus32(m_cpu, addr, data);
+	LICPU_writeBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
 }
 
 
 Uint32 LCpu_pop(LCpu *m_cpu){
-	m_cpu->regs.n.esp -= 4;
 	Uint32 addr = m_cpu->regs.n.esp;
-	return LICPU_readBus32(m_cpu, addr);
+	m_cpu->regs.n.esp += 4;
+	return LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
 }
 
 
 void LCpu_push(LCpu *m_cpu, Uint32 data){
+	m_cpu->regs.n.esp -= 4;
 	Uint32 addr = m_cpu->regs.n.esp;
-	m_cpu->regs.n.esp += 4;
-	LICPU_writeBus32(m_cpu, addr, data);
+	LICPU_writeBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
 }
 
 
 Uint32 LCpu_fetch(LCpu *m_cpu){
 	Uint32 addr = m_cpu->sregs.epc;
 	m_cpu->sregs.epc += 4;
-	return (m_cpu->sregs.efd = LICPU_readBus32(m_cpu, addr));
+	return (m_cpu->sregs.efd = LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_EXECUTE)));
+}
+
+
+/* Extra Registers */
+
+Uint32 LCpu_readExReg(LCpu *m_cpu, Uint16 reg){
+	if(m_cpu->exregs&&(reg<m_cpu->exregs_length)){
+		return m_cpu->exregs[reg];
+	}
+	return 0;
+}
+
+void LCpu_writeExReg(LCpu *m_cpu, Uint16 reg, Uint32 data){
+	if(m_cpu->exregs&&(reg<m_cpu->exregs_length)){
+		m_cpu->exregs[reg] = data;
+	}
+}
+
+
+/* External Devices Access */
+
+Uint32 LCpu_in(LCpu *m_cpu, Uint8 port){
+	if(m_cpu->io.pci){
+		return LPci_read(m_cpu->io.pci, port);
+	}
+	return 0;
+}
+
+void LCpu_out(LCpu *m_cpu, Uint8 port, Uint32 data){
+	if(m_cpu->io.pci){
+		LPci_write(m_cpu->io.pci, port, data);
+	}
+}
+
+
+/* Coprocessor Access */
+
+Uint32 LCpu_co_readReg(LCpu *m_cpu, Uint8 co, Uint32 reg){
+	co &= 3;
+	if(m_cpu->coprocs[co]){
+		if(m_cpu->coprocs[co]->readReg){
+			return m_cpu->coprocs[co]->readReg(reg);
+		}
+	}
+	
+	return 0;
+}
+
+void LCpu_co_writeReg(LCpu *m_cpu, Uint8 co, Uint32 reg, Uint32 data){
+	co &= 3;
+	if(m_cpu->coprocs[co]){
+		if(m_cpu->coprocs[co]->writeReg){
+			m_cpu->coprocs[co]->writeReg(reg, data);
+		}
+	}
+}
+
+
+void LCpu_co_disable(LCpu *m_cpu, Uint8 co){
+	co &= 3;
+	if(m_cpu->coprocs[co]){
+		m_cpu->coprocs[co]->enabled = FALSE;
+	}
+}
+
+void LCpu_co_enable(LCpu *m_cpu, Uint8 co){
+	co &= 3;
+	if(m_cpu->coprocs[co]){
+		m_cpu->coprocs[co]->enabled = TRUE;
+	}
+}
+
+
+Uint8 LCpu_co_checkState(LCpu *m_cpu, Uint8 co){
+	co &= 3;
+	return m_cpu->coprocs[co]? (m_cpu->coprocs[co]->enabled?1:-1) :0;
+}
+
+
+void LCpu_co_command(LCpu *m_cpu, Uint8 co, Uint32 cmd){
+	co &= 3;
+	if(m_cpu->coprocs[co]){
+		if(m_cpu->coprocs[co]->receive){
+			m_cpu->coprocs[co]->receive(cmd);
+		}
+	}
 }
 
 
@@ -216,23 +329,39 @@ Bool LICpu_condition(LCpu *m_cpu){
 
 /* Program Flow */
 
-void LCpu_jumpA(LCpu *m_cpu, Uint32 addr){
+void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr){
 	m_cpu->sregs.lpc = addr;
 	m_cpu->sregs.epc = addr;
 }
 
-void LCpu_jumpR(LCpu *m_cpu, Sint32 addr){
+void LCpu_jumpRel(LCpu *m_cpu, Sint32 addr){
 	m_cpu->sregs.lpc += addr;
 	m_cpu->sregs.epc = m_cpu->sregs.lpc;
 }
 
 
 void LICpu_int_call(LCpu *m_cpu, Uint32 addr){
-	/* TODO */
+	LCpu_push(m_cpu, m_cpu->sregs.est);
+	LCpu_push(m_cpu, m_cpu->sregs.epc);
+	m_cpu->sregs.est = clrBit(m_cpu->sregs.est, LI_CPU_PM);
+	LCpu_jumpAbs(m_cpu, addr);
 }
 
 void LICpu_int_return(LCpu *m_cpu, Uint32 addr){
-	/* TODO */
+	m_cpu->sregs.epc = LCpu_pop(m_cpu);
+	m_cpu->sregs.est = LCpu_pop(m_cpu);
+}
+
+Bool LCpu_requestInterruption(LCpu *m_cpu, LIPInterruption intr){ // Returns Bool state => TRUE if the interruption was successfull did
+	/* Detect the interruption type */
+	if(intr.selector>127){
+		if(!getBit(m_cpu->sregs.est, LI_CPU_EI)){
+			return FALSE;
+		}
+	}
+	Uint32 addr = LICPU_readBus32(m_cpu, (m_cpu->sregs.it + (intr.selector*2)));
+	LICpu_int_call(m_cpu, addr);
+	return TRUE;
 }
 
 

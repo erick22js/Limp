@@ -11,12 +11,12 @@
 */
 
 
-typedef void (LIInstFormat)(LCpu *m_cpu, LPSignal signal);
+typedef void (LIInstFormat)(LCpu *m_cpu, LIPSignal signal);
 
 typedef struct LIInstDescriptor{
 	LIInstFormat *decoder;
 	void (*func)(LCpu *m_cpu);
-	LPSignal flags;
+	LIPSignal flags;
 	void (**subfuncs)(LCpu *m_cpu);
 }LIInstDescriptor;
 
@@ -51,6 +51,7 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 #include <Limp/instructions/opcode10.h>
 #include <Limp/instructions/opcode11.h>
 
+#include <Limp/instructions/opcode14.h>
 #include <Limp/instructions/opcode15.h>
 
 #include <Limp/instructions/opcode18.h>

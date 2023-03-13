@@ -5,8 +5,6 @@
 #include <Limp/instructions/table.h>
 
 
-void LIIsaDtb_opcode34_func00(LCpu *m_cpu);
-
 extern void (*LIIsaDtb_opcode34[64])(LCpu *m_cpu);
 
 

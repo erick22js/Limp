@@ -18,7 +18,7 @@
 
 @ 06
 
-@ 07
+@ 07 [AMI]
 
 	mode.0 - LDMB $amd, regd
 		& Loads a byte data from memory address to register
@@ -46,7 +46,7 @@
 
 @ 0E
 
-@ 0F #ONLYADDRESS
+@ 0F [AMI] #ONLYADDRESS
 
 	mode.0 - STRB $amd, regd
 		& Stores a byte register data to memory address
@@ -60,7 +60,7 @@
 	mode.3 - STRQ $amd, regd
 		& Stores a double dword registers data to memory address
 
-@ 10
+@ 10 [AMI]
 
 	mode.0 - ADD regd, $amd
 		& Adds a value data to register
@@ -74,7 +74,7 @@
 	mode.3 - SBB regd, $amd
 		& Subtracts a value with borrow to register
 
-@ 11
+@ 11 [AMI]
 
 	mode.0 - MUL regd, $amd
 		& Multiplies a value data to register
@@ -92,9 +92,33 @@
 
 @ 13
 
-@ 14
+@ 14 [SI]
 
-@ 15
+	func.0 - INC regd
+		& Do a increment in regd
+	
+	func.1 - DEC regd
+		& Do a decrement in regd
+	
+	func.2 - NEG regd
+		& Do a subtraction of zero by regd, and stores
+	
+	func.3 - MADD regd, regb, regp
+		& Multiply regd by regb, then adds regp and store at regd
+	
+	func.4 - MSUB regd, regb, regp
+		& Multiply regd by regb, then subtracts regp and store at regd
+	
+	func.5 - MADC regd, regb, regp
+		& Multiply regd by regb, then adds regp with carry and store at regd
+	
+	func.6 - MSBB regd, regb, regp
+		& Multiply regd by regb, then subtracts regp with borrow and store at regd
+	
+	func.7 - LDIV regd, regb
+		& Divides regd by regb, but stores at regd the under integer (decimal part) value
+
+@ 15 [AMI]
 
 	mode.0 - CMP regd, $amd
 		& Do a subtraction between a value data from register without saving the result, doing a comparation
@@ -106,7 +130,7 @@
 
 @ 17
 
-@ 18
+@ 18 [AMI]
 
 	mode.0 - AND regd, $amd
 		& Do and bitwise value data to register
@@ -122,7 +146,7 @@
 
 @ 19
 
-@ 1A
+@ 1A [AMI]
 
 	mode.0 - TEST $amd
 		& Test the data value and sets the bits acoordling
@@ -130,7 +154,7 @@
 	mode.1 - BIT regd, $amd
 		& Do and bitwise between regd and data, doing a bit test, without store the result
 
-@ 1B
+@ 1B [AMI]
 
 	mode.0 - LSHF regd, $amd
 		& Do a left shift in regd by data
@@ -152,7 +176,7 @@
 
 @ 1F
 
-@ 20
+@ 20 [ADI]
 
 	mode.0 - JA imm16<2
 		& Jumps to a absolute address position
@@ -198,7 +222,7 @@
 	mode.1 - MOVI regd, imm16
 		& Moves a immediate value to a register
 
-@ 31
+@ 31 [IR]
 
 	mod.0 - CVBW regd, regb
 		& Converts a byte data to sign extended word to register
@@ -216,7 +240,7 @@
 
 @ 33
 
-@ 34
+@ 34 [SI]
 
 	func.00 - STEQ regd, imm8, regb, regp
 		& Stores a immediate value to register if regb is equal to regp

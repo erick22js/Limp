@@ -29,16 +29,27 @@ typedef struct LCpu{
 		Float32 f[9];
 	}regs;
 	
+	/* Extra Registers */
+	Uint32 *exregs;
+	Uint32 exregs_length;
+	
 	struct{
 		Uint32 epc;
 		Uint32 lpc;
 		Uint32 est;
 		Uint32 efd;
+		
+		Uint32 it; /* Interruption Table Address */
 	}sregs;
 	
-	/* Inputs/Outputs */
+	/* CoProcessors Conections */
+	LCoproc *coprocs[4];
+	LMmu *mmu;
+	
+	/* Inputs/Outputs and Peripherals */
 	struct{
 		LBus *bus;
+		LPci *pci;
 	}io;
 	
 	/* Instruction Decoding Arguments */
@@ -61,7 +72,20 @@ typedef struct LCpu{
 
 #define LI_CPU_EI 16
 #define LI_CPU_PM 17
+#define LI_CPU_VM 18
 
+
+/**
+	DATA
+*/
+
+
+/* System Predefined Interruptions */
+
+extern const LIPInterruption LI_INT_PMVIOLATION;
+extern const LIPInterruption LI_INT_INVALIDOPC;
+extern const LIPInterruption LI_INT_ZERODIVISION;
+extern const LIPInterruption LI_INT_DEBUGGING;
 
 
 
@@ -95,6 +119,8 @@ void LCpu_init(LCpu *m_cpu, LBus *m_bus);
 #define LICPU_writeBus32(m_cpu, addr, data)\
 	(m_cpu->io.bus->write32(m_cpu->io.bus, addr&(~3), data))
 
+Inline Uint32 LCpu_tAddress(LCpu *m_cpu, Uint32 addr, LIPAdressAccess mode);
+
 Uint8 LCpu_readMem8(LCpu *m_cpu, Uint32 addr);
 Uint16 LCpu_readMem16(LCpu *m_cpu, Uint32 addr);
 Uint32 LCpu_readMem32(LCpu *m_cpu, Uint32 addr);
@@ -110,6 +136,31 @@ void LCpu_push(LCpu *m_cpu, Uint32 data);
 Uint32 LCpu_fetch(LCpu *m_cpu);
 
 
+/* Extra Registers */
+
+Uint32 LCpu_readExReg(LCpu *m_cpu, Uint16 reg);
+void LCpu_writeExReg(LCpu *m_cpu, Uint16 reg, Uint32 data);
+
+
+/* External Devices Access */
+
+Uint32 LCpu_in(LCpu *m_cpu, Uint8 port);
+void LCpu_out(LCpu *m_cpu, Uint8 port, Uint32 data);
+
+
+/* Coprocessor Access */
+
+Uint32 LCpu_co_readReg(LCpu *m_cpu, Uint8 co, Uint32 reg);
+void LCpu_co_writeReg(LCpu *m_cpu, Uint8 co, Uint32 reg, Uint32 data);
+
+void LCpu_co_disable(LCpu *m_cpu, Uint8 co);
+void LCpu_co_enable(LCpu *m_cpu, Uint8 co);
+
+Uint8 LCpu_co_checkState(LCpu *m_cpu, Uint8 co);
+
+void LCpu_co_command(LCpu *m_cpu, Uint8 co, Uint32 cmd);
+
+
 /* Instruction Handling */
 
 void LICpu_decode(LCpu *m_cpu);
@@ -119,11 +170,12 @@ Bool LICpu_condition(LCpu *m_cpu);
 
 /* Program Flow */
 
-void LCpu_jumpA(LCpu *m_cpu, Uint32 addr);
-void LCpu_jumpR(LCpu *m_cpu, Sint32 addr);
+void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr);
+void LCpu_jumpRel(LCpu *m_cpu, Sint32 addr);
 
 void LICpu_int_call(LCpu *m_cpu, Uint32 addr);
 void LICpu_int_return(LCpu *m_cpu, Uint32 addr);
+Bool LCpu_requestInterruption(LCpu *m_cpu, LIPInterruption intr);
 
 void LICpu_step(LCpu *m_cpu);
 

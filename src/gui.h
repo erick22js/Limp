@@ -555,6 +555,7 @@ struct GuiFlag{
 	{L"OF", 5, 21},
 	{L"EI", 16, 22},
 	{L"PM", 17, 23},
+	{L"VM", 18, 24},
 };
 Int guiflags_len = sizeof(guiflags)/sizeof(struct GuiFlag);
 
@@ -678,9 +679,11 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if(LOWORD(wParam) == id_dpd_editloadmode){
 				_gui_dialog_mode = gui_dropdown_getIndex(ui_dpd_editloadmode);
 			}
+			static TCHAR defaultFile[260] = "mem.bin";
 			if(LOWORD(wParam) == id_menu_load){
 				OPENFILENAME ofn = {0}; 
-				TCHAR szFile[260]={0};
+				TCHAR szFile[260];
+				memcpy(szFile, defaultFile, sizeof(szFile));
 				// Initialize remaining fields of OPENFILENAME structure
 				ofn.lStructSize = sizeof(ofn); 
 				ofn.hwndOwner = hwnd; 
@@ -695,7 +698,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 				if(GetOpenFileName(&ofn) == TRUE){ 
 					// use ofn.lpstrFile here
-					
+					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
 					FILE *file = fopen(ofn.lpstrFile, "r");
 					
 					for(Int i=0; i<1024*1024*8; i++){
@@ -708,7 +711,8 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			}
 			if(LOWORD(wParam) == id_menu_dump){
 				OPENFILENAME ofn = {0}; 
-				TCHAR szFile[260]={0};
+				TCHAR szFile[260];
+				memcpy(szFile, defaultFile, sizeof(szFile));
 				// Initialize remaining fields of OPENFILENAME structure
 				ofn.lStructSize = sizeof(ofn); 
 				ofn.hwndOwner = hwnd; 
@@ -723,6 +727,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				
 				if(GetSaveFileName(&ofn) == TRUE){ 
 					// use ofn.lpstrFile here
+					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
 					printf("Dumping to %s\n", ofn.lpstrFile);
 					
 					FILE *file = fopen(ofn.lpstrFile, "w");

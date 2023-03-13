@@ -18,7 +18,7 @@ void LIIsaDtb_opcode30(LCpu *m_cpu){
 		break;
 		
 		default:{
-			/* TODO: Exception => Invalid Instruction */
+			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
 		}
 	}
 	

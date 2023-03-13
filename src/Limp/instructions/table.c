@@ -8,7 +8,7 @@
 */
 
 
-void LIIsaFmt_ir(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_ir(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_IR_mod(m_cpu->sregs.efd);
 	
 	Uint32 im = LIDFmt_IR_im(m_cpu->sregs.efd);
@@ -38,7 +38,7 @@ void LIIsaFmt_ir(LCpu *m_cpu, LPSignal signal){
 	m_cpu->args.regb = &m_cpu->regs.u[LIDFmt_IR_regb(m_cpu->sregs.efd)];
 }
 
-void LIIsaFmt_ami(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_ami(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_AMI_mod(m_cpu->sregs.efd);
 	
 	Uint32 adrm = LIDFmt_AMI_adrm(m_cpu->sregs.efd);
@@ -189,7 +189,7 @@ void LIIsaFmt_ami(LCpu *m_cpu, LPSignal signal){
 	m_cpu->args.ea = ea;
 }
 
-void LIIsaFmt_si(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_si(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_SI_mod(m_cpu->sregs.efd);
 	
 	Uint32 func = LIDFmt_SI_func(m_cpu->sregs.efd);
@@ -208,7 +208,7 @@ void LIIsaFmt_si(LCpu *m_cpu, LPSignal signal){
 	}
 }
 
-void LIIsaFmt_adi(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_adi(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_ADI_mod(m_cpu->sregs.efd);
 	m_cpu->args.cond = LIDFmt_ADI_cond(m_cpu->sregs.efd);
 	m_cpu->args.rego = &m_cpu->regs.u[LIDFmt_ADI_rego(m_cpu->sregs.efd)];
@@ -219,7 +219,7 @@ void LIIsaFmt_adi(LCpu *m_cpu, LPSignal signal){
 	}
 }
 
-void LIIsaFmt_cdi(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_cdi(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_CDI_mod(m_cpu->sregs.efd);
 	m_cpu->args.cond = LIDFmt_CDI_cond(m_cpu->sregs.efd);
 	
@@ -236,7 +236,9 @@ void LIIsaFmt_cdi(LCpu *m_cpu, LPSignal signal){
 	}
 	
 	if(!LIDFmt_CDI_gap_(m_cpu->sregs.efd)){
-		/* TODO: Interruption -> Invalid Instruction */
+		m_cpu->args.func = LIIsaDtb_nop;
+		LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
+		return;
 	}
 	
 	if(!LICpu_condition(m_cpu)){
@@ -244,13 +246,14 @@ void LIIsaFmt_cdi(LCpu *m_cpu, LPSignal signal){
 	}
 }
 
-void LIIsaFmt_jl(LCpu *m_cpu, LPSignal signal){
+void LIIsaFmt_jl(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.imm = LIDFmt_JL_imm(m_cpu->sregs.efd);
 }
 
 
 void LIIsaDtb_undefined(LCpu *m_cpu){
 	printf("# Undefined Instruction #\n");
+	LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
 }
 
 void LIIsaDtb_nop(LCpu *m_cpu){
@@ -285,7 +288,7 @@ LIInstDescriptor LIIsa_table[64] = {
 	[0x11] = {LIIsaFmt_ami, LIIsaDtb_opcode11, LPROCS_NONE, NULL},
 	[0x12] = {LIIsaFmt_jl, LIIsaDtb_undefined, LPROCS_NONE, NULL},
 	[0x13] = {LIIsaFmt_jl, LIIsaDtb_undefined, LPROCS_NONE, NULL},
-	[0x14] = {LIIsaFmt_jl, LIIsaDtb_undefined, LPROCS_NONE, NULL},
+	[0x14] = {LIIsaFmt_si, NULL, LPROCS_NONE, LIIsaDtb_opcode14},
 	[0x15] = {LIIsaFmt_ami, LIIsaDtb_opcode15, LPROCS_NONE, NULL},
 	[0x16] = {LIIsaFmt_jl, LIIsaDtb_undefined, LPROCS_NONE, NULL},
 	[0x17] = {LIIsaFmt_jl, LIIsaDtb_undefined, LPROCS_NONE, NULL},

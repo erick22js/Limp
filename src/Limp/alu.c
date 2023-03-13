@@ -105,11 +105,6 @@ Uint32 LIAlu_hmul(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 Uint32 LIAlu_div(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	Uint32 st = m_cpu->sregs.est;
 	
-	if(v2==0){
-		/* TODO: Throw a exception */
-		return 0xFFFFFFFF;
-	}
-	
 	// Do the division between values
 	Uint32 res = v1/v2;
 	
@@ -128,11 +123,6 @@ Uint32 LIAlu_div(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 
 Uint32 LIAlu_mod(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	Uint32 st = m_cpu->sregs.est;
-	
-	if(v2==0){
-		/* TODO: Throw a exception */
-		return 0;
-	}
 	
 	// Do the modulation between values
 	Uint32 res = v1%v2;
