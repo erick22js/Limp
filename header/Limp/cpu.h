@@ -167,6 +167,8 @@ void LICpu_decode(LCpu *m_cpu);
 
 Bool LICpu_condition(LCpu *m_cpu);
 
+Bool LICpu_protectionThrown(LCpu *m_cpu); /* Returns TRUE if has throwed a interruption */
+
 
 /* Program Flow */
 
@@ -174,7 +176,7 @@ void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr);
 void LCpu_jumpRel(LCpu *m_cpu, Sint32 addr);
 
 void LICpu_int_call(LCpu *m_cpu, Uint32 addr);
-void LICpu_int_return(LCpu *m_cpu, Uint32 addr);
+void LICpu_int_return(LCpu *m_cpu);
 Bool LCpu_requestInterruption(LCpu *m_cpu, LIPInterruption intr);
 
 void LICpu_step(LCpu *m_cpu);

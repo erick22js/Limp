@@ -44,16 +44,28 @@
 		<Unit filename="header/Limp/cpu.h" />
 		<Unit filename="header/Limp/defines.h" />
 		<Unit filename="header/Limp/instructions/format.h" />
+		<Unit filename="header/Limp/instructions/opcode03.h" />
+		<Unit filename="header/Limp/instructions/opcode04.h" />
 		<Unit filename="header/Limp/instructions/opcode07.h" />
+		<Unit filename="header/Limp/instructions/opcode0B.h" />
+		<Unit filename="header/Limp/instructions/opcode0C.h" />
 		<Unit filename="header/Limp/instructions/opcode0F.h" />
 		<Unit filename="header/Limp/instructions/opcode10.h" />
 		<Unit filename="header/Limp/instructions/opcode11.h" />
 		<Unit filename="header/Limp/instructions/opcode14.h" />
 		<Unit filename="header/Limp/instructions/opcode15.h" />
 		<Unit filename="header/Limp/instructions/opcode18.h" />
+		<Unit filename="header/Limp/instructions/opcode19.h" />
 		<Unit filename="header/Limp/instructions/opcode1A.h" />
 		<Unit filename="header/Limp/instructions/opcode1B.h" />
 		<Unit filename="header/Limp/instructions/opcode20.h" />
+		<Unit filename="header/Limp/instructions/opcode21.h" />
+		<Unit filename="header/Limp/instructions/opcode22.h" />
+		<Unit filename="header/Limp/instructions/opcode23.h" />
+		<Unit filename="header/Limp/instructions/opcode24.h" />
+		<Unit filename="header/Limp/instructions/opcode25.h" />
+		<Unit filename="header/Limp/instructions/opcode26.h" />
+		<Unit filename="header/Limp/instructions/opcode27.h" />
 		<Unit filename="header/Limp/instructions/opcode30.h" />
 		<Unit filename="header/Limp/instructions/opcode31.h" />
 		<Unit filename="header/Limp/instructions/opcode34.h" />
@@ -71,7 +83,19 @@
 		<Unit filename="src/Limp/cpu.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/Limp/instructions/opcode03.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode04.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Limp/instructions/opcode07.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode0B.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode0C.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/instructions/opcode0F.c">
@@ -92,6 +116,9 @@
 		<Unit filename="src/Limp/instructions/opcode18.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/Limp/instructions/opcode19.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Limp/instructions/opcode1A.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -99,6 +126,27 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/instructions/opcode20.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode21.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode22.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode23.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode24.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode25.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode26.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/instructions/opcode27.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/instructions/opcode30.c">

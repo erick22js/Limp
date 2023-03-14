@@ -12,7 +12,22 @@
 
 @ 03
 
+	mode.0 - POPAS
+		& Pops to EST register Application part
+
+	mode.1 - #POPSS
+		& Pops to EST register System part
+
+	mode.2 - #POPS
+		& Pops to EST register
+
 @ 04
+
+	mode.0 - POPR regd
+		& Pops a value from stack to regd
+	
+	mode.1 - POPP regb, regd
+		& Pops values from stack to a sequence of register from regd to regb
 
 @ 05
 
@@ -40,7 +55,25 @@
 
 @ 0B
 
+	mode.0 - PSHAS
+		& Pushes the EST Register Application part to stack
+
+	mode.1 - #PSHSS
+		& Pushes the EST Register System part to stack
+
+	mode.2 - #PSHS
+		& Pushes the EST Register to stack
+
 @ 0C
+
+	mode.0 - PSHI imm
+		& Pushes a immediate value to stack
+	
+	mode.1 - PSHR regb
+		& Pushes regb value to stack
+	
+	mode.2 - PSHP regb, regd
+		& Pushes values from sequence regb to regd to stack
 
 @ 0D
 
@@ -144,7 +177,22 @@
 	mode.3 - NAND regd, $amd
 		& Do nand bitwise value data to register
 
-@ 19
+@ 19 [SI]
+
+	func.0 - NOT regd
+		& Inverts the bits values of regd
+	
+	func.1 - SETB regd, imm8
+		& Sets the bit of regd at offset of imm
+	
+	func.2 - CLRB regd, imm8
+		& Clears the bit of regd at offset of imm
+	
+	func.3 - SWAP regd
+		& Swaps the bytes of regd, changing the endianess
+	
+	func.4 - SWAPB regd
+		& Swaps the bits of regd, changing its format
 
 @ 1A [AMI]
 
@@ -184,19 +232,79 @@
 	mode.1 - BA imm16<2
 		& Branchs to a absolute address position
 
-@ 21
+	mode.2 - JR imm16<2
+		& Jumps by a relative offset
 
-@ 22
+	mode.3 - BR imm16<2
+		& Branchs by a relative offset
 
-@ 23
+@ 21 [SI]
 
-@ 24
+	func.0 - RET
+		& Returns from a branch
+	
+	func.1 - #IRET
+		& Returns from a interruption
+	
+	func.2|mode.0 - ENTER imm
+		& Reserves a sized space stack for current procedure and stores offset in EFP
+	
+	func.2|mode.1 - ENTERV regb
+		& Reserves a sized variable space stack for current procedure and stores offset in EFP
+	
+	func.3 - LEAVE imm
+		& Free the reserved space stack and return the old EFP and ESP values (May be called after using ENTER or ENTERV)
 
-@ 25
+	func.4 - INT imm8
+		& Calls for system interruption
 
-@ 26
+@ 22 [CDI]
 
-@ 27
+	mode.0 - JRA regb
+		& Jumps to a absolute address by regp
+	
+	mode.1 - BRA regp
+		& Branchs to a absolute address by regp
+	
+	mode.2 - #JRAP regp
+		& Jumps to a absolute address by regp in protected mode
+
+	mode.3 - #BRAP regp
+		& Branchs to a absolute address by regp in protected mode
+
+@ 23 [CDI]
+
+	mode.0 - JRR regb
+		& Jumps by a relative offset by regp
+	
+	mode.1 - BRR regp
+		& Branchs by a relative offset by regp
+	
+	mode.2 - XJP regb
+		& Exchange value between regp and epc, doing a jump
+
+	mode.3 - XBR regb
+		& Exchange value between regp and epc, doing a branch
+
+@ 24 [JL]
+
+	- JL imm<2
+		& Do a long jump inside the current 256 MB Bank
+
+@ 25 [JL]
+
+	- BL imm<2
+		& Do a long branch inside the current 256 MB Bank
+
+@ 26 [JL]
+
+	- #JLP imm<2
+		& Do a long jump inside the current 256 MB Bank in protected mode
+
+@ 27 [JL]
+
+	- #BLP imm<2
+		& Do a long branch inside the current 256 MB Bank in protected mode
 
 @ 28
 

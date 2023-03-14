@@ -326,6 +326,14 @@ Bool LICpu_condition(LCpu *m_cpu){
 	return TRUE;
 }
 
+Bool LICpu_protectionThrown(LCpu *m_cpu){
+	if(getBit(m_cpu->sregs.est, LI_CPU_PM)){
+		LCpu_requestInterruption(m_cpu, LI_INT_PMVIOLATION);
+		return TRUE;
+	}
+	return FALSE;
+}
+
 
 /* Program Flow */
 
@@ -347,7 +355,7 @@ void LICpu_int_call(LCpu *m_cpu, Uint32 addr){
 	LCpu_jumpAbs(m_cpu, addr);
 }
 
-void LICpu_int_return(LCpu *m_cpu, Uint32 addr){
+void LICpu_int_return(LCpu *m_cpu){
 	m_cpu->sregs.epc = LCpu_pop(m_cpu);
 	m_cpu->sregs.est = LCpu_pop(m_cpu);
 }

@@ -44,7 +44,13 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 */
 
 
+#include <Limp/instructions/opcode03.h>
+#include <Limp/instructions/opcode04.h>
+
 #include <Limp/instructions/opcode07.h>
+
+#include <Limp/instructions/opcode0B.h>
+#include <Limp/instructions/opcode0C.h>
 
 #include <Limp/instructions/opcode0F.h>
 
@@ -59,7 +65,15 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 #include <Limp/instructions/opcode1A.h>
 #include <Limp/instructions/opcode1B.h>
 
+#include <Limp/instructions/opcode19.h>
 #include <Limp/instructions/opcode20.h>
+#include <Limp/instructions/opcode21.h>
+#include <Limp/instructions/opcode22.h>
+
+#include <Limp/instructions/opcode24.h>
+#include <Limp/instructions/opcode25.h>
+#include <Limp/instructions/opcode26.h>
+#include <Limp/instructions/opcode27.h>
 
 #include <Limp/instructions/opcode30.h>
 #include <Limp/instructions/opcode31.h>
