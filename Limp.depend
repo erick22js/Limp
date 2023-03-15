@@ -22,13 +22,13 @@
 	<Limp/api.h>
 	<Limp/api.h>
 
-1678797863 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
+1678882792 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
 	<Limp/cpu.h>
 	<Limp/coproc.h>
 	<Limp/mmu.h>
 	<Limp/pci.h>
 
-1678797853 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
+1678882689 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
 	<Limp/defines.h>
 	<Limp/bus.h>
 	<Limp/alu.h>
@@ -38,18 +38,21 @@
 	<Limp/limp.h>
 	"gui.h"
 
-1678802390 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
+1678888497 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
 	<Limp/instructions/table.h>
 	<Limp/cpu.h>
 
-1678803348 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\table.h
+1678888485 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\table.h
 	<Limp/defines.h>
 	<Limp/instructions/format.h>
+	<Limp/instructions/opcode01.h>
 	<Limp/instructions/opcode03.h>
 	<Limp/instructions/opcode04.h>
 	<Limp/instructions/opcode07.h>
+	<Limp/instructions/opcode08.h>
 	<Limp/instructions/opcode0B.h>
 	<Limp/instructions/opcode0C.h>
+	<Limp/instructions/opcode0E.h>
 	<Limp/instructions/opcode0F.h>
 	<Limp/instructions/opcode10.h>
 	<Limp/instructions/opcode11.h>
@@ -58,6 +61,8 @@
 	<Limp/instructions/opcode18.h>
 	<Limp/instructions/opcode1A.h>
 	<Limp/instructions/opcode1B.h>
+	<Limp/instructions/opcode1C.h>
+	<Limp/instructions/opcode1D.h>
 	<Limp/instructions/opcode19.h>
 	<Limp/instructions/opcode20.h>
 	<Limp/instructions/opcode21.h>
@@ -68,7 +73,11 @@
 	<Limp/instructions/opcode27.h>
 	<Limp/instructions/opcode30.h>
 	<Limp/instructions/opcode31.h>
+	<Limp/instructions/opcode32.h>
+	<Limp/instructions/opcode33.h>
 	<Limp/instructions/opcode34.h>
+	<Limp/instructions/opcode35.h>
+	<Limp/instructions/opcode38.h>
 
 1678713388 source:c:\users\erick\documents\meusprojetos\limp\src\limp\alu.c
 	<Limp/alu.h>
@@ -717,5 +726,78 @@
 
 1678803328 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode19.c
 	<Limp/instructions/opcode19.h>
+	<Limp/cpu.h>
+
+1678878287 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode32.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678878728 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode33.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678878440 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode32.c
+	<Limp/instructions/opcode32.h>
+	<Limp/cpu.h>
+
+1678879131 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode35.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678878846 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode33.c
+	<Limp/instructions/opcode33.h>
+	<Limp/cpu.h>
+
+1678879785 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode38.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678879477 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode35.c
+	<Limp/instructions/opcode35.h>
+	<Limp/cpu.h>
+
+1678881131 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode01.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678882390 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode01.c
+	<Limp/instructions/opcode01.h>
+	<Limp/cpu.h>
+
+1678880928 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode38.c
+	<Limp/instructions/opcode38.h>
+	<Limp/cpu.h>
+
+1678882365 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode08.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678883327 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode08.c
+	<Limp/instructions/opcode08.h>
+	<Limp/cpu.h>
+
+1678884263 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode0e.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678885051 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode1c.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678884593 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode0e.c
+	<Limp/instructions/opcode0E.h>
+	<Limp/cpu.h>
+
+1678888126 c:\users\erick\documents\meusprojetos\limp\header\limp\instructions\opcode1d.h
+	<Limp/defines.h>
+	<Limp/instructions/table.h>
+
+1678887979 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode1c.c
+	<math.h>
+	<Limp/instructions/opcode33.h>
+	<Limp/cpu.h>
+
+1678888418 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode1d.c
+	<Limp/instructions/opcode1D.h>
 	<Limp/cpu.h>
 
