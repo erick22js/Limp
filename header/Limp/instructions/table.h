@@ -44,14 +44,18 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 */
 
 
+#include <Limp/instructions/opcode01.h>
+
 #include <Limp/instructions/opcode03.h>
 #include <Limp/instructions/opcode04.h>
 
 #include <Limp/instructions/opcode07.h>
+#include <Limp/instructions/opcode08.h>
 
 #include <Limp/instructions/opcode0B.h>
 #include <Limp/instructions/opcode0C.h>
 
+#include <Limp/instructions/opcode0E.h>
 #include <Limp/instructions/opcode0F.h>
 
 #include <Limp/instructions/opcode10.h>
@@ -64,6 +68,8 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 
 #include <Limp/instructions/opcode1A.h>
 #include <Limp/instructions/opcode1B.h>
+#include <Limp/instructions/opcode1C.h>
+#include <Limp/instructions/opcode1D.h>
 
 #include <Limp/instructions/opcode19.h>
 #include <Limp/instructions/opcode20.h>
@@ -77,8 +83,12 @@ void LIIsaDtb_nop(LCpu *m_cpu);
 
 #include <Limp/instructions/opcode30.h>
 #include <Limp/instructions/opcode31.h>
-
+#include <Limp/instructions/opcode32.h>
+#include <Limp/instructions/opcode33.h>
 #include <Limp/instructions/opcode34.h>
+#include <Limp/instructions/opcode35.h>
+
+#include <Limp/instructions/opcode38.h>
 
 
 extern LIInstDescriptor LIIsa_table[64];

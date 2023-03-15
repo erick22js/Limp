@@ -352,10 +352,21 @@ void LICpu_int_call(LCpu *m_cpu, Uint32 addr){
 	LCpu_push(m_cpu, m_cpu->sregs.est);
 	LCpu_push(m_cpu, m_cpu->sregs.epc);
 	m_cpu->sregs.est = clrBit(m_cpu->sregs.est, LI_CPU_PM);
+	m_cpu->hs.wait = FALSE;
 	LCpu_jumpAbs(m_cpu, addr);
 }
 
 void LICpu_int_return(LCpu *m_cpu){
+	/* If is in waiting mode and current interruption is not the desired, put system in wait state */
+	if(m_cpu->hs.waits){
+		if(m_cpu->hs.waiti!=((Uint8)(m_cpu->sregs.est>>24))){
+			m_cpu->hs.wait = TRUE;
+		}
+		else{
+			m_cpu->hs.waits = FALSE;
+		}
+	}
+	
 	m_cpu->sregs.epc = LCpu_pop(m_cpu);
 	m_cpu->sregs.est = LCpu_pop(m_cpu);
 }

@@ -42,6 +42,14 @@ typedef struct LCpu{
 		Uint32 it; /* Interruption Table Address */
 	}sregs;
 	
+	/* Hardware States */
+	struct{
+		Bool halt; /* Halted Execution */
+		Bool wait; /* Waiting state */
+		Bool waits; /* Waits for specific interruption */
+		Uint8 waiti; /* Interruption to waits for */
+	}hs;
+	
 	/* CoProcessors Conections */
 	LCoproc *coprocs[4];
 	LMmu *mmu;
@@ -73,6 +81,8 @@ typedef struct LCpu{
 #define LI_CPU_EI 16
 #define LI_CPU_PM 17
 #define LI_CPU_VM 18
+
+#define LI_CPU_WS 23
 
 
 /**
