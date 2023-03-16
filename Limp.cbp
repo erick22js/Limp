@@ -83,6 +83,7 @@
 		<Unit filename="header/Limp/mmu.h" />
 		<Unit filename="header/Limp/pci.h" />
 		<Unit filename="header/Limp/peri.h" />
+		<Unit filename="header/Limp/thread.h" />
 		<Unit filename="src/Limp/alu.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -198,6 +199,12 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/pci.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/peri.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/thread.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/gui.h" />

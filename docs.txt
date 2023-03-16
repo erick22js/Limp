@@ -335,17 +335,17 @@
 	func.04 - FMUL regd, regb
 		& In Floating-Point format, multiply regb to regd
 
-	func.05 - FMADD regd, regb, rego
-		& In Floating-Point format, multiply regb to regd and adds rego
+	func.05 - FMADD regd, regb, regp
+		& In Floating-Point format, multiply regb to regd and adds regp
 
-	func.06 - FMADC regd, regb, rego
-		& In Floating-Point format, multiply regb to regd and adds rego with carry
+	func.06 - FMADC regd, regb, regp
+		& In Floating-Point format, multiply regb to regd and adds regp with carry
 
-	func.07 - FMSUB regd, regb, rego
-		& In Floating-Point format, multiply regb to regd and subtracts rego
+	func.07 - FMSUB regd, regb, regp
+		& In Floating-Point format, multiply regb to regd and subtracts regp
 
-	func.08 - FMSBB regd, regb, rego
-		& In Floating-Point format, multiply regb to regd and subtracts rego with borrow
+	func.08 - FMSBB regd, regb, regp
+		& In Floating-Point format, multiply regb to regd and subtracts regp with borrow
 
 	func.09 - FDIV regd, regb
 		& In Floating-Point format, divides regb by regd
@@ -404,8 +404,8 @@
 	func.1B - FATAN regd, regb
 		& In Floating-Point format, do arctangent of regb and stores to regd
 	
-	func.1C - FATAN2 regd, regb, rego
-		& In Floating-Point format, do arctangent in y of regb and x of rego to regd
+	func.1C - FATAN2 regd, regb, regp
+		& In Floating-Point format, do arctangent in y of regb and x of regp to regd
 	
 	func.1D - FFLR regd, regb
 		& In Floating-Point format, rounds regb to floor and stores to regd
