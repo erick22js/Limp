@@ -8,7 +8,8 @@
 struct LMmu{
 	LCoproc coproc;
 	
-	Uint32 (*tAddr)(Uint32 addr, Uint32 lcpu_st);
+	/* Returns: 0 if no any error, otherwise, any other value on error */
+	Int (*tAddr)(Uint32 *addr, Uint32 lcpu_st);
 };
 
 

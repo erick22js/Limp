@@ -94,6 +94,8 @@ typedef struct LCpu{
 
 extern const LIPInterruption LI_INT_PMVIOLATION;
 extern const LIPInterruption LI_INT_INVALIDOPC;
+extern const LIPInterruption LI_INT_INVDATAACCESS;
+extern const LIPInterruption LI_INT_INVCODEACCESS;
 extern const LIPInterruption LI_INT_ZERODIVISION;
 extern const LIPInterruption LI_INT_DEBUGGING;
 
@@ -129,7 +131,7 @@ void LCpu_init(LCpu *m_cpu, LBus *m_bus);
 #define LICPU_writeBus32(m_cpu, addr, data)\
 	(m_cpu->io.bus->write32(m_cpu->io.bus, addr&(~3), data))
 
-Inline Uint32 LCpu_tAddress(LCpu *m_cpu, Uint32 addr, LIPAdressAccess mode);
+Inline Int LCpu_tAddress(LCpu *m_cpu, Uint32 *addr, LIPAdressAccess mode);
 
 Uint8 LCpu_readMem8(LCpu *m_cpu, Uint32 addr);
 Uint16 LCpu_readMem16(LCpu *m_cpu, Uint32 addr);

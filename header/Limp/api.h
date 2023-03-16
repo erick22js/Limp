@@ -80,10 +80,10 @@ typedef double Float64;
 	SETTINGS DEFINITION
 */
 
-#define LI_LITTLEENDIAN 1
-#define LI_WINDOWS 1
-#define LI_32BIT 1
-#define LI_INTEL_COREI3 1
+#define LI_LITTLEENDIAN
+#define LI_WINDOWS
+#define LI_32BIT
+#define LI_INTEL_COREI3
 
 
 #endif // limp_api_h

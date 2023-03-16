@@ -29,9 +29,8 @@ typedef struct LIPInterruption{
 }LIPInterruption;
 
 typedef enum LIPAdressAccess{
-	LIP_ADRESSACCESS_READ = 0,
-	LIP_ADRESSACCESS_WRITE = 1,
-	LIP_ADRESSACCESS_EXECUTE = 2,
+	LIP_ADRESSACCESS_WRITE = 0x100000, /* 0=read; 1=write */
+	LIP_ADRESSACCESS_EXECUTE = 0x200000, /* 0=data; 1=code */
 }LIPAdressAccess;
 
 
