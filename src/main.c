@@ -7,8 +7,8 @@
 int _main(){
 	
 	setup();
-	
 	init();
+	close();
 	
 	return 0;
 }

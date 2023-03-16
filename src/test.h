@@ -78,32 +78,25 @@ void setup(){
 	
 }
 
+Uint32 asidexec(void* args){
+	
+	printf("From other thread!\n");
+	
+	return 40;
+}
+
+LThread thread;
+
 void init(){
-	LCpu_log(&gcpu);
 	
-	/*
-	LCpu_writeMem32(&gcpu, 0x0000, 0x45129045);
+	/* Testing a thread aside */
+	thread = LThread_create(asidexec, NULL);
+	printf("Code from thread %d\n", LThread_join(thread));
 	
-	LCpu_fetch(&gcpu);
-	
-	Uint32 data = LIAlu_ldiv(&gcpu, 3, 4);
-	
-	Uint64 dl = data;
-	dl = dl*1000000000/(Uint64)4294967296;
-	Uint32 dw = dl;
-	
-	printf(".%.9u\n", dw);
-	
-	LCpu_log(&gcpu);
-	*/
-	
-	LCpu_writeMem32(&gcpu, 0x0000, 0x45129045);
-	
-	for(Int i=0; i<4; i++){
-		LCpu_step(&gcpu);
-		LCpu_log(&gcpu);
-	}
-	
+}
+
+void close(){
+	LThread_destroy(thread);
 }
 
 #include "gui.h"

@@ -13,6 +13,8 @@
 
 const LIPInterruption LI_INT_PMVIOLATION = {0};
 const LIPInterruption LI_INT_INVALIDOPC = {2};
+const LIPInterruption LI_INT_INVDATAACCESS = {4};
+const LIPInterruption LI_INT_INVCODEACCESS = {5};
 const LIPInterruption LI_INT_ZERODIVISION = {7};
 const LIPInterruption LI_INT_DEBUGGING = {10};
 
@@ -38,61 +40,95 @@ void LCpu_init(LCpu *m_cpu, LBus *m_bus){
 
 /* Memory Access */
 
-
-Uint32 LCpu_tAddress(LCpu *m_cpu, Uint32 addr, LIPAdressAccess mode){
+Int LCpu_tAddress(LCpu *m_cpu, Uint32 *addr, LIPAdressAccess mode){
 	if(getBit(m_cpu->sregs.est, LI_CPU_VM)){
 		if(m_cpu->mmu){
-			return m_cpu->mmu->tAddr(addr, mode|m_cpu->sregs.est);
+			if(m_cpu->mmu->tAddr(addr, mode|m_cpu->sregs.est)){
+				if(mode&LIP_ADRESSACCESS_EXECUTE){
+					LCpu_requestInterruption(m_cpu, LI_INT_INVCODEACCESS);
+				}
+				else{
+					LCpu_requestInterruption(m_cpu, LI_INT_INVDATAACCESS);
+				}
+				return 1;
+			}
 		}
 	}
-	return addr;
+	return 0;
 }
 
 
 Uint8 LCpu_readMem8(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus8(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
+	if(LCpu_tAddress(m_cpu, &addr, 0)){
+		return 0;
+	}
+	return LICPU_readBus8(m_cpu, addr);
 }
 
 Uint16 LCpu_readMem16(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus16(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
+	if(LCpu_tAddress(m_cpu, &addr, 0)){
+		return 0;
+	}
+	return LICPU_readBus16(m_cpu, addr);
 }
 
 Uint32 LCpu_readMem32(LCpu *m_cpu, Uint32 addr){
-	return LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
+	if(LCpu_tAddress(m_cpu, &addr, 0)){
+		return 0;
+	}
+	return LICPU_readBus32(m_cpu, addr);
 }
 
 
 void LCpu_writeMem8(LCpu *m_cpu, Uint32 addr, Uint8 data){
-	LICPU_writeBus8(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
+	if(LCpu_tAddress(m_cpu, &addr, LIP_ADRESSACCESS_WRITE)){
+		return 0;
+	}
+	LICPU_writeBus8(m_cpu, addr, data);
 }
 
 void LCpu_writeMem16(LCpu *m_cpu, Uint32 addr, Uint16 data){
-	LICPU_writeBus16(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
+	if(LCpu_tAddress(m_cpu, &addr, LIP_ADRESSACCESS_WRITE)){
+		return 0;
+	}
+	LICPU_writeBus16(m_cpu, addr, data);
 }
 
 void LCpu_writeMem32(LCpu *m_cpu, Uint32 addr, Uint32 data){
-	LICPU_writeBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
+	if(LCpu_tAddress(m_cpu, &addr, LIP_ADRESSACCESS_WRITE)){
+		return 0;
+	}
+	LICPU_writeBus32(m_cpu, addr, data);
 }
 
 
 Uint32 LCpu_pop(LCpu *m_cpu){
 	Uint32 addr = m_cpu->regs.n.esp;
 	m_cpu->regs.n.esp += 4;
-	return LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_READ));
+	if(LCpu_tAddress(m_cpu, &addr, 0)){
+		return 0;
+	}
+	return LICPU_readBus32(m_cpu, addr);
 }
 
 
 void LCpu_push(LCpu *m_cpu, Uint32 data){
 	m_cpu->regs.n.esp -= 4;
 	Uint32 addr = m_cpu->regs.n.esp;
-	LICPU_writeBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_WRITE), data);
+	if(LCpu_tAddress(m_cpu, &addr, LIP_ADRESSACCESS_WRITE)){
+		return 0;
+	}
+	LICPU_writeBus32(m_cpu, addr, data);
 }
 
 
 Uint32 LCpu_fetch(LCpu *m_cpu){
 	Uint32 addr = m_cpu->sregs.epc;
 	m_cpu->sregs.epc += 4;
-	return (m_cpu->sregs.efd = LICPU_readBus32(m_cpu, LCpu_tAddress(m_cpu, addr, LIP_ADRESSACCESS_EXECUTE)));
+	if(LCpu_tAddress(m_cpu, &addr, LIP_ADRESSACCESS_EXECUTE)){
+		return 0;
+	}
+	return (m_cpu->sregs.efd = LICPU_readBus32(m_cpu, addr));
 }
 
 
@@ -116,14 +152,14 @@ void LCpu_writeExReg(LCpu *m_cpu, Uint16 reg, Uint32 data){
 
 Uint32 LCpu_in(LCpu *m_cpu, Uint8 port){
 	if(m_cpu->io.pci){
-		return LPci_read(m_cpu->io.pci, port);
+		return LPci_cpu_read(m_cpu->io.pci, port);
 	}
 	return 0;
 }
 
 void LCpu_out(LCpu *m_cpu, Uint8 port, Uint32 data){
 	if(m_cpu->io.pci){
-		LPci_write(m_cpu->io.pci, port, data);
+		LPci_cpu_write(m_cpu->io.pci, port, data);
 	}
 }
 
@@ -394,38 +430,5 @@ void LICpu_step(LCpu *m_cpu){
 
 void LCpu_step(LCpu *m_cpu){
 	LICpu_step(m_cpu);
-}
-
-
-/* Debugging */
-
-void LCpu_log(LCpu *m_cpu){
-	printf("========================================\n");
-	printf("              LIMP CPU                  \n\n");
-	printf("@ Regs\n");
-	printf("- EAX: %8x\n", m_cpu->regs.u[0]);
-	printf("- EDX: %8x\n", m_cpu->regs.u[1]);
-	printf("- ECX: %8x\n", m_cpu->regs.u[2]);
-	printf("- EBX: %8x\n", m_cpu->regs.u[3]);
-	printf("- EFP: %8x\n", m_cpu->regs.u[4]);
-	printf("- ESP: %8x\n", m_cpu->regs.u[5]);
-	printf("- ESS: %8x\n", m_cpu->regs.u[6]);
-	printf("- ESD: %8x\n\n", m_cpu->regs.u[7]);
-	printf("@ SRegs\n");
-	printf("- EPC: %8x\n", m_cpu->sregs.epc);
-	printf("- EFD: %8x\n", m_cpu->sregs.efd);
-	printf("- EST: %8x\n\n", m_cpu->sregs.est);
-	printf("@ Flags\n");
-	printf("CF BF VF ZF NF OF  EI PM\n");
-	printf("%x  %x  %x  %x  %x  %x   %x  %x\n",
-		getBit(m_cpu->sregs.est, LI_CPU_CF),
-		getBit(m_cpu->sregs.est, LI_CPU_BF),
-		getBit(m_cpu->sregs.est, LI_CPU_VF),
-		getBit(m_cpu->sregs.est, LI_CPU_ZF),
-		getBit(m_cpu->sregs.est, LI_CPU_NF),
-		getBit(m_cpu->sregs.est, LI_CPU_OF),
-		getBit(m_cpu->sregs.est, LI_CPU_EI),
-		getBit(m_cpu->sregs.est, LI_CPU_PM));
-	printf("========================================\n\n");
 }
 

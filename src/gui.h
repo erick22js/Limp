@@ -834,6 +834,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int CmdShow) {
 	
 	setup();
+	init();
 	
 	_hInstance = hInstance;
 	_hPrevInstance = hPrevInstance;
@@ -862,7 +863,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 		DispatchMessage(&msg);
 	}
 	
-	//_main();
+	close();
 	
 	return 0;
 }
