@@ -6,24 +6,17 @@
 void LIIsaDtb_opcode14_func00(LCpu *m_cpu){
 	*m_cpu->args.regd += 1;
 	
-	if(*m_cpu->args.regd){
-		m_cpu->sregs.est = clrBit(m_cpu->sregs.est, LI_CPU_CF);
-	}
-	else{
-		m_cpu->sregs.est = setBit(m_cpu->sregs.est, LI_CPU_CF);
-	}
+	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_CF, !(*m_cpu->args.regd));
+	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_ZF, !(*m_cpu->args.regd));
 }
 
 // DEC
 void LIIsaDtb_opcode14_func01(LCpu *m_cpu){
-	if(*m_cpu->args.regd){
-		m_cpu->sregs.est = clrBit(m_cpu->sregs.est, LI_CPU_BF);
-	}
-	else{
-		m_cpu->sregs.est = setBit(m_cpu->sregs.est, LI_CPU_BF);
-	}
+	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_BF, !(*m_cpu->args.regd));
 	
 	*m_cpu->args.regd -= 1;
+	
+	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_ZF, !(*m_cpu->args.regd));
 }
 
 // NEG

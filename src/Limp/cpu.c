@@ -425,6 +425,7 @@ void LICpu_step(LCpu *m_cpu){
 	
 	LICpu_decode(m_cpu);
 	m_cpu->args.func(m_cpu);
+	m_cpu->sregs.lpc = m_cpu->sregs.epc;
 }
 
 

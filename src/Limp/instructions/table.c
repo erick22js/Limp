@@ -14,6 +14,9 @@ void LIIsaFmt_ir(LCpu *m_cpu, LIPSignal signal){
 	Uint32 im = LIDFmt_IR_im(m_cpu->sregs.efd);
 	m_cpu->args.im = im;
 	
+	m_cpu->args.regd = &m_cpu->regs.u[LIDFmt_IR_regd(m_cpu->sregs.efd)];
+	m_cpu->args.regb = &m_cpu->regs.u[LIDFmt_IR_regb(m_cpu->sregs.efd)];
+	
 	/* Loading the immediate for instruction */
 	switch(im){
 		case 0:{
@@ -33,9 +36,6 @@ void LIIsaFmt_ir(LCpu *m_cpu, LIPSignal signal){
 		}
 		break;
 	}
-	
-	m_cpu->args.regd = &m_cpu->regs.u[LIDFmt_IR_regd(m_cpu->sregs.efd)];
-	m_cpu->args.regb = &m_cpu->regs.u[LIDFmt_IR_regb(m_cpu->sregs.efd)];
 }
 
 void LIIsaFmt_ami(LCpu *m_cpu, LIPSignal signal){
@@ -54,138 +54,115 @@ void LIIsaFmt_ami(LCpu *m_cpu, LIPSignal signal){
 	Uint32 *regb = &m_cpu->regs.u[LIDFmt_AMI_regb(m_cpu->sregs.efd)];
 	m_cpu->args.regb = regb;
 	
+	Uint32 imm;
+	
 	/* Check for extra immediate fetching */
 	if(LIDFmt_AMI_f(m_cpu->sregs.efd)){
 		m_cpu->args.imm = LCpu_fetch(m_cpu);
+		imm = m_cpu->args.imm;
 	}
 	else{
 		m_cpu->args.imm = LIDFmt_AMI_imm(m_cpu->sregs.efd);
+		imm = castS8T32(m_cpu->args.imm);
 	}
-	
-	Uint32 imm = m_cpu->args.imm;
 	
 	/* Loading the immediate for instruction base on addressing mode */
 	Uint32 ea = 0;
+	Bool readmem_adr = !signal&LPROCS_ONLYADDRESS;
 	switch(adrm){
 		case 0:{
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = imm;
-			}
+			m_cpu->args.data = imm;
+			readmem_adr = FALSE;
 		}
 		break;
 		case 1:{
 			ea = regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = *regb;
-			}
+			m_cpu->args.data = *regb;
+			readmem_adr = FALSE;
 		}
 		break;
 		case 2:{
 			ea = imm<<dsize;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 3:{
 			ea = *regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 4:{
 			ea = *regb + (imm<<dsize);
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 5:{
 			ea = *regb + *regi;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 6:{
 			ea = *regb + *regi + (imm<<dsize);
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 7:{
 			ea = *regb + (*regi)*imm;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 8:{
 			*regb += 1;
 			ea = *regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 9:{
 			*regb -= 1;
 			ea = *regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 		}
 		break;
 		case 10:{
 			ea = *regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regb += 1;
 		}
 		break;
 		case 11:{
 			ea = *regb;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regb -= 1;
 		}
 		break;
 		case 12:{
 			ea = *regb + *regi;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regi += 1;
 		}
 		break;
 		case 13:{
 			ea = *regb + *regi;
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regi -= 1;
 		}
 		break;
 		case 14:{
 			ea = *regb + *regi + (imm<<dsize);
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regi += 1;
 		}
 		break;
 		default:{
 			ea = *regb + *regi + (imm<<dsize);
-			if(!signal&LPROCS_ONLYADDRESS){
-				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
-			}
 			*regi -= 1;
 		}
 	}
+	if(readmem_adr){
+		switch(dsize){
+			case 0:{
+				m_cpu->args.data = LCpu_readMem8(m_cpu, ea);
+			}
+			break;
+			case 1:{
+				m_cpu->args.data = LCpu_readMem16(m_cpu, ea);
+			}
+			break;
+			case 2:
+			case 3:{
+				m_cpu->args.data = LCpu_readMem32(m_cpu, ea);
+			}
+			break;
+		}
+	}
+	
 	m_cpu->args.ea = ea;
 }
 
@@ -212,7 +189,7 @@ void LIIsaFmt_adi(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.mod = LIDFmt_ADI_mod(m_cpu->sregs.efd);
 	m_cpu->args.cond = LIDFmt_ADI_cond(m_cpu->sregs.efd);
 	m_cpu->args.rego = &m_cpu->regs.u[LIDFmt_ADI_rego(m_cpu->sregs.efd)];
-	m_cpu->args.imm = LIDFmt_ADI_imm(m_cpu->sregs.efd);
+	m_cpu->args.imm = castS16T32(LIDFmt_ADI_imm(m_cpu->sregs.efd));
 	
 	if(!LICpu_condition(m_cpu)){
 		m_cpu->args.func = LIIsaDtb_nop;
@@ -227,18 +204,18 @@ void LIIsaFmt_cdi(LCpu *m_cpu, LIPSignal signal){
 	m_cpu->args.rego = &m_cpu->regs.u[LIDFmt_CDI_rego(m_cpu->sregs.efd)];
 	m_cpu->args.regb = &m_cpu->regs.u[LIDFmt_CDI_regb(m_cpu->sregs.efd)];
 	
+	if(!LIDFmt_CDI_gap_(m_cpu->sregs.efd)){
+		m_cpu->args.func = LIIsaDtb_nop;
+		LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
+		return;
+	}
+	
 	/* Check for extra immediate fetching */
 	if(LIDFmt_CDI_f(m_cpu->sregs.efd)){
 		m_cpu->args.imm = LCpu_fetch(m_cpu);
 	}
 	else{
 		m_cpu->args.imm = LIDFmt_CDI_imm(m_cpu->sregs.efd);
-	}
-	
-	if(!LIDFmt_CDI_gap_(m_cpu->sregs.efd)){
-		m_cpu->args.func = LIIsaDtb_nop;
-		LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		return;
 	}
 	
 	if(!LICpu_condition(m_cpu)){

@@ -676,6 +676,12 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				LICpu_step(&gcpu);
 				gui_refresh();
 			}
+			if(LOWORD(wParam) == id_btn_reset){
+				memset(&gcpu.regs, 0, sizeof(gcpu.regs));
+				memset(&gcpu.sregs, 0, sizeof(gcpu.sregs));
+				memset(&gcpu.hs, 0, sizeof(gcpu.hs));
+				gui_refresh();
+			}
 			if(LOWORD(wParam) == id_dpd_editloadmode){
 				_gui_dialog_mode = gui_dropdown_getIndex(ui_dpd_editloadmode);
 			}
@@ -701,7 +707,11 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
 					FILE *file = fopen(ofn.lpstrFile, "r");
 					
-					for(Int i=0; i<1024*1024*8; i++){
+					fseek(file, 0, SEEK_END);
+					Uint32 maxsize = ftell(file);
+					fseek(file, 0, SEEK_SET);
+					
+					for(Int i=0; (i<1024*1024*8)&&(i<maxsize); i++){
 						LICPU_writeBus8((&gcpu), i, fgetc(file));
 					}
 					
