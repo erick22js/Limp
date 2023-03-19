@@ -26,7 +26,7 @@
 	<Limp/api.h>
 	<Limp/api.h>
 
-1678966117 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
+1679236287 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
 	<Limp/cpu.h>
 	<Limp/coproc.h>
 	<Limp/mmu.h>
@@ -42,7 +42,7 @@
 	<Limp/limp.h>
 	"gui.h"
 
-1678888497 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
+1679236520 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
 	<Limp/instructions/table.h>
 	<Limp/cpu.h>
 
@@ -120,7 +120,7 @@
 	<string.h>
 	<string.h>
 
-1678968804 c:\users\erick\documents\meusprojetos\limp\src\gui.h
+1679221512 c:\users\erick\documents\meusprojetos\limp\src\gui.h
 	<windows.h>
 	<commctrl.h>
 	<wchar.h>
@@ -567,7 +567,7 @@
 	<Limp/defines.h>
 	<Limp/instructions/table.h>
 
-1678799028 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode20.c
+1679236081 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode20.c
 	<Limp/instructions/opcode20.h>
 	<Limp/cpu.h>
 
@@ -615,7 +615,7 @@
 	<Limp/defines.h>
 	<Limp/instructions/table.h>
 
-1678705383 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode14.c
+1679235561 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode14.c
 	<Limp/instructions/opcode14.h>
 	<Limp/cpu.h>
 
@@ -810,11 +810,11 @@
 	<Limp/peri.h>
 	<Limp/pci.h>
 
-1678969230 c:\users\erick\documents\meusprojetos\limp\header\limp\thread.h
+1678969447 c:\users\erick\documents\meusprojetos\limp\header\limp\thread.h
 	<pthread.h>
 	<Limp/api.h>
 
-1678969327 source:c:\users\erick\documents\meusprojetos\limp\src\limp\thread.c
+1678969496 source:c:\users\erick\documents\meusprojetos\limp\src\limp\thread.c
 	<Limp/thread.h>
 	<windows.h>
 
