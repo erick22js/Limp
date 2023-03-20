@@ -30,6 +30,8 @@ typedef long long Long;
 typedef float Float;
 typedef double Double;
 
+typedef intptr_t IntPtr;
+
 
 #ifndef EOF
     #define EOF 0xFFFFFFFF

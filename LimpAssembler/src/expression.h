@@ -91,10 +91,26 @@ Int LSExp_unaryOprOrder(Int opr){
 /* Returns zero in invalid operator */
 Int LSExp_binaryOprOrder(Int opr){
 	switch(opr){
-		case '+':case '-':
+		case '||':
 			return 1;
-		case '*':case '/':
+		case '&&':
 			return 2;
+		case '|':
+			return 3;
+		case '^':
+			return 4;
+		case '&':
+			return 5;
+		case '==':case '!=':
+			return 6;
+		case '<':case '>':case '<=':case '>=':
+			return 7;
+		case '<<':case '>>':
+			return 8;
+		case '+':case '-':
+			return 9;
+		case '*':case '/':case '%':
+			return 10;
 	}
 	return 0;
 }
@@ -116,6 +132,62 @@ Int LSExp_solveBinary(LSParser *parser, LSsymValue *val1, Int opr, LSsymValue *v
 		break;
 		case '/':{
 			res->data.u32 = val1->data.u32/val2->data.u32;
+		}
+		break;
+		case '%':{
+			res->data.u32 = val1->data.u32%val2->data.u32;
+		}
+		break;
+		case '<<':{
+			res->data.u32 = val1->data.u32<<val2->data.u32;
+		}
+		break;
+		case '>>':{
+			res->data.u32 = val1->data.u32>>val2->data.u32;
+		}
+		break;
+		case '<':{
+			res->data.u32 = val1->data.u32<val2->data.u32;
+		}
+		break;
+		case '>':{
+			res->data.u32 = val1->data.u32>val2->data.u32;
+		}
+		break;
+		case '<=':{
+			res->data.u32 = val1->data.u32<=val2->data.u32;
+		}
+		break;
+		case '>=':{
+			res->data.u32 = val1->data.u32>=val2->data.u32;
+		}
+		break;
+		case '==':{
+			res->data.u32 = val1->data.u32==val2->data.u32;
+		}
+		break;
+		case '!=':{
+			res->data.u32 = val1->data.u32!=val2->data.u32;
+		}
+		break;
+		case '&':{
+			res->data.u32 = val1->data.u32&val2->data.u32;
+		}
+		break;
+		case '|':{
+			res->data.u32 = val1->data.u32|val2->data.u32;
+		}
+		break;
+		case '^':{
+			res->data.u32 = val1->data.u32^val2->data.u32;
+		}
+		break;
+		case '&&':{
+			res->data.u32 = val1->data.u32&&val2->data.u32;
+		}
+		break;
+		case '||':{
+			res->data.u32 = val1->data.u32||val2->data.u32;
 		}
 		break;
 	}

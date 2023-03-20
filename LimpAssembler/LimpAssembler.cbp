@@ -34,10 +34,12 @@
 		<Unit filename="src/api.h" />
 		<Unit filename="src/db_general.h" />
 		<Unit filename="src/db_instructions.h" />
+		<Unit filename="src/dirhanddler.h" />
 		<Unit filename="src/encoder.h" />
 		<Unit filename="src/error.h" />
 		<Unit filename="src/expression.h" />
 		<Unit filename="src/file.h" />
+		<Unit filename="src/instructions.h" />
 		<Unit filename="src/lexer.h" />
 		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />

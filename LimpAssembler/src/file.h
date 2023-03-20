@@ -2,15 +2,15 @@
 #define limps_file_h
 
 #include "api.h"
+#include "dirhanddler.h"
 
 
-#define LS_MAX_PATHSIZE 255
 #define LS_MAX_FILES 32
 
 typedef struct LSFile{
     /* File definitions */
     Bool open;
-    Char path[LS_MAX_PATHSIZE+1];
+    Char path[LS_MAX_PATHSIZE];
     
     /* Definition for buffer type */
     Char* buffer;
@@ -30,8 +30,8 @@ typedef struct LSFile{
     Uint16 latest_feed:4;
     
     /* Custom data */
-    void* userdata;
-    void* apidata;
+    Uint32 userdata;
+    Uint32 apidata;
 }LSFile;
 
 LSFile lsg_files_[LS_MAX_FILES];
@@ -77,6 +77,7 @@ LSFile *LSFile_loadUserFile(Char* path, Bool read_mode){
         if(!file->file){
             return NULL;
         }
+        LSDh_copy(file->path, path);
         file->open = TRUE;
         file->bufft = FALSE;
         file->readm = read_mode;

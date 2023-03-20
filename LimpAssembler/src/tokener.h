@@ -132,6 +132,78 @@ Int LSTokener_fetch(LSTokener *tkr){
 					}
 				}
 				break;
+				case '!':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='='){
+						tkr->tk.data.sign = '!=';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '!';
+					}
+				}
+				break;
+				case '>':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='>'){
+						tkr->tk.data.sign = '>>';
+					}
+					else if(chr=='='){
+						tkr->tk.data.sign = '>=';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '>';
+					}
+				}
+				break;
+				case '<':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='<'){
+						tkr->tk.data.sign = '<<';
+					}
+					else if(chr=='='){
+						tkr->tk.data.sign = '<=';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '<';
+					}
+				}
+				break;
+				case '&':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='&'){
+						tkr->tk.data.sign = '&&';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '&';
+					}
+				}
+				break;
+				case '|':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='|'){
+						tkr->tk.data.sign = '||';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '|';
+					}
+				}
+				break;
+				case '=':{
+					chr = LSLexer_get(tkr->file);
+					if(chr=='='){
+						tkr->tk.data.sign = '==';
+					}
+					else{
+						LSLexer_unget(tkr->file);
+						tkr->tk.data.sign = '=';
+					}
+				}
+				break;
 				default:{
 					tkr->tk.data.sign = chr;
 				}
@@ -143,7 +215,7 @@ Int LSTokener_fetch(LSTokener *tkr){
     if(LSLexer_eof(tkr->file)){
         tkr->ended = TRUE;
     }
-    LSToken_print(&tkr->tk);
+    //LSToken_print(&tkr->tk);
     return 0;
 }
 

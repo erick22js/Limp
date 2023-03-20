@@ -23,13 +23,7 @@ LSDySPtr iptr = 0;
 int main(){
     printf("#################################################### Begin ####################################################\n\n");
     
-    /*
-    FILE *file = fopen("teste.txt", "w");
-    fputc('O', file);
-    fclose(file);
-    */
-    
-    file = LSLexer_openPath("test.asm");
+    file = LSLexer_openPath("main.asm");
     
     LSParser parser;
     
@@ -38,8 +32,6 @@ int main(){
     if((errcode=LSParser_init(&parser))){
         printf("\n\nCompilation terminated with code error %d\n", errcode);
     }
-    
-    
     
     printf("\n\nProgram Ended with %d bytes allocated.", LSDyS_getTotalMemAllocated());
     

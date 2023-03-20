@@ -146,6 +146,21 @@ struct LSsymLabel{
 
 
 /**
+	Literal Definition
+	Its arranjed in a linked list way
+*/
+
+struct LSsymLitdef;
+typedef struct LSsymLitdef LSsymLitdef;
+struct LSsymLitdef{
+	Char* name;
+	LSsymValue value;
+	
+	LSsymLitdef *next;
+};
+
+
+/**
     Arranjed linked lists Functions
 */
 
