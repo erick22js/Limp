@@ -6,6 +6,22 @@ var obj = JSON.parse(raw);
 var src = "\n\nLSMnemonic lsdb_mnemonics[] = {\n";
 var mnes = "";
 
+var su_cond = [
+	[""], [".aw"],[".eq"],[".ne"],[".lt"],
+    [".gt"],[".le"],[".ge"],[".bl"],
+    [".ab"],[".be"],[".ae"],[".ez"],
+    [".nz"],[".gz"],[".lz"],[".oez"],
+    [".onz"],[".ogz"],[".olz"],[".oed"],
+    [".ond"],[".old"],[".ogd"],[".oea"],
+    [".ona"],[".ov"],[".sc"],[".cc"],[".sb"],[".cb"],[".so"],[".co"],
+];
+var su_fet = [
+    [""], [".b"], [".d"],
+];
+var su_im = [
+    [""], [".w"], [".uw"], [".hw"], [".sw"],
+]
+
 
 function type_by_ta(ta){
 	switch(ta){
@@ -58,7 +74,33 @@ for(var opcode in obj){
 	if(opc["varyants"]!=null){
 		for(var mi=0; mi<opc["varyants"].length; mi++){
 			var mne = opc["varyants"][mi];
-			mnes += mne["mnemonic"].toLowerCase()+"\n";
+			
+			if(opc["format"]=="IR"){
+				for(var i=0; i<su_im.length; i++){
+					mnes += mne["mnemonic"].toLowerCase()+""+su_im[i]+" ";
+				}
+			}
+			if(opc["format"]=="ADI"||opc["format"]=="CDI"){
+				for(var i=0; i<su_cond.length; i++){
+					if(opc["format"]=="CDI"){
+						for(var i2=0; i2<su_fet.length; i2++){
+							mnes += mne["mnemonic"].toLowerCase()+""+su_cond[i]+su_fet[i2]+" ";
+						}
+					}
+					else{
+						mnes += mne["mnemonic"].toLowerCase()+""+su_cond[i]+" ";
+					}
+				}
+			}
+			if(opc["format"]=="AMI"||opc["format"]=="SI"){
+				for(var i=0; i<su_fet.length; i++){
+					mnes += mne["mnemonic"].toLowerCase()+""+su_fet[i]+" ";
+				}
+			}
+			if(opc["format"]=="JL"){
+				mnes += mne["mnemonic"].toLowerCase()+" ";
+			}
+			
 			src +=
 `    {
         "`+mne["mnemonic"].toLowerCase()+`", 0x`+opcode.substr(2, 3).toUpperCase()+`, LS_INSTRTYPE_`+opc["format"]+`,
@@ -82,5 +124,5 @@ for(var opcode in obj){
 src += "};";
 
 
-fs.writeFileSync("LimpAssembler/src/instructions.h", src);
+//fs.writeFileSync("LimpAssembler/src/instructions.h", src);
 fs.writeFileSync("mnemonics.h", mnes);
