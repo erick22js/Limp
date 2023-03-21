@@ -141,6 +141,23 @@ void LSFile_ungetc(LSFile *file){
     }
 }
 
+Uint32 LSFile_read(LSFile *file, void* dest, Uint32 length){
+	Int count = 0;
+	Byte* destb = dest;
+	if(file->readm){
+        while(length){
+			Int chr = LSFile_getc(file);
+			if(chr==EOF){
+				break;
+			}
+			destb++;
+			length--;
+			count++;
+        }
+    }
+    return count;
+}
+
 void LSFile_putc(LSFile *file, Byte chr){
     if(!file->readm){
         if(file->bufft){

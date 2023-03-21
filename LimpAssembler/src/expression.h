@@ -35,16 +35,16 @@ Int LSExp_getInstructionSize(LSParser *parser, LSMnemonic *mne, Int *out_size){
     *out_size = 4;
     Uint32 value;
     
-    LSTokener_fetch(&parser->tkr);
+    LSParser_fetchToken(parser, FALSE);
     if(LSToken_isSign(tk, '.')){
         if(mne->type==LS_INSTRTYPE_IR){
-            LSTokener_fetch(&parser->tkr);
+            LSParser_fetchToken(parser, FALSE);
             Throw(
                 LSExp_leadDescriptor(tk, LS_KWTYPE_IMODE, &value)
             );
         }
         else if((mne->type==LS_INSTRTYPE_AMI)||(mne->type==LS_INSTRTYPE_SI)||(mne->type==LS_INSTRTYPE_CDI)){
-            LSTokener_fetch(&parser->tkr);
+            LSParser_fetchToken(parser, FALSE);
             printf("The retrieved mnemonic is %s\n", mne->name);
             Throw(
                 LSExp_leadDescriptor(tk, LS_KWTYPE_EFETCH, &value)
@@ -200,7 +200,7 @@ Int LSExp_fetchBinary(LSParser *parser, LSsymValue *res, LSsymValue *val1_pre, I
 Int LSExp_fetchUnary(LSParser *parser, LSsymValue *res){
     LSToken *tk = &parser->tkr.tk;
     
-	LSTokener_fetch(&parser->tkr);
+	LSParser_fetchToken(parser, FALSE);
 	if(LSToken_isSign(tk, '-')){
 		Throw(
 			LSExp_fetchUnary(parser, res)
@@ -212,18 +212,30 @@ Int LSExp_fetchUnary(LSParser *parser, LSsymValue *res){
 			LSExp_fetchUnary(parser, res)
 		);
 	}
+	else if(LSToken_isSign(tk, '!')){
+		Throw(
+			LSExp_fetchUnary(parser, res)
+		);
+		res->data.s32 = !(res->data.s32);
+	}
+	else if(LSToken_isSign(tk, '~')){
+		Throw(
+			LSExp_fetchUnary(parser, res)
+		);
+		res->data.s32 = !(res->data.s32);
+	}
 	else if(LSToken_isSign(tk, '(')){
 		Throw(
 			LSExp_fetchBinary(parser, res, NULL, 0)
 		);
-		LSTokener_fetch(&parser->tkr);
+		LSParser_fetchToken(parser, FALSE);
 		if(!LSToken_isSign(tk, ')')){
 			/* TODO: Throw a Exception = Expected a closin paren */
 			Error(1);
 		}
 	}
 	else if(LSToken_isSign(tk, '@')){
-		LSTokener_preview(&parser->tkr);
+		LSParser_previewToken(parser, FALSE);
 		if((tk->type==LS_TOKENTYPE_INTEGER)||(tk->type==LS_TOKENTYPE_IDENTIFIER)){
 			Throw(
 				LSExp_fetchUnary(parser, res)
@@ -239,7 +251,7 @@ Int LSExp_fetchUnary(LSParser *parser, LSsymValue *res){
 		res->valtype = LS_ARGVALUE_IMM;
 	}
 	else if(tk->type==LS_TOKENTYPE_IDENTIFIER){
-		if(LSParser_hasSymbol(parser, tk->data.string)){
+		if(LSParser_hasSymbol(parser, tk->data.string, TRUE)){
 			res->data.u32 = LSParser_getSymbol(parser, tk->data.string);
 			res->valtype = LS_ARGVALUE_IMM32;
 		}
@@ -253,11 +265,11 @@ Int LSExp_fetchUnary(LSParser *parser, LSsymValue *res){
         Error(1);
 	}
 	
-	LSTokener_preview(&parser->tkr);
+	LSParser_previewToken(parser, FALSE);
 	if(LSToken_isSign(tk, '#')||LSToken_isSign(tk, ':')){
 		Bool signed_cast = LSToken_isSign(tk, ':');
-		LSTokener_fetch(&parser->tkr);
-		LSTokener_fetch(&parser->tkr);
+		LSParser_fetchToken(parser, FALSE);
+		LSParser_fetchToken(parser, FALSE);
 		
 		/* Cast to higher size for easy casting */
 		switch(res->valtype){
@@ -335,10 +347,10 @@ Int LSExp_fetchBinary(LSParser *parser, LSsymValue *res, LSsymValue *val1_pre, I
 		opr1 = opr1_pre;
 	}
 	else{
-		LSTokener_preview(&parser->tkr);
+		LSParser_previewToken(parser, FALSE);
 		if((tk->type==LS_TOKENTYPE_SIGN)&&LSExp_binaryOprOrder(tk->data.sign)){
 			opr1 = tk->data.sign;
-			LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
 		}
 		else{
 			*res = val1;
@@ -354,10 +366,10 @@ Int LSExp_fetchBinary(LSParser *parser, LSsymValue *res, LSsymValue *val1_pre, I
 	
 	/* Fetching for second operator */
 	Int opr2 = 0;
-	LSTokener_preview(&parser->tkr);
+	LSParser_previewToken(parser, FALSE);
 	if((tk->type==LS_TOKENTYPE_SIGN)&&LSExp_binaryOprOrder(tk->data.sign)){
 		opr2 = tk->data.sign;
-		LSTokener_fetch(&parser->tkr);
+		LSParser_fetchToken(parser, FALSE);
 		
 		if(LSExp_binaryOprOrder(opr1)>=LSExp_binaryOprOrder(opr2)){
 			LSsymValue res2;
@@ -401,7 +413,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
     /* Each argument must be separated by a comma */
     /* If current argument is not the first, consume the comma */
     if(!first){
-        LSTokener_fetch(&parser->tkr);
+        LSParser_fetchToken(parser, FALSE);
         if(!LSToken_isSign(tk, ',')){
             /* TODO: Throw a Exception = Expected a comma separator */
             Error(1);
@@ -409,54 +421,54 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
     }
     
     /* Now, start fetching for the argument */
-    LSTokener_preview(&parser->tkr);
+    LSParser_previewToken(parser, FALSE);
     
     /* Its a lonely register */
     if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
-        LSTokener_fetch(&parser->tkr);
+        LSParser_fetchToken(parser, FALSE);
         arg->valtype = LS_ARGVALUE_REG;
         arg->value.regindex = tk->data.kw->code;
     }
     /* Its a amd for memory */
     else if(LSToken_isSign(tk, '[')){
-		LSTokener_fetch(&parser->tkr);
-        LSTokener_preview(&parser->tkr);
+		LSParser_fetchToken(parser, FALSE);
+        LSParser_previewToken(parser, FALSE);
         
         if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
-			LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
 			arg->value.amd.regb = tk->data.kw->code;
 			
-			LSTokener_preview(&parser->tkr);
+			LSParser_previewToken(parser, FALSE);
 			/* ADRM: Pointer */
 			if(LSToken_isSign(tk, ']')){
 				arg->value.amd.type = LS_AMDTYPE_POINTER;
 			}
 			/* ADRM: Pointer Pos-Increment */
 			else if(LSToken_isSign(tk, '++')){
-				LSTokener_fetch(&parser->tkr);
+				LSParser_fetchToken(parser, FALSE);
 				arg->value.amd.type = LS_AMDTYPE_POINTERPOSINCREMENT;
 			}
 			/* ADRM: Pointer Pos-Decrement */
 			else if(LSToken_isSign(tk, '--')){
-				LSTokener_fetch(&parser->tkr);
+				LSParser_fetchToken(parser, FALSE);
 				arg->value.amd.type = LS_AMDTYPE_POINTERPOSDECREMENT;
 			}
 			else if(LSToken_isSign(tk, '+')){
-				LSTokener_fetch(&parser->tkr);
+				LSParser_fetchToken(parser, FALSE);
 				
-				LSTokener_preview(&parser->tkr);
+				LSParser_previewToken(parser, FALSE);
 				if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
-					LSTokener_fetch(&parser->tkr);
+					LSParser_fetchToken(parser, FALSE);
 					arg->value.amd.regi = tk->data.kw->code;
 					
-					LSTokener_preview(&parser->tkr);
+					LSParser_previewToken(parser, FALSE);
 					/* ADRM: Pointer Indexed */
 					if(LSToken_isSign(tk, ']')){
 						arg->value.amd.type = LS_AMDTYPE_POINTERINDEXED;
 					}
 					/* ADRM: Pointer Dynamic */
 					else if(LSToken_isSign(tk, '+')){
-						LSTokener_fetch(&parser->tkr);
+						LSParser_fetchToken(parser, FALSE);
 						
 						LSsymValue res = {0, 0};
 						Throw(
@@ -468,7 +480,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 					}
 					/* ADRM: Pointer Dynamic (with minus prefix) */
 					else if(LSToken_isSign(tk, '+')){
-						LSTokener_fetch(&parser->tkr);
+						LSParser_fetchToken(parser, FALSE);
 						
 						LSsymValue res = {0, 0};
 						Throw(
@@ -480,7 +492,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 					}
 					/* ADRM: Pointer Element */
 					else if(LSToken_isSign(tk, '*')){
-						LSTokener_fetch(&parser->tkr);
+						LSParser_fetchToken(parser, FALSE);
 						
 						LSsymValue res = {0, 0};
 						Throw(
@@ -496,8 +508,8 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 					}
 				}
 				else if(LSToken_isSign(tk, '(')){
-					LSTokener_fetch(&parser->tkr);
-					LSTokener_fetch(&parser->tkr);
+					LSParser_fetchToken(parser, FALSE);
+					LSParser_fetchToken(parser, FALSE);
 					
 					if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
 						arg->value.amd.regi = tk->data.kw->code;
@@ -507,7 +519,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 						Error(1);
 					}
 					
-					LSTokener_fetch(&parser->tkr);
+					LSParser_fetchToken(parser, FALSE);
 					/* ADRM: Pointer Indexed Pos-Increment */
 					if(LSToken_isSign(tk, '++')){
 						arg->value.amd.type = LS_AMDTYPE_POINTERINDEXEDPOSINCREMENT;
@@ -521,16 +533,16 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 						Error(1);
 					}
 					
-					LSTokener_fetch(&parser->tkr);
+					LSParser_fetchToken(parser, FALSE);
 					if(!LSToken_isSign(tk, ')')){
 						/* TODO: Throw Exception => Expected a closin paren */
 						Error(1);
 					}
 					
-					LSTokener_preview(&parser->tkr);
+					LSParser_previewToken(parser, FALSE);
 					/* ADRM: Pointer Dynamic Pos-Increment or Pos-Decremented */
 					if(LSToken_isSign(tk, '+')){
-						LSTokener_fetch(&parser->tkr);
+						LSParser_fetchToken(parser, FALSE);
 						
 						LSsymValue res = {0, 0};
 						Throw(
@@ -541,7 +553,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 						arg->value.amd.imm = res.data.u32;
 					}
 					else if(LSToken_isSign(tk, '-')){
-						LSTokener_fetch(&parser->tkr);
+						LSParser_fetchToken(parser, FALSE);
 						
 						LSsymValue res = {0, 0};
 						Throw(
@@ -569,7 +581,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 				}
 			}
 			else if(LSToken_isSign(tk, '-')){
-				LSTokener_fetch(&parser->tkr);
+				LSParser_fetchToken(parser, FALSE);
 				
 				/* ADRM: Pointer Immediate Indexed (with minus prefix) */
 				LSsymValue res = {0, 0};
@@ -587,8 +599,8 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
         }
         /* ADRM: Pointer Pre-Increment */
         else if(LSToken_isSign(tk, '++')){
-			LSTokener_fetch(&parser->tkr);
-			LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+			LSParser_fetchToken(parser, FALSE);
 			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
 				arg->value.amd.type = LS_AMDTYPE_POINTERPREINCREMENT;
 				arg->value.amd.regb = tk->data.kw->code;
@@ -600,8 +612,8 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
         }
         /* ADRM: Pointer Pre-Decrement */
         else if(LSToken_isSign(tk, '--')){
-			LSTokener_fetch(&parser->tkr);
-			LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+			LSParser_fetchToken(parser, FALSE);
 			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
 				arg->value.amd.type = LS_AMDTYPE_POINTERPREDECREMENT;
 				arg->value.amd.regb = tk->data.kw->code;
@@ -624,17 +636,17 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 		arg->valtype = LS_ARGVALUE_AMD;
 		
 		/* Checks if is not end of addressing mode */
-		LSTokener_fetch(&parser->tkr);
+		LSParser_fetchToken(parser, FALSE);
 		if(!LSToken_isSign(tk, ']')){
 			/* TODO: Throw Exception => Expected end of addressing mode clause */
 			Error(1);
 		}
 		
 		/* Checks for any adrmsize specifier */
-		LSTokener_preview(&parser->tkr);
+		LSParser_previewToken(parser, FALSE);
 		if(LSToken_isSign(tk, '#')){
-			LSTokener_fetch(&parser->tkr);
-			LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+			LSParser_fetchToken(parser, FALSE);
 			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_ADRSIZE)){
 				arg->value.amd.dsize = tk->data.kw->code;
 			}
@@ -657,7 +669,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
         arg->value.imm = res.data.u32;
     }
     
-    LSTokener_preview(&parser->tkr);
+    LSParser_previewToken(parser, FALSE);
     if(!LSToken_endOfArgument(tk)){
         /* TODO: Throw a Exception = Expected end of argument */
         Error(1);
@@ -674,28 +686,28 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
     memset(instr, 0, sizeof(LSsymInstruction));
     
     /* Descriptor Determination */
-    LSTokener_preview(&parser->tkr);
+    LSParser_previewToken(parser, FALSE);
     if(LSToken_isSign(tk, '.')){
         if(mne->type==LS_INSTRTYPE_IR){
-			LSTokener_fetch(&parser->tkr);
-            LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+            LSParser_fetchToken(parser, FALSE);
             Throw(
                 LSExp_leadDescriptor(tk, LS_KWTYPE_IMODE, &value)
             );
             instr->im = value;
         }
         else if((mne->type==LS_INSTRTYPE_ADI)||(mne->type==LS_INSTRTYPE_CDI)){
-			LSTokener_fetch(&parser->tkr);
-            LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+            LSParser_fetchToken(parser, FALSE);
             Throw(
                 LSExp_leadDescriptor(tk, LS_KWTYPE_CONDITION, &value)
             );
             instr->cond = value;
             /* Check for Register Operand Specifier */
-            LSTokener_preview(&parser->tkr);
+            LSParser_previewToken(parser, FALSE);
             if(LSToken_isSign(tk, '<')){
-                LSTokener_fetch(&parser->tkr);
-                LSTokener_fetch(&parser->tkr);
+                LSParser_fetchToken(parser, FALSE);
+                LSParser_fetchToken(parser, FALSE);
                 
                 if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
                     instr->rego = tk->data.kw->code;
@@ -705,7 +717,7 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
                     Error(1);
                 }
                 
-                LSTokener_fetch(&parser->tkr);
+                LSParser_fetchToken(parser, FALSE);
                 if(!LSToken_isSign(tk, '>')){
                     /* TODO: Throw Exception => Expected closin '>' */
                     Error(1);
@@ -715,12 +727,12 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
                 instr->rego = 0;
             }
         }
-        LSTokener_preview(&parser->tkr);
+        LSParser_previewToken(parser, FALSE);
     }
     if(LSToken_isSign(tk, '.')){
         if((mne->type==LS_INSTRTYPE_AMI)||(mne->type==LS_INSTRTYPE_SI)||(mne->type==LS_INSTRTYPE_CDI)){
-			LSTokener_fetch(&parser->tkr);
-            LSTokener_fetch(&parser->tkr);
+			LSParser_fetchToken(parser, FALSE);
+            LSParser_fetchToken(parser, FALSE);
             Throw(
                 LSExp_leadDescriptor(tk, LS_KWTYPE_EFETCH, &value)
             );
@@ -762,7 +774,7 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
     }
     
     /* Check if has reached the end of instruction */
-    LSTokener_preview(&parser->tkr);
+    LSParser_previewToken(parser, FALSE);
     if(!LSToken_endOfArgumentList(tk)){
         printf("$ Incompatible arguments!\n");
         /* TODO: Throw a exception => Unexpected token */

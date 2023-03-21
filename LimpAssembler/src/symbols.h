@@ -129,7 +129,6 @@ struct LSsymInstruction{
 };
 
 
-
 /**
     Symbol Label
     Its arranjed in a linked list way
@@ -157,6 +156,64 @@ struct LSsymLitdef{
 	LSsymValue value;
 	
 	LSsymLitdef *next;
+};
+
+
+/**
+	Defines Definition
+	Its arranjed in a linked list way
+*/
+
+struct LSsymDefine;
+typedef struct LSsymDefine LSsymDefine;
+struct LSsymDefine{
+	Char* name;
+	Char* src;
+	Int src_len;
+	
+	LSsymDefine *next;
+};
+
+
+/**
+	Once Definition
+	Its arranjed in a linked list way
+*/
+
+struct LSsymOnce;
+typedef struct LSsymOnce LSsymOnce;
+struct LSsymOnce{
+	Char* path;
+	
+	LSsymDefine *next;
+};
+
+
+/**
+	Scope Definition
+*/
+
+struct LSsymScope;
+typedef struct LSsymScope LSsymScope;
+struct LSsymScope{
+	Char* name;
+	Uint32 adr;
+	
+	LSsymLabel *label_first;
+    LSsymLabel *label_last;
+    
+    LSsymLitdef *predef_first;
+    LSsymLitdef *predef_last;
+    
+    LSsymLitdef *const_first;
+    LSsymLitdef *const_last;
+
+    LSsymDefine *def_first;
+    LSsymDefine *def_last;
+    
+    LSsymScope *father;
+    
+    LSsymScope *next;
 };
 
 

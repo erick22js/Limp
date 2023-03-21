@@ -104,6 +104,12 @@ Int LSTokener_fetch(LSTokener *tkr){
 					}
 				}
 				break;
+				case ';':{
+					while(chr!='\n' && chr!=EOF){
+							chr = LSLexer_get(tkr->file);
+						}
+						continue;
+				}
 				case '/':{
 					chr = LSLexer_get(tkr->file);
 					/* Multi line commentary */
@@ -215,7 +221,7 @@ Int LSTokener_fetch(LSTokener *tkr){
     if(LSLexer_eof(tkr->file)){
         tkr->ended = TRUE;
     }
-    //LSToken_print(&tkr->tk);
+    LSToken_print(&tkr->tk);
     return 0;
 }
 
@@ -227,6 +233,7 @@ Int LSTokener_preview(LSTokener *tkr){
     }
     LSTokener_fetch(tkr);
     tkr->preview = TRUE;
+    return 0;
 }
 
 

@@ -19,6 +19,15 @@ LSFile *LSLexer_openSrc(Char* string){
     return file;
 }
 
+LSFile *LSLexer_openBuffer(Byte* buffer, Int length, Char* pspath){
+    LSFile *file = LSFile_loadBuffer((Byte*)buffer, length, TRUE);
+    if(file){
+        file->apidata = 0x00010001;
+        LSDh_copy(file->path, pspath);
+    }
+    return file;
+}
+
 LSFile *LSLexer_openPath(Char* path){
     LSFile *file = LSFile_loadUserFile(path, TRUE);
     if(file){
@@ -48,6 +57,11 @@ void LSLexer_unget(LSFile *file){
 	file->apidata -= 1;
 }
 
+void LSLexer_read(LSFile *file, Char* out, Int length){
+	Int readed = LSFile_read(file, out, length);
+	out[readed] = 0;
+}
+
 void LSLexer_seekSet(LSFile *file, Int offset){
     LSFile_seekBegin(file, offset);
     file->apidata = 0x00010001;
@@ -68,6 +82,10 @@ Int LSLexer_line(LSFile *file){
 
 Int LSLexer_offset(LSFile *file){
     return (file->apidata)&0xFFFF;
+}
+
+Int LSLexer_tell(LSFile *file){
+    return LSFile_tell(file);
 }
 
 

@@ -3,22 +3,22 @@
 	<stdio.h>
 	"parser.h"
 
-1679321196 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\parser.h
+1679411683 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\parser.h
 	"tokener.h"
 	"symbols.h"
 	"encoder.h"
 	"expression.h"
 
-1679322051 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
+1679407697 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
 	"lexer.h"
 	"tokens.h"
 
-1679315686 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\lexer.h
+1679406256 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\lexer.h
 	"file.h"
 	"memory.h"
 	"error.h"
 
-1679317661 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\file.h
+1679403097 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\file.h
 	"api.h"
 	"dirhanddler.h"
 
@@ -47,7 +47,7 @@
 	"api.h"
 	"instructions.h"
 
-1679311965 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
+1679410511 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
 	"api.h"
 	"db_general.h"
 	"db_instructions.h"
@@ -59,7 +59,7 @@
 1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\wbuffer.h
 	"file.h"
 
-1679321974 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
+1679408039 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
 	"tokener.h"
 	"symbols.h"
 	"parser.h"
