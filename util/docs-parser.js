@@ -5,6 +5,9 @@ var obj = JSON.parse(raw);
 
 var src = "\n\nLSMnemonic lsdb_mnemonics[] = {\n";
 var mnes = "";
+var docs = "";
+
+var mnemonics = [];
 
 var su_cond = [
 	[""], [".aw"],[".eq"],[".ne"],[".lt"],
@@ -19,7 +22,7 @@ var su_fet = [
     [""], [".b"], [".d"],
 ];
 var su_im = [
-    [""], [".w"], [".uw"], [".hw"], [".sw"],
+    [""], [".w"], [".uw"], [".hw"], [".sw"], [".d"]
 ]
 
 
@@ -67,6 +70,24 @@ function value_by_ta(ta){
 	}
 }
 
+docs += "<body style='font-family:monospace; width:500px;'>";
+function writeDocs(mnemonic, type, args, description, non_pm){
+	var argslist = "";
+	for(var i=0; i<args.length; i++){
+		argslist += " "+args[i]+(i<(args.length-1)?",":"");
+	}
+	docs += `
+	<h1 style="font-size:20pt">`+mnemonic+`</h1>
+    
+    <label><h3>`+type+` Format: `+(non_pm?"#Super Mode":"Protected Mode")+`</h3></label>
+    <br>
+    <center><b>`+mnemonic+(type=="IR"?"[.im]":"")+(type=="ADI"||type=="CDI"?"[.cond]":"")+(type=="AMI"||type=="SI"||type=="CDI"?"[.f]":"")+argslist+`</b></center><br><br>
+    
+    <center>`+description+`</center><br><br>
+    
+    <hr>`;
+}
+
 
 for(var opcode in obj){
 	var opc = obj[opcode];
@@ -101,6 +122,8 @@ for(var opcode in obj){
 				mnes += mne["mnemonic"].toLowerCase()+" ";
 			}
 			
+			mnemonics.push([opc, mne]);
+			
 			src +=
 `    {
         "`+mne["mnemonic"].toLowerCase()+`", 0x`+opcode.substr(2, 3).toUpperCase()+`, LS_INSTRTYPE_`+opc["format"]+`,
@@ -121,8 +144,23 @@ for(var opcode in obj){
 	
 };
 
+mnemonics.sort(function(a, b){
+	return a[1]["mnemonic"]==b[1]["mnemonic"]?0:a[1]["mnemonic"]>b[1]["mnemonic"]?1:-1;
+});
+
+for(var i=0; i<mnemonics.length; i++){
+	writeDocs(
+		mnemonics[i][1]["mnemonic"].toLowerCase(),
+		mnemonics[i][0]["format"],
+		mnemonics[i][1]["args"],
+		mnemonics[i][1]["description"],
+		mnemonics[i][1]["non-pm"]);
+}
+
 src += "};";
 
+docs += "</body>";
 
-//fs.writeFileSync("LimpAssembler/src/instructions.h", src);
-fs.writeFileSync("mnemonics.h", mnes);
+fs.writeFileSync("instructions.h", src);
+//fs.writeFileSync("mnemonics.h", mnes);
+fs.writeFileSync("docs.html", docs);

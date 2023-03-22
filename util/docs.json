@@ -108,8 +108,8 @@
         "mode": 0,
         "mnemonic": "LDMB",
         "args": [
-          "$amd",
-          "regd"
+          "regd",
+          "$amd"
         ],
         "description": "Loads a byte data from memory address to register"
       },
@@ -117,8 +117,8 @@
         "mode": 1,
         "mnemonic": "LDMW",
         "args": [
-          "$amd",
-          "regd"
+          "regd",
+          "$amd"
         ],
         "description": "Loads a word data from memory address to register"
       },
@@ -126,8 +126,8 @@
         "mode": 2,
         "mnemonic": "LDMD",
         "args": [
-          "$amd",
-          "regd"
+          "regd",
+          "$amd"
         ],
         "description": "Loads a dword data from memory address to register"
       },
@@ -135,8 +135,8 @@
         "mode": 3,
         "mnemonic": "LDMQ",
         "args": [
-          "$amd",
-          "regd"
+          "regd",
+          "$amd"
         ],
         "description": "Loads a dword data from memory address to double registers"
       }
