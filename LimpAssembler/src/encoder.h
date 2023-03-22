@@ -32,14 +32,14 @@ Uint32 LSEnc_toAMI(Uint32 base, Uint32 mod, Uint32 adrm, Uint32 dsize, Uint32 f,
         (imm&0xFF);
 }
 
-Uint32 LSEnc_toSI(Uint32 base, Uint32 mod, Uint32 func, Uint32 f, Uint32 regd, Uint32 regi, Uint32 regb, Uint32 imm){
+Uint32 LSEnc_toSI(Uint32 base, Uint32 mod, Uint32 func, Uint32 f, Uint32 regd, Uint32 regp, Uint32 regb, Uint32 imm){
     return
         ((base&0x3F)<<26) |
         ((mod&0x3)<<24) |
         ((func&0x3F)<<18) |
         ((f&0x1)<<17) |
         ((regd&0x7)<<14) |
-        ((regi&0x7)<<11) |
+        ((regp&0x7)<<11) |
         ((regb&0x7)<<8) |
         (imm&0xFF);
 }
@@ -172,8 +172,8 @@ void LSEnc_writeInstruction(LSFile *outfile, LSsymInstruction *instr){
     /*
         Chooses the correspondent instruction format for data encoding
     */
-    printf("#Encoding properties:\n\t- mnemonic: '%s';\n\t- base: 0x%x;\n\t- mod: 0x%x;\n\t- im: 0x%x;\n\t- func: 0x%x;\n\t- adrm: 0x%x;\n\t- dsize: %d;\n\t- cond: 0x%x;\n\t- f: %d;\n\t- regd: %d;\n\t- regb: %d;\n\t- regi: %d;\n\t- regp: %d;\n\t- rego: %d;\n\t- imm: 0x%x;\n",
-		mne->name, base, mod, im, func, adrm, dsize, cond, f, regd, regb, regi, regp, rego, imm);
+    //printf("#Encoding properties:\n\t- mnemonic: '%s';\n\t- base: 0x%x;\n\t- mod: 0x%x;\n\t- im: 0x%x;\n\t- func: 0x%x;\n\t- adrm: 0x%x;\n\t- dsize: %d;\n\t- cond: 0x%x;\n\t- f: %d;\n\t- regd: %d;\n\t- regb: %d;\n\t- regi: %d;\n\t- regp: %d;\n\t- rego: %d;\n\t- imm: 0x%x;\n",
+	//	mne->name, base, mod, im, func, adrm, dsize, cond, f, regd, regb, regi, regp, rego, imm);
     switch(mne->type){
         case LS_INSTRTYPE_IR:{
             opcode = LSEnc_toIR(base, mod, im, regd, regb, imm);
@@ -184,7 +184,7 @@ void LSEnc_writeInstruction(LSFile *outfile, LSsymInstruction *instr){
         }
         break;
         case LS_INSTRTYPE_SI:{
-            opcode = LSEnc_toSI(base, mod, func, f, regd, regi, regb, imm);
+            opcode = LSEnc_toSI(base, mod, func, f, regd, regp, regb, imm);
         }
         break;
         case LS_INSTRTYPE_ADI:{

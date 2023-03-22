@@ -206,7 +206,7 @@ void LSParser_pushScope(LSParser *parser, Char* name){
 	scope->father = parser->scope_in;
 	parser->scope_in = scope;
 	if(parser->scope_current){
-		printf("Entering from scope '%s' to '%s'\n", parser->scope_current->name, name);
+		//printf("Entering from scope '%s' to '%s'\n", parser->scope_current->name, name);
 		parser->scope_current->next = scope;
 	}
 	parser->scope_current = scope;
@@ -215,7 +215,7 @@ void LSParser_pushScope(LSParser *parser, Char* name){
 void LSParser_enterScope(LSParser *parser){
 	LSsymScope* scope = parser->scope_current->next;
 	
-	printf("Entering from scope '%s' to '%s'\n", parser->scope_current->name, scope->name);
+	//printf("Entering from scope '%s' to '%s'\n", parser->scope_current->name, scope->name);
 	scope->father = parser->scope_in;
 	parser->scope_in = scope;
 	parser->scope_current = scope;
@@ -223,7 +223,7 @@ void LSParser_enterScope(LSParser *parser){
 
 Bool LSParser_leaveScope(LSParser *parser){
 	if(parser->scope_in->father){
-		printf("Leaving from scope '%s' to '%s'\n", parser->scope_current->name, parser->scope_in->father->name);
+		//printf("Leaving from scope '%s' to '%s'\n", parser->scope_current->name, parser->scope_in->father->name);
 		parser->scope_in = parser->scope_in->father;
 		return TRUE;
 	}
@@ -233,7 +233,7 @@ Bool LSParser_leaveScope(LSParser *parser){
 void LSParser_rewindScope(LSParser *parser){
 	parser->scope_in = parser->scope_master;
 	parser->scope_current = parser->scope_master;
-	printf("Rewinding to scope '%s'\n", parser->scope_current->name);
+	//printf("Rewinding to scope '%s'\n", parser->scope_current->name);
 	parser->once_first = NULL;
 	parser->once_last = NULL;
 }
@@ -346,7 +346,9 @@ Int LSParser_process_file_(LSParser *parser){
     
     /* Process the current file until reach the end */
     while(!parser->tkr.ended){
-        LSParser_fetchToken(parser, FALSE);
+        Throw(
+			LSParser_fetchToken(parser, FALSE)
+		);
         
         /* Break line */
         if(tk->type==LS_TOKENTYPE_NEWLINE){
@@ -358,28 +360,29 @@ Int LSParser_process_file_(LSParser *parser){
         }
         /* If token is a preprocessor precursor */
         else if(LSToken_isSign(tk, '.')){
-            LSParser_fetchToken(parser, FALSE);
+            Throw(
+                LSParser_fetchToken(parser, FALSE)
+			);
             
             /* Must be a preprocessor identifier */
             if(tk->type!=LS_TOKENTYPE_IDENTIFIER){
-				/* TODO: Throw Exception => Expected a preprocessor name */
-				Error(1);
+				Error(LS_ERR_EXPECTPREPNAME);
             }
             
             /* Must be a valid preprocessor */
             /* PROC: Predefine a literal with name in program */
             if(LSToken_isIdentifier(tk, "predef")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_IDENTIFIER){
-					/* TODO: Throw Exception => Expected a identifier */
-					Error(1);
+					Error(LS_ERR_EXPECTIDENTIFIER);
 				}
 				Char* identifier = tk->data.string;
 				
 				if(LSParser_hasSymbol(parser, identifier, FALSE)){
-					/* TODO: Throw Exception => Symbol with same name already defined */
-					Error(1);
+					Error(LS_ERR_SYMBOLALREADYDEF);
 				}
 				
 				/* Evals next expression and attribs to symbol */
@@ -397,18 +400,21 @@ Int LSParser_process_file_(LSParser *parser){
             else if(LSToken_isIdentifier(tk, "const")){}
             /* PROC: Define a src with name */
             else if(LSToken_isIdentifier(tk, "define")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_IDENTIFIER){
-					/* TODO: Throw Exception => Expected a identifier */
-					Error(1);
+					Error(LS_ERR_EXPECTIDENTIFIER);
 				}
 				Char* identifier = tk->data.string;
 				
 				Uint32 begin = LSLexer_tell(LSParser_getCurrentFile(parser));
 				/* Retrieves the characters for symbol definition */
 				while(!LSToken_endOfArgumentList(tk)){
-					LSParser_fetchToken(parser, TRUE);
+					Throw(
+						LSParser_fetchToken(parser, TRUE)
+					);
 				}
 				Uint32 end = LSLexer_tell(LSParser_getCurrentFile(parser))-1;
 				Uint32 length = end-begin;
@@ -429,11 +435,12 @@ Int LSParser_process_file_(LSParser *parser){
             }
             /* PROC: Includes a external file */
             else if(LSToken_isIdentifier(tk, "include")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_STRING){
-					/* TODO: Throw Exception => Expected a string relative path */
-					Error(1);
+					Error(LS_ERR_EXPECTSTRING);
 				}
 				Char* relpath = tk->data.string;
 				
@@ -443,7 +450,7 @@ Int LSParser_process_file_(LSParser *parser){
 				LSDh_up(path);
 				LSDh_cd(path, relpath);
 				
-				printf("Opening file in path: '%s'\n", path);
+				//printf("Opening file in path: '%s'\n", path);
 				LSFile *file = LSLexer_openPath(path);
 				
 				LSParser_pushFile_(parser, file, FALSE);
@@ -451,7 +458,9 @@ Int LSParser_process_file_(LSParser *parser){
             }
             /* PROC: Includes a external file */
             else if(LSToken_isIdentifier(tk, "once")){
-				LSParser_previewToken(parser, FALSE);
+				Throw(
+					LSParser_previewToken(parser, FALSE)
+				);
 				
 				Char* id;
 				if(tk->type==LS_TOKENTYPE_STRING){
@@ -472,11 +481,15 @@ Int LSParser_process_file_(LSParser *parser){
             }
             /* PROC: Enters a scope */
             else if(LSToken_isIdentifier(tk, "scope")){
-				LSParser_previewToken(parser, FALSE);
+				Throw(
+					LSParser_previewToken(parser, FALSE)
+				);
 				
 				Char* name = "";
 				if(tk->type==LS_TOKENTYPE_IDENTIFIER){
-					LSParser_fetchToken(parser, FALSE);
+					Throw(
+						LSParser_fetchToken(parser, FALSE)
+					);
 					name = tk->data.string;
 				}
 				
@@ -485,8 +498,7 @@ Int LSParser_process_file_(LSParser *parser){
             /* PROC: Enters a scope */
             else if(LSToken_isIdentifier(tk, "endscope")){
 				if(!LSParser_leaveScope(parser)){
-					/* TODO: Throw Exception => Trying to go out of global scope */
-					Error(1);
+					Error(LS_ERR_OUTGLOBAL);
 				}
             }
             /* PROC: inserts raw bytes */
@@ -496,7 +508,9 @@ Int LSParser_process_file_(LSParser *parser){
 					if(LSToken_isSign(tk, ',')){
 						symbols++;
 					}
-					LSParser_fetchToken(parser, TRUE);
+					Throw(
+						LSParser_fetchToken(parser, TRUE)
+					);
 				}
 				if(LSToken_isIdentifier(tk, "d32")){
 					symbols *= 4;
@@ -509,11 +523,12 @@ Int LSParser_process_file_(LSParser *parser){
             }
             /* PROC: inserts text bytes on binary */
             else if(LSToken_isIdentifier(tk, "text")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_STRING){
-					/* TODO: Throw Exception => Expected a string */
-					Error(1);
+					Error(LS_ERR_EXPECTSTRING);
 				}
 				Char* cstr = tk->data.string;
 				
@@ -540,25 +555,27 @@ Int LSParser_process_file_(LSParser *parser){
             	break;
             }
             else{
-				/* TODO: Throw Exception => Expected a valid preprocessor name */
-				Error(1);
+				Error(LS_ERR_EXPECTVALIDPREPNAME);
             }
             /* Suspends processing until end of line instruction */
             while(!LSToken_endOfArgumentList(tk)){
-                LSParser_fetchToken(parser, TRUE);
+                Throw(
+					LSParser_fetchToken(parser, TRUE)
+				);
             }
         }
         /* May be a label definition */
         else if(tk->type==LS_TOKENTYPE_IDENTIFIER){
             Char* identifier = tk->data.string;
-            LSParser_fetchToken(parser, FALSE);
+            Throw(
+                LSParser_fetchToken(parser, FALSE)
+			);
             
             /* Its a label definition */
             if(LSToken_isSign(tk, ':')){
 				/* Cannot have any other symbol with the same name */
 				if(LSParser_hasSymbol(parser, identifier, FALSE)){
-					/* TODO: Throw Exception => Symbol with same name already defined */
-					Error(1);
+					Error(LS_ERR_SYMBOLALREADYDEF);
 				}
                 LSsymLabel *label = Calloc(sizeof(LSsymLabel));
                 label->name = identifier;
@@ -579,7 +596,9 @@ Int LSParser_process_file_(LSParser *parser){
             
             /* Suspends processing until end of line instruction */
             while(!LSToken_endOfArgumentList(tk)){
-                LSParser_fetchToken(parser, TRUE);
+                Throw(
+					LSParser_fetchToken(parser, TRUE)
+				);
             }
         }
         /* Undentified command */
@@ -588,8 +607,8 @@ Int LSParser_process_file_(LSParser *parser){
         }
         
         // Test code
-        LSToken_print(tk);
-        printf("#@@@@ Processor at adr: %d\n", parser->process_address_program);
+        //LSToken_print(tk);
+        //printf("#@@@@ Processor at adr: %d\n", parser->process_address_program);
     }
     return 0;
 }
@@ -600,7 +619,9 @@ Int LSParser_encode_file_(LSParser *parser){
     
     /* Process the current file until reach the end */
     while(!parser->tkr.ended){
-        LSParser_fetchToken(parser, FALSE);
+        Throw(
+			LSParser_fetchToken(parser, FALSE)
+		);
         
         /* Break line */
         if(tk->type==LS_TOKENTYPE_NEWLINE){
@@ -612,12 +633,13 @@ Int LSParser_encode_file_(LSParser *parser){
         }
         /* If token is a preprocessor precursor */
         else if(LSToken_isSign(tk, '.')){
-            LSParser_fetchToken(parser, FALSE);
+            Throw(
+                LSParser_fetchToken(parser, FALSE)
+			);
             
             /* Must be a preprocessor identifier */
             if(tk->type!=LS_TOKENTYPE_IDENTIFIER){
-				/* TODO: Throw Exception => Expected a preprocessor name */
-				Error(1);
+				Error(LS_ERR_EXPECTPREPNAME);
             }
             
             /* Must be a valid preprocessor */
@@ -625,17 +647,17 @@ Int LSParser_encode_file_(LSParser *parser){
             if(LSToken_isIdentifier(tk, "predef")){}
             /* PROC: Define a value with name in program */
             else if(LSToken_isIdentifier(tk, "const")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_IDENTIFIER){
-					/* TODO: Throw Exception => Expected a identifier */
-					Error(1);
+					Error(LS_ERR_EXPECTIDENTIFIER);
 				}
 				Char* identifier = tk->data.string;
 				
 				if(LSParser_hasSymbol(parser, identifier, FALSE)){
-					/* TODO: Throw Exception => Symbol with same name already defined */
-					Error(1);
+					Error(LS_ERR_SYMBOLALREADYDEF);
 				}
 				
 				/* Evals next expression and attribs to symbol */
@@ -657,11 +679,12 @@ Int LSParser_encode_file_(LSParser *parser){
             }
             /* PROC: Includes a external file */
             else if(LSToken_isIdentifier(tk, "include")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_STRING){
-					/* TODO: Throw Exception => Expected a string relative path */
-					Error(1);
+					Error(LS_ERR_EXPECTSTRING);
 				}
 				Char* relpath = tk->data.string;
 				
@@ -671,7 +694,7 @@ Int LSParser_encode_file_(LSParser *parser){
 				LSDh_up(path);
 				LSDh_cd(path, relpath);
 				
-				printf("Opening file in path: '%s'\n", path);
+				//printf("Opening file in path: '%s'\n", path);
 				LSFile *file = LSLexer_openPath(path);
 				
 				LSParser_pushFile_(parser, file, FALSE);
@@ -679,7 +702,9 @@ Int LSParser_encode_file_(LSParser *parser){
             }
             /* PROC: Includes a external file */
             else if(LSToken_isIdentifier(tk, "once")){
-				LSParser_previewToken(parser, FALSE);
+				Throw(
+					LSParser_previewToken(parser, FALSE)
+				);
 				
 				Char* id;
 				if(tk->type==LS_TOKENTYPE_STRING){
@@ -705,8 +730,7 @@ Int LSParser_encode_file_(LSParser *parser){
             /* PROC: Enters a scope */
             else if(LSToken_isIdentifier(tk, "endscope")){
 				if(!LSParser_leaveScope(parser)){
-					/* TODO: Throw Exception => Trying to go out of global scope */
-					Error(1);
+					Error(LS_ERR_OUTGLOBAL);
 				}
             }
             /* PROC: inserts raw bytes */
@@ -730,9 +754,13 @@ Int LSParser_encode_file_(LSParser *parser){
 						LSWbuff_write8(parser->out_file, res.data.u32);
 					}
 					expecting = FALSE;
-					LSParser_previewToken(parser, FALSE);
+					Throw(
+						LSParser_previewToken(parser, FALSE)
+					);
 					if(LSToken_isSign(tk, ',')){
-						LSParser_fetchToken(parser, FALSE);
+						Throw(
+							LSParser_fetchToken(parser, FALSE)
+						);
 						symbols++;
 						expecting = TRUE;
 					}
@@ -749,21 +777,24 @@ Int LSParser_encode_file_(LSParser *parser){
             }
             /* PROC: inserts text bytes on binary */
             else if(LSToken_isIdentifier(tk, "text")){
-				LSParser_fetchToken(parser, FALSE);
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
 				
 				if(tk->type!=LS_TOKENTYPE_STRING){
-					/* TODO: Throw Exception => Expected a string */
-					Error(1);
+					Error(LS_ERR_EXPECTSTRING);
 				}
 				Char* cstr = tk->data.string;
 				
 				Uint8* tstr = (Uint8*)cstr;
-				while((*tstr)){
+				Uint32 length = tk->length;
+				while(length){
 					LSWbuff_write8(parser->out_file, (*tstr));
 					tstr++;
+					length--;
 				}
 				
-				Int len = Str_length(cstr);
+				Int len = tk->length;
 				
 				parser->encode_address_program += len;
 				parser->encode_address_binary += len;
@@ -787,17 +818,20 @@ Int LSParser_encode_file_(LSParser *parser){
             	break;
             }
             else{
-				/* TODO: Throw Exception => Expected a valid preprocessor name */
-				Error(1);
+				Error(LS_ERR_EXPECTVALIDPREPNAME);
             }
             /* Suspends processing until end of line instruction */
             while(!LSToken_endOfArgumentList(tk)){
-                LSParser_fetchToken(parser, TRUE);
+                Throw(
+					LSParser_fetchToken(parser, TRUE)
+				);
             }
         }
         /* May be a label definition */
         else if(tk->type==LS_TOKENTYPE_IDENTIFIER){
-            LSParser_fetchToken(parser, FALSE);
+            Throw(
+                LSParser_fetchToken(parser, FALSE)
+			);
             
             /* Its a label definition */
             if(LSToken_isSign(tk, ':')){
@@ -821,12 +855,12 @@ Int LSParser_encode_file_(LSParser *parser){
         }
         /* Undentified command */
         else{
-            Error(1);
+            Error(LS_ERR_UNEXPECTTK);
         }
         
         // Test code
-        LSToken_print(tk);
-        printf("#!!!! Encoder at adr: %d\n", parser->encode_address_program);
+        //LSToken_print(tk);
+        //printf("#!!!! Encoder at adr: %d\n", parser->encode_address_program);
     }
     return 0;
 }
@@ -866,8 +900,12 @@ Int LSParser_init(LSParser *parser){
     
     Uint32 errcode = LSParser_parsesrc_(parser, parser->src_files[0]);
     if(errcode){
-		printf("Error in src file '%s', at line %d and offset %d", parser->files[parser->file_i-1].file->path, LSLexer_line(parser->files[parser->file_i-1].file), LSLexer_offset(parser->files[parser->file_i-1].file));
+		printf("Compilation fail :-(\n");
+		printf("Error in src file '%s', at line %d and offset %d\nCode %d: \"%s\"", parser->files[parser->file_i-1].file->path, LSLexer_line(parser->files[parser->file_i-1].file), parser->tkr.last.offset, errcode, LSErr_msgFromCode(errcode));
 		return errcode;
+    }
+    else{
+		printf("Compilation success!\n");
     }
     
     return 0;

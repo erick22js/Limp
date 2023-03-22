@@ -14,6 +14,7 @@ LSFile *LSLexer_openSrc(Char* string){
     }
     LSFile *file = LSFile_loadBuffer((Byte*)string, size, TRUE);
     if(file){
+        file->userdata = 0;
         file->apidata = 0x00010001;
     }
     return file;
@@ -22,6 +23,7 @@ LSFile *LSLexer_openSrc(Char* string){
 LSFile *LSLexer_openBuffer(Byte* buffer, Int length, Char* pspath){
     LSFile *file = LSFile_loadBuffer((Byte*)buffer, length, TRUE);
     if(file){
+        file->userdata = 0;
         file->apidata = 0x00010001;
         LSDh_copy(file->path, pspath);
     }
@@ -31,6 +33,7 @@ LSFile *LSLexer_openBuffer(Byte* buffer, Int length, Char* pspath){
 LSFile *LSLexer_openPath(Char* path){
     LSFile *file = LSFile_loadUserFile(path, TRUE);
     if(file){
+        file->userdata = 0;
         file->apidata = 0x00010001;
     }
     return file;

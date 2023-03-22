@@ -105,8 +105,8 @@ LSMnemonic lsdb_mnemonics[] = {
         "ldmb", 0x7, LS_INSTRTYPE_AMI,
         0x0, 0,
         {
-            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {0, 0},
             {0, 0},
         },
@@ -115,8 +115,8 @@ LSMnemonic lsdb_mnemonics[] = {
         "ldmw", 0x7, LS_INSTRTYPE_AMI,
         0x1, 0,
         {
-            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {0, 0},
             {0, 0},
         },
@@ -125,8 +125,8 @@ LSMnemonic lsdb_mnemonics[] = {
         "ldmd", 0x7, LS_INSTRTYPE_AMI,
         0x2, 0,
         {
-            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {0, 0},
             {0, 0},
         },
@@ -135,8 +135,8 @@ LSMnemonic lsdb_mnemonics[] = {
         "ldmq", 0x7, LS_INSTRTYPE_AMI,
         0x3, 0,
         {
-            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_AMD, LS_ARGVALUE_AMD},
             {0, 0},
             {0, 0},
         },

@@ -8,6 +8,9 @@
 typedef struct LSTokener{
     LSFile *file;
     LSToken tk;
+    struct{
+    	Uint16 offset;
+    }last;
     Bool ended;
     
     Bool preview;
@@ -19,8 +22,8 @@ typedef struct LSTokener{
 */
 
 void LSTokener_init(LSTokener *tkr, LSFile *file){
+	memset(tkr, 0, sizeof(LSTokener));
     tkr->file = file;
-    tkr->ended = FALSE;
 }
 
 
@@ -31,6 +34,8 @@ void LSTokener_init(LSTokener *tkr, LSFile *file){
 /* Fetches the next token */
 /* Returns Error code */
 Int LSTokener_fetch(LSTokener *tkr){
+	tkr->last.offset = LSLexer_offset(tkr->file);
+	
     /* Do not fetch anything if it was did in preview mode */
     if(tkr->preview){
         tkr->preview = FALSE;
@@ -47,181 +52,185 @@ Int LSTokener_fetch(LSTokener *tkr){
     while(!LSLexer_eof(tkr->file)){
         chr = LSLexer_get(tkr->file);
         
-        /* Is a breakline character */
-        if(chr=='\n'){
-            tkr->tk.type = LS_TOKENTYPE_NEWLINE;
-            tkr->tk.data.u32 = 0;
-            break;
-        }
         /* Is a not printable character */
-        else if(Char_isBlank(chr)){
+        if(Char_isBlank(chr)&&(chr!='\n')){
             continue;
         }
-        /* Is a number precursor */
-        else if(Char_isDecimal(chr)){
-            Throw(
-                LSToken_fetchNumber(tkr->file, &tkr->tk, chr)
-            );
-            break;
-        }
-        /* Is a identifier precursor */
-        else if(Char_isIdentifier(chr)){
-            Throw(
-                LSToken_fetchIdentifier(tkr->file, &tkr->tk, chr)
-            );
-            break;
-        }
-        /* Is a string literal */
-        else if(chr=='"'){
-            Throw(
-                LSToken_fetchString(tkr->file, &tkr->tk)
-            );
-            break;
-        }
-        /* Is any other sign character */
         else{
-			tkr->tk.type = LS_TOKENTYPE_SIGN;
-			switch(chr){
-				case '+':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='+'){
-						tkr->tk.data.sign = '++';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '+';
-					}
-				}
+			tkr->last.offset = LSLexer_offset(tkr->file)-1;
+			
+			/* Is a breakline character */
+			if(chr=='\n'){
+				tkr->tk.type = LS_TOKENTYPE_NEWLINE;
+				tkr->tk.data.u32 = 0;
 				break;
-				case '-':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='-'){
-						tkr->tk.data.sign = '--';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '-';
-					}
-				}
+			}
+			/* Is a number precursor */
+			else if(Char_isDecimal(chr)){
+				Throw(
+					LSToken_fetchNumber(tkr->file, &tkr->tk, chr)
+				);
 				break;
-				case ';':{
-					while(chr!='\n' && chr!=EOF){
-							chr = LSLexer_get(tkr->file);
+			}
+			/* Is a identifier precursor */
+			else if(Char_isIdentifier(chr)){
+				Throw(
+					LSToken_fetchIdentifier(tkr->file, &tkr->tk, chr)
+				);
+				break;
+			}
+			/* Is a string literal */
+			else if(chr=='"'){
+				Throw(
+					LSToken_fetchString(tkr->file, &tkr->tk)
+				);
+				break;
+			}
+			/* Is any other sign character */
+			else{
+				tkr->tk.type = LS_TOKENTYPE_SIGN;
+				switch(chr){
+					case '+':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='+'){
+							tkr->tk.data.sign = '++';
 						}
-						continue;
-				}
-				case '/':{
-					chr = LSLexer_get(tkr->file);
-					/* Multi line commentary */
-					if(chr=='*'){
-						while(chr!=EOF){
-							chr = LSLexer_get(tkr->file);
-							if(chr=='*'){
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '+';
+						}
+					}
+					break;
+					case '-':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='-'){
+							tkr->tk.data.sign = '--';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '-';
+						}
+					}
+					break;
+					case ';':{
+						while(chr!='\n' && chr!=EOF){
 								chr = LSLexer_get(tkr->file);
-								if(chr=='/'){
-									break;
+							}
+							continue;
+					}
+					case '/':{
+						chr = LSLexer_get(tkr->file);
+						/* Multi line commentary */
+						if(chr=='*'){
+							while(chr!=EOF){
+								chr = LSLexer_get(tkr->file);
+								if(chr=='*'){
+									chr = LSLexer_get(tkr->file);
+									if(chr=='/'){
+										break;
+									}
 								}
 							}
+							continue;
 						}
-						continue;
-					}
-					/* One line commentary */
-					else if(chr=='/'){
-						while(chr!='\n' && chr!=EOF){
-							chr = LSLexer_get(tkr->file);
+						/* One line commentary */
+						else if(chr=='/'){
+							while(chr!='\n' && chr!=EOF){
+								chr = LSLexer_get(tkr->file);
+							}
+							continue;
 						}
-						continue;
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '-';
+						}
 					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '-';
+					break;
+					case '!':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='='){
+							tkr->tk.data.sign = '!=';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '!';
+						}
+					}
+					break;
+					case '>':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='>'){
+							tkr->tk.data.sign = '>>';
+						}
+						else if(chr=='='){
+							tkr->tk.data.sign = '>=';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '>';
+						}
+					}
+					break;
+					case '<':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='<'){
+							tkr->tk.data.sign = '<<';
+						}
+						else if(chr=='='){
+							tkr->tk.data.sign = '<=';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '<';
+						}
+					}
+					break;
+					case '&':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='&'){
+							tkr->tk.data.sign = '&&';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '&';
+						}
+					}
+					break;
+					case '|':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='|'){
+							tkr->tk.data.sign = '||';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '|';
+						}
+					}
+					break;
+					case '=':{
+						chr = LSLexer_get(tkr->file);
+						if(chr=='='){
+							tkr->tk.data.sign = '==';
+						}
+						else{
+							LSLexer_unget(tkr->file);
+							tkr->tk.data.sign = '=';
+						}
+					}
+					break;
+					default:{
+						tkr->tk.data.sign = chr;
 					}
 				}
 				break;
-				case '!':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='='){
-						tkr->tk.data.sign = '!=';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '!';
-					}
-				}
-				break;
-				case '>':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='>'){
-						tkr->tk.data.sign = '>>';
-					}
-					else if(chr=='='){
-						tkr->tk.data.sign = '>=';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '>';
-					}
-				}
-				break;
-				case '<':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='<'){
-						tkr->tk.data.sign = '<<';
-					}
-					else if(chr=='='){
-						tkr->tk.data.sign = '<=';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '<';
-					}
-				}
-				break;
-				case '&':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='&'){
-						tkr->tk.data.sign = '&&';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '&';
-					}
-				}
-				break;
-				case '|':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='|'){
-						tkr->tk.data.sign = '||';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '|';
-					}
-				}
-				break;
-				case '=':{
-					chr = LSLexer_get(tkr->file);
-					if(chr=='='){
-						tkr->tk.data.sign = '==';
-					}
-					else{
-						LSLexer_unget(tkr->file);
-						tkr->tk.data.sign = '=';
-					}
-				}
-				break;
-				default:{
-					tkr->tk.data.sign = chr;
-				}
 			}
-            break;
         }
     }
     
     if(LSLexer_eof(tkr->file)){
         tkr->ended = TRUE;
     }
-    LSToken_print(&tkr->tk);
+    //LSToken_print(&tkr->tk);
     return 0;
 }
 

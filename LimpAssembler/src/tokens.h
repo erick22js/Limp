@@ -54,6 +54,7 @@ typedef struct LSToken{
         LSMnemonic *mne;
         Uint32 sign;
     }data;
+    Uint32 length;
 }LSToken;
 
 
@@ -106,6 +107,27 @@ Uint32 LSToken_fetchIdentifier(LSFile *file, LSToken *tk, Int first){
 }
 
 /* String fetching */
+Int LSToken_decodeEscape(LSFile *file, Int chr){
+	if(chr=='\\'){
+		chr = LSLexer_get(file);
+		switch(chr){
+			case 'n':{
+				return '\n';
+			}
+			break;
+			case 't':{
+				return '\t';
+			}
+			break;
+			case '0':{
+				return '\0';
+			}
+			break;
+		}
+	}
+	return chr;
+}
+
 LSDySPtr lsgtkn_string_p = 0;
 Uint32 LSToken_fetchString(LSFile *file, LSToken *tk){
     Char buffer[LS_MAXSTRING_SIZE+1];
@@ -114,7 +136,7 @@ Uint32 LSToken_fetchString(LSFile *file, LSToken *tk){
     
     /* Keeps retrieving characters while are valid */
     while((chr!='"')&&(chr!=EOF)&&(i<=LS_MAXSTRING_SIZE)){
-        buffer[i] = chr;
+        buffer[i] = LSToken_decodeEscape(file, chr);
         i++;
         chr = LSLexer_get(file);
     }
@@ -125,6 +147,7 @@ Uint32 LSToken_fetchString(LSFile *file, LSToken *tk){
     
     tk->type = LS_TOKENTYPE_STRING;
     tk->data.string = wrap;
+    tk->length = i;
     return 0;
 }
 
@@ -137,6 +160,9 @@ Uint32 LSToken_fetchNbinary(LSFile *file, LSToken *tk){
         value <<= 1;
         value |= Char_toValue(chr);
         chr = LSLexer_get(file);
+    }
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
     }
     LSLexer_unget(file);
     
@@ -154,11 +180,32 @@ Uint32 LSToken_fetchNoctal(LSFile *file, LSToken *tk){
         value |= Char_toValue(chr);
         chr = LSLexer_get(file);
     }
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
+    }
     LSLexer_unget(file);
     
     tk->data.u32 = value;
     tk->type = LS_TOKENTYPE_INTEGER;
     return 0;
+}
+
+Float32 LSToken_fetchNFdecimal(LSFile *file, Float *out){
+	Int chr = '.';
+	Float value = 0;
+	Float dividend = 10;
+	
+	while(Char_isDecimal((chr=LSLexer_get(file)))){
+		value += Char_toValue(chr)/dividend;
+		dividend *= 10;
+	}
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
+    }
+	LSLexer_unget(file);
+	
+	*out = value;
+	return 0;
 }
 
 Uint32 LSToken_fetchNdecimal(LSFile *file, LSToken *tk, Int first){
@@ -170,11 +217,42 @@ Uint32 LSToken_fetchNdecimal(LSFile *file, LSToken *tk, Int first){
         value += Char_toValue(chr);
         chr = LSLexer_get(file);
     }
-    LSLexer_unget(file);
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
+    }
+    if(chr=='.'){
+		Float dec = 0;
+		Throw(
+			LSToken_fetchNFdecimal(file, &dec)
+		);
+		dec += value;
+		value = *(Uint32*)&dec;
+    }
+    else{
+		LSLexer_unget(file);
+    }
     
     tk->data.u32 = value;
     tk->type = LS_TOKENTYPE_INTEGER;
     return 0;
+}
+
+Float32 LSToken_fetchNFhexadecimal(LSFile *file, Float *out){
+	Int chr = '.';
+	Float value = 0;
+	Float dividend = 16;
+	
+	while(Char_isHexadecimal((chr=LSLexer_get(file)))){
+		value += Char_toValue(chr)/dividend;
+		dividend *= 16;
+	}
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
+    }
+	LSLexer_unget(file);
+	
+	*out = value;
+	return 0;
 }
 
 Uint32 LSToken_fetchNhexadecimal(LSFile *file, LSToken *tk){
@@ -186,7 +264,20 @@ Uint32 LSToken_fetchNhexadecimal(LSFile *file, LSToken *tk){
         value |= Char_toValue(chr);
         chr = LSLexer_get(file);
     }
-    LSLexer_unget(file);
+    if(Char_isIdentifier(chr)){
+		Error(LS_ERR_UNALOWEDPOSFIX);
+    }
+    if(chr=='.'){
+		Float dec = 0;
+		Throw(
+			LSToken_fetchNFhexadecimal(file, &dec)
+		);
+		dec += value;
+		value = *(Uint32*)&dec;
+    }
+    else{
+		LSLexer_unget(file);
+    }
     
     tk->data.u32 = value;
     tk->type = LS_TOKENTYPE_INTEGER;
@@ -199,28 +290,45 @@ Uint32 LSToken_fetchNumber(LSFile *file, LSToken *tk, Int first){
     if(chr=='0'){
         chr = LSLexer_get(file);
         if(chr=='x'){
-            LSToken_fetchNhexadecimal(file, tk);
+            Throw(
+				LSToken_fetchNhexadecimal(file, tk)
+			);
         }
         else if(chr=='o'){
-            LSToken_fetchNoctal(file, tk);
+            Throw(
+				LSToken_fetchNoctal(file, tk)
+			);
         }
         else if(chr=='b'){
-            LSToken_fetchNbinary(file, tk);
+            Throw(
+				LSToken_fetchNbinary(file, tk)
+			);
         }
         else if(Char_isDecimal(chr)){
-            LSToken_fetchNdecimal(file, tk, chr);
+            Throw(
+				LSToken_fetchNdecimal(file, tk, chr)
+			);
         }
+		else if(chr=='.'){
+			Float dec = 0;
+			Throw(
+				LSToken_fetchNFdecimal(file, &dec)
+			);
+			Uint32 value = *(Uint32*)&dec;
+			
+			tk->data.u32 = value;
+			tk->type = LS_TOKENTYPE_INTEGER;
+		}
         else{
             LSLexer_unget(file);
             tk->data.s32 = 0;
             tk->type = LS_TOKENTYPE_INTEGER;
         }
     }
-    else if(chr=='.'){
-        
-    }
     else{
-        LSToken_fetchNdecimal(file, tk, first);
+        Throw(
+			LSToken_fetchNdecimal(file, tk, first)
+		);
     }
     return 0;
 }
