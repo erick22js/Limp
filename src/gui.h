@@ -705,14 +705,16 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				if(GetOpenFileName(&ofn) == TRUE){ 
 					// use ofn.lpstrFile here
 					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
-					FILE *file = fopen(ofn.lpstrFile, "r");
+					FILE *file = fopen(ofn.lpstrFile, "rb");
 					
 					fseek(file, 0, SEEK_END);
 					Uint32 maxsize = ftell(file);
 					fseek(file, 0, SEEK_SET);
 					
 					for(Int i=0; (i<1024*1024*8)&&(i<maxsize); i++){
-						LICPU_writeBus8((&gcpu), i, fgetc(file));
+						Uint8 val = fgetc(file);
+						printf("Byte getted is %d\n", val);
+						LICPU_writeBus8((&gcpu), i, val);
 					}
 					
 					gui_refresh();
@@ -740,7 +742,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
 					printf("Dumping to %s\n", ofn.lpstrFile);
 					
-					FILE *file = fopen(ofn.lpstrFile, "w");
+					FILE *file = fopen(ofn.lpstrFile, "wb");
 					
 					for(Int i=0; i<1024*1024*8; i++){
 						fputc(LICPU_readBus8((&gcpu), i), file);

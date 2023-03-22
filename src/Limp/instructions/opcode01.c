@@ -4,10 +4,20 @@
 
 // HALT
 void LIIsaDtb_opcode01_func00(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	m_cpu->hs.halt = TRUE;
 }
 
 void LIIsaDtb_opcode01_func01(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	m_cpu->hs.wait = TRUE;
 	
 	switch(m_cpu->args.mod){

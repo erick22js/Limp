@@ -4,41 +4,81 @@
 
 // IN
 void LIIsaDtb_opcode08_func00(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	*m_cpu->args.regd = LCpu_in(m_cpu, *m_cpu->args.regp);
 }
 
 // OUT
 void LIIsaDtb_opcode08_func01(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	LCpu_out(m_cpu, *m_cpu->args.regp, *m_cpu->args.regb);
 }
 
 // CPRR
 void LIIsaDtb_opcode08_func02(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	*m_cpu->args.regd = LCpu_co_readReg(m_cpu, m_cpu->args.mod, *m_cpu->args.regp);
 }
 
 // CPWR
 void LIIsaDtb_opcode08_func03(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	LCpu_co_writeReg(m_cpu, m_cpu->args.mod, *m_cpu->args.regp, *m_cpu->args.regb);
 }
 
 // CPDI
 void LIIsaDtb_opcode08_func04(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	LCpu_co_disable(m_cpu, m_cpu->args.mod);
 }
 
 // CPEN
 void LIIsaDtb_opcode08_func05(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	LCpu_co_enable(m_cpu, m_cpu->args.mod);
 }
 
 // CPCHKST
 void LIIsaDtb_opcode08_func06(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	*m_cpu->args.regd = LCpu_co_checkState(m_cpu, m_cpu->args.mod);
 }
 
 // CPCMD
 void LIIsaDtb_opcode08_func07(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
 	LCpu_co_command(m_cpu, m_cpu->args.mod, *m_cpu->args.regb);
 }
 
