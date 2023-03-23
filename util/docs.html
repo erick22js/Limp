@@ -1,4 +1,13 @@
 <body style='font-family:monospace; width:500px;'>
+	<h1 style="font-size:20pt">aba</h1>
+    
+    <label><h3>SI Format: Protected Mode</h3></label>
+    <br>
+    <center><b>aba[.f] regd, regb</b></center><br><br>
+    
+    <center>Adjusts the value in regb from ascii to binary and stores in regd</center><br><br>
+    
+    <hr>
 	<h1 style="font-size:20pt">adc</h1>
     
     <label><h3>AMI Format: Protected Mode</h3></label>
@@ -33,6 +42,15 @@
     <center><b>ba[.cond] imm16<2</b></center><br><br>
     
     <center>Branchs to a absolute address position</center><br><br>
+    
+    <hr>
+	<h1 style="font-size:20pt">baa</h1>
+    
+    <label><h3>SI Format: Protected Mode</h3></label>
+    <br>
+    <center><b>baa[.f] regd, regb</b></center><br><br>
+    
+    <center>Adjusts the value in regb from binary to ascii and stores in regd</center><br><br>
     
     <hr>
 	<h1 style="font-size:20pt">bit</h1>
@@ -2010,18 +2028,18 @@
     
     <label><h3>SI Format: Protected Mode</h3></label>
     <br>
-    <center><b>waiti[.f] regb</b></center><br><br>
+    <center><b>waiti[.f] imm8</b></center><br><br>
     
-    <center>Waits for a specific interruption of regb</center><br><br>
+    <center>Waits for a specific interruption of imm</center><br><br>
     
     <hr>
 	<h1 style="font-size:20pt">waiti</h1>
     
     <label><h3>SI Format: Protected Mode</h3></label>
     <br>
-    <center><b>waiti[.f] imm8</b></center><br><br>
+    <center><b>waiti[.f] regb</b></center><br><br>
     
-    <center>Waits for a specific interruption of imm</center><br><br>
+    <center>Waits for a specific interruption of regb</center><br><br>
     
     <hr>
 	<h1 style="font-size:20pt">xbr</h1>

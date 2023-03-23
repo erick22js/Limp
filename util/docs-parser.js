@@ -161,6 +161,6 @@ src += "};";
 
 docs += "</body>";
 
-fs.writeFileSync("instructions.h", src);
-//fs.writeFileSync("mnemonics.h", mnes);
+fs.writeFileSync("../LimpAssembler/src/instructions.h", src);
+fs.writeFileSync("mnemonics.h", mnes);
 fs.writeFileSync("docs.html", docs);

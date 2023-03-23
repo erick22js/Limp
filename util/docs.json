@@ -712,6 +712,24 @@
           "regb"
         ],
         "description": "Divides regd by regb, but stores at regd the under integer (decimal part) value"
+      },
+      {
+        "func": 8,
+        "mnemonic": "BAA",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Adjusts the value in regb from binary to ascii and stores in regd"
+      },
+      {
+        "func": 9,
+        "mnemonic": "ABA",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Adjusts the value in regb from ascii to binary and stores in regd"
       }
     ]
   },
