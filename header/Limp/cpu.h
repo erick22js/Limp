@@ -5,6 +5,7 @@
 #include <Limp/bus.h>
 #include <Limp/alu.h>
 #include <Limp/instructions/table.h>
+#include <Limp/peri.h>
 
 
 typedef struct LCpu{
@@ -44,6 +45,8 @@ typedef struct LCpu{
 	
 	/* Hardware States */
 	struct{
+		Bool busy;
+		Bool ext_req;
 		Bool halt; /* Halted Execution */
 		Bool wait; /* Waiting state */
 		Bool waits; /* Waits for specific interruption */
@@ -68,6 +71,13 @@ typedef struct LCpu{
 		Uint32 ea, data;
 		Uint32 *regd, *regb, *regi, *regp, *rego;
 	}args;
+	
+	/* Running frequencies */
+	Int freq_i;
+	Int freq_set;
+	
+	/* Cpu can be a Peripherical component */
+	LPeri peri;
 	
 }LCpu;
 
@@ -191,9 +201,9 @@ void LICpu_int_call(LCpu *m_cpu, Uint32 addr);
 void LICpu_int_return(LCpu *m_cpu);
 Bool LCpu_requestInterruption(LCpu *m_cpu, LIPInterruption intr);
 
-void LICpu_step(LCpu *m_cpu);
-
 void LCpu_step(LCpu *m_cpu);
+void LCpu_execute(LCpu *m_cpu);
+void LCpu_stop(LCpu *m_cpu);
 
 
 /* Debugging */

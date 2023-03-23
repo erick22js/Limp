@@ -2,11 +2,16 @@
 #define limp_peripherical_h
 
 #include <Limp/defines.h>
+#include <Limp/time.h>
+#include <Limp/thread.h>
 
 
 struct LPeri{
 	LPci *m_pci;
 	Uint8 port;
+	
+	LThread t_exec;
+	Bool running;
 	
 	void *api_data;
 };

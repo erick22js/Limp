@@ -7,6 +7,7 @@
 #include <Limp/pci.h>
 #include <Limp/peri.h>
 
+#include <Limp/time.h>
 #include <Limp/thread.h>
 
 
