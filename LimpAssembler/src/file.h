@@ -161,7 +161,8 @@ Uint32 LSFile_read(LSFile *file, void* dest, Uint32 length){
 void LSFile_putc(LSFile *file, Byte chr){
     if(!file->readm){
         if(file->bufft){
-            /* TODO: Buffer Mode */
+            file->buffer[file->buffer_seek] = chr;
+            file->buffer_seek++;
         }
         else{
             fputc(chr, file->file);

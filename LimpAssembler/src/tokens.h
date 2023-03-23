@@ -151,6 +151,35 @@ Uint32 LSToken_fetchString(LSFile *file, LSToken *tk){
     return 0;
 }
 
+/* Character fetching */
+Uint32 LSToken_fetchChar(LSFile *file, LSToken *tk){
+    Uint32 character = 0;
+    Int chr = LSLexer_get(file);
+    
+    /* Keeps retrieving characters while are valid */
+    while((chr!='\'')&&(chr!=EOF)){
+        chr = LSToken_decodeEscape(file, chr);
+        if(chr>0xFFFFFF){
+			character <<= 32;
+        }
+        else if(chr>0xFFFF){
+			character <<= 24;
+        }
+        else if(chr>0xFF){
+			character <<= 16;
+        }
+        else{
+			character <<= 8;
+		}
+		character |= chr;
+        chr = LSLexer_get(file);
+    }
+    
+    tk->type = LS_TOKENTYPE_INTEGER;
+    tk->data.u32 = character;
+    return 0;
+}
+
 /* Number fetching */
 Uint32 LSToken_fetchNbinary(LSFile *file, LSToken *tk){
     Int chr = LSLexer_get(file);

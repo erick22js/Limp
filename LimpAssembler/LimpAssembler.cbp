@@ -46,6 +46,7 @@
 		</Unit>
 		<Unit filename="src/memory.h" />
 		<Unit filename="src/parser.h" />
+		<Unit filename="src/rbuffer.h" />
 		<Unit filename="src/symbols.h" />
 		<Unit filename="src/tokener.h" />
 		<Unit filename="src/tokens.h" />

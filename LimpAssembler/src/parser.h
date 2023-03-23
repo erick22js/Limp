@@ -9,6 +9,7 @@ typedef struct LSParser LSParser;
 #include "tokener.h"
 #include "symbols.h"
 #include "encoder.h"
+#include "rbuffer.h"
 
 
 #define LS_MAXPARSER_FILEDEPTH 16
@@ -456,8 +457,33 @@ Int LSParser_process_file_(LSParser *parser){
 				LSParser_pushFile_(parser, file, FALSE);
 				continue;
             }
-            /* PROC: Includes a external file */
-            else if(LSToken_isIdentifier(tk, "once")){
+            /* PROC: Includes a external binary file */
+            else if(LSToken_isIdentifier(tk, "bin")){
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
+				
+				if(tk->type!=LS_TOKENTYPE_STRING){
+					Error(LS_ERR_EXPECTSTRING);
+				}
+				Char* relpath = tk->data.string;
+				
+				Char path[LS_MAXH_PATHSIZE];
+				LSDh_zero(path);
+				LSDh_copy(path, LSParser_getCurrentFile(parser)->path);
+				LSDh_up(path);
+				LSDh_cd(path, relpath);
+				
+				LSFile *file = LSRbuff_openUserFile(path);
+				Uint32 size = LSRbuff_getSize(file);
+				parser->process_address_program += file;
+				parser->process_address_binary += file;
+				LSRbuff_close(file);
+				continue;
+            }
+            /* PROC: Sets this file to process only a once time */
+            else if(LSToken_isIdentifier(tk, "once")||LSToken_isIdentifier(tk, "notonce")){
+				Bool has_cond = LSToken_isIdentifier(tk, "once");
 				Throw(
 					LSParser_previewToken(parser, FALSE)
 				);
@@ -470,10 +496,27 @@ Int LSParser_process_file_(LSParser *parser){
 					id = LSParser_getCurrentFile(parser)->path;
 				}
 				
-				if(LSParser_hasOnce(parser, id)){
+				if(LSParser_hasOnce(parser, id)==has_cond){
 					break;
 				}
 				else{
+					LSsymOnce *once = Calloc(sizeof(LSsymOnce));
+					once->path = LSDyS_wrapMemCmp((void*)id, LS_MAX_PATHSIZE, &lsgpsr_path_p, Str_equal);
+					LLPush(parser->once_first, parser->once_last, once);
+				}
+            }
+            /* PROC: Defines a symbol for once files execution control */
+            else if(LSToken_isIdentifier(tk, "defonce")){
+				Throw(
+					LSParser_previewToken(parser, FALSE)
+				);
+				
+				if(tk->type!=LS_TOKENTYPE_STRING){
+					Error(LS_ERR_EXPECTSTRING);
+				}
+				Char* id = tk->data.string;
+				
+				if(!LSParser_hasOnce(parser, id)){
 					LSsymOnce *once = Calloc(sizeof(LSsymOnce));
 					once->path = LSDyS_wrapMemCmp((void*)id, LS_MAX_PATHSIZE, &lsgpsr_path_p, Str_equal);
 					LLPush(parser->once_first, parser->once_last, once);
@@ -700,8 +743,40 @@ Int LSParser_encode_file_(LSParser *parser){
 				LSParser_pushFile_(parser, file, FALSE);
 				continue;
             }
-            /* PROC: Includes a external file */
-            else if(LSToken_isIdentifier(tk, "once")){
+            /* PROC: Includes a external binary file */
+            else if(LSToken_isIdentifier(tk, "bin")){
+				Throw(
+					LSParser_fetchToken(parser, FALSE)
+				);
+				
+				if(tk->type!=LS_TOKENTYPE_STRING){
+					Error(LS_ERR_EXPECTSTRING);
+				}
+				Char* relpath = tk->data.string;
+				
+				Char path[LS_MAXH_PATHSIZE];
+				LSDh_zero(path);
+				LSDh_copy(path, LSParser_getCurrentFile(parser)->path);
+				LSDh_up(path);
+				LSDh_cd(path, relpath);
+				
+				LSFile *file = LSRbuff_openUserFile(path);
+				Uint32 size = LSRbuff_getSize(file);
+				
+				while(size){
+					LSWbuff_write8(parser->out_file, LSRbuff_read8(file));
+					size--;
+				}
+				
+				parser->encode_address_program += file;
+				parser->encode_address_binary += file;
+				
+				LSRbuff_close(file);
+				continue;
+            }
+            /* PROC: Defines file for be include only a once time */
+            else if(LSToken_isIdentifier(tk, "once")||LSToken_isIdentifier(tk, "notonce")){
+				Bool has_cond = LSToken_isIdentifier(tk, "once");
 				Throw(
 					LSParser_previewToken(parser, FALSE)
 				);
@@ -714,10 +789,27 @@ Int LSParser_encode_file_(LSParser *parser){
 					id = LSParser_getCurrentFile(parser)->path;
 				}
 				
-				if(LSParser_hasOnce(parser, id)){
+				if(LSParser_hasOnce(parser, id)==has_cond){
 					break;
 				}
 				else{
+					LSsymOnce *once = Calloc(sizeof(LSsymOnce));
+					once->path = LSDyS_wrapMemCmp((void*)id, LS_MAX_PATHSIZE, &lsgpsr_path_p, Str_equal);
+					LLPush(parser->once_first, parser->once_last, once);
+				}
+            }
+            /* PROC: Defines a symbol for once files execution control */
+            else if(LSToken_isIdentifier(tk, "defonce")){
+				Throw(
+					LSParser_previewToken(parser, FALSE)
+				);
+				
+				if(tk->type!=LS_TOKENTYPE_STRING){
+					Error(LS_ERR_EXPECTSTRING);
+				}
+				Char* id = tk->data.string;
+				
+				if(!LSParser_hasOnce(parser, id)){
 					LSsymOnce *once = Calloc(sizeof(LSsymOnce));
 					once->path = LSDyS_wrapMemCmp((void*)id, LS_MAX_PATHSIZE, &lsgpsr_path_p, Str_equal);
 					LLPush(parser->once_first, parser->once_last, once);

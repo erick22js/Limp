@@ -1,11 +1,21 @@
 jl _Main
 
+/** Ascii and binary adjust tests */
+_Main:
+	ldmd edx, [0x80]
+	baa eax, edx
+	aba ecx, eax
+	add ebx, 5
+	jl _Main
+
 /** Lower Division test */
+/*
 _Main:
 	movi eax, 16
 	movi ebx, 32
 	ldiv eax, ebx
 	jl @
+*/
 
 
 /** Test Set on condition */

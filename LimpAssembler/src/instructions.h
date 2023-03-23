@@ -702,6 +702,26 @@ LSMnemonic lsdb_mnemonics[] = {
         },
     },
     {
+        "baa", 0x14, LS_INSTRTYPE_SI,
+        0, 0x8,
+        {
+            {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_REGB, LS_ARGVALUE_REG},
+            {0, 0},
+            {0, 0},
+        },
+    },
+    {
+        "aba", 0x14, LS_INSTRTYPE_SI,
+        0, 0x9,
+        {
+            {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {LS_ARGNAME_REGB, LS_ARGVALUE_REG},
+            {0, 0},
+            {0, 0},
+        },
+    },
+    {
         "cmp", 0x15, LS_INSTRTYPE_AMI,
         0x0, 0,
         {

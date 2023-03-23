@@ -86,6 +86,13 @@ Int LSTokener_fetch(LSTokener *tkr){
 				);
 				break;
 			}
+			/* Is a character literal */
+			else if(chr=='\''){
+				Throw(
+					LSToken_fetchChar(tkr->file, &tkr->tk)
+				);
+				break;
+			}
 			/* Is any other sign character */
 			else{
 				tkr->tk.type = LS_TOKENTYPE_SIGN;
