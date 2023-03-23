@@ -528,6 +528,7 @@ struct GuiReg{
 	wchar_t *name;
 	Int id_btn_set;
 	Ui ui_txt_v;
+	Ui ui_btn;
 }guiregs[] = {
 	{L"EAX", 1},
 	{L"EDX", 2},
@@ -546,6 +547,7 @@ struct GuiFlag{
 	wchar_t *name;
 	Int offset;
 	Int id_chk;
+	Ui ui_chk;
 }guiflags[] = {
 	{L"CF", 0, 16},
 	{L"BF", 1, 17},
@@ -559,6 +561,7 @@ struct GuiFlag{
 };
 Int guiflags_len = sizeof(guiflags)/sizeof(struct GuiFlag);
 
+static Bool gui_unhandle = FALSE;
 
 LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	static const Int adrs = 12;
@@ -566,16 +569,38 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	
 	static Int id_btn_step = 32;
 	static Int id_btn_reset = 33;
-	static Int id_dpd_editloadmode = 34;
+	static Int id_btn_start = 34;
+	static Int id_btn_stop = 35;
+	static Int id_dpd_editloadmode = 36;
 	static Int id_btn_setadr = 48;
 	static Int id_btn_cells[12*16];
 	static Int id_menu_load = 64;
 	static Int id_menu_dump = 65;
 	
+	static Ui ui_btn_step;
+	static Ui ui_btn_reset;
+	static Ui ui_btn_start;
+	static Ui ui_btn_stop;
+	static Int ui_btn_setadr;
 	static Ui ui_btn_cells[12*16];
 	static Ui ui_txt_adrs[12];
 	static Ui ui_dpd_editloadmode;
 	
+	if(gcpu.hs.halt){
+		gui_unhandle = FALSE;
+		EnableWindow(ui_btn_stop, FALSE);
+		EnableWindow(ui_btn_start, TRUE);
+		EnableWindow(ui_btn_step, TRUE);
+		EnableWindow(ui_btn_reset, TRUE);
+		EnableWindow(ui_btn_setadr, TRUE);
+		
+		for(Int i=0; i<guiregs_len; i++){
+			EnableWindow(guiregs[i].ui_btn, TRUE);
+		}
+		for(Int i=0; i<guiflags_len; i++){
+			EnableWindow(guiflags[i].ui_chk, TRUE);
+		}
+	}
 	
 	switch(msg){
 		/* Define o layout da janela na sua criação */
@@ -585,20 +610,20 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			for(Int i=0; i<guiregs_len; i++){
 				gui_ui_text(guiregs[i].name, NO_ID, 16, 32+(i*32), 64, 32);
 				guiregs[i].ui_txt_v = gui_ui_text(L"0x0", NO_ID, 80, 32+(i*32), 128, 32);
-				gui_ui_button(L"Set", guiregs[i].id_btn_set, 228, 32+(i*32), 64, 20);
+				guiregs[i].ui_btn = gui_ui_button(L"Set", guiregs[i].id_btn_set, 228, 32+(i*32), 64, 20);
 			}
 			
 			
 			/* Flags Panel */
 			for(Int i=0; i<guiflags_len; i++){
 				gui_ui_text(guiflags[i].name, NO_ID, 16+(i*32), 368, 32, 32);
-				gui_ui_checkbox(L"", guiflags[i].id_chk, 16+(i*32), 388, 32, 32);
+				guiflags[i].ui_chk = gui_ui_checkbox(L"", guiflags[i].id_chk, 16+(i*32), 388, 32, 32);
 			}
 			
 			
 			/* Memory View Panel */
 			/* Adresses */
-			gui_ui_button(L"Address", id_btn_setadr, 320, 90, 64, 32);
+			ui_btn_setadr = gui_ui_button(L"Address", id_btn_setadr, 320, 90, 64, 32);
 			for(Int i=0; i<adrs; i++){
 				ui_txt_adrs[i] = gui_ui_text(L"0x00000000", NO_ID, 320, 128+(i*24), 96, 24);
 			}
@@ -618,8 +643,11 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			}
 			
 			/* Control Panel */
-			gui_ui_button(L"Step", id_btn_step, 336, 32, 64, 32);
-			gui_ui_button(L"Reset", id_btn_reset, 416, 32, 64, 32);
+			ui_btn_step = gui_ui_button(L"Step", id_btn_step, 336, 32, 64, 32);
+			ui_btn_reset = gui_ui_button(L"Reset", id_btn_reset, 416, 32, 64, 32);
+			ui_btn_start = gui_ui_button(L"Start", id_btn_start, 640, 32, 64, 32);
+			ui_btn_stop = gui_ui_button(L"Stop", id_btn_stop, 720, 32, 64, 32);
+			EnableWindow(ui_btn_stop, FALSE);
 			ui_dpd_editloadmode = gui_ui_dropdown(id_dpd_editloadmode, 496, 32, 128);
 			
 			gui_dropdown_addItem(ui_dpd_editloadmode, "hexadecimal");
@@ -652,6 +680,44 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 		/* Eventos dispachados pelos elementos */
 		case WM_COMMAND:{
+			if(LOWORD(wParam) == id_btn_stop){
+				LCpu_stop(&gcpu);
+				gui_unhandle = FALSE;
+				EnableWindow(ui_btn_stop, FALSE);
+				EnableWindow(ui_btn_start, TRUE);
+				EnableWindow(ui_btn_step, TRUE);
+				EnableWindow(ui_btn_reset, TRUE);
+				EnableWindow(ui_btn_setadr, TRUE);
+				
+				for(Int i=0; i<guiregs_len; i++){
+					EnableWindow(guiregs[i].ui_btn, TRUE);
+				}
+				for(Int i=0; i<guiflags_len; i++){
+					EnableWindow(guiflags[i].ui_chk, TRUE);
+				}
+				gui_refresh();
+			}
+			if(LOWORD(wParam) == id_btn_start){
+				LCpu_execute(&gcpu);
+				gui_unhandle = TRUE;
+				EnableWindow(ui_btn_stop, TRUE);
+				EnableWindow(ui_btn_start, FALSE);
+				EnableWindow(ui_btn_step, FALSE);
+				EnableWindow(ui_btn_reset, FALSE);
+				EnableWindow(ui_btn_setadr, FALSE);
+				
+				for(Int i=0; i<guiregs_len; i++){
+					EnableWindow(guiregs[i].ui_btn, FALSE);
+				}
+				for(Int i=0; i<guiflags_len; i++){
+					EnableWindow(guiflags[i].ui_chk, FALSE);
+				}
+			}
+			
+			if(gui_unhandle){
+				return DefWindowProcW(hwnd, msg, wParam, lParam);
+			}
+			
 			for(Int i=0; i<guiregs_len; i++){
 				if(LOWORD(wParam) == guiregs[i].id_btn_set){
 					guiset_reg_i = i;
@@ -679,7 +745,9 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if(LOWORD(wParam) == id_btn_reset){
 				memset(&gcpu.regs, 0, sizeof(gcpu.regs));
 				memset(&gcpu.sregs, 0, sizeof(gcpu.sregs));
-				memset(&gcpu.hs, 0, sizeof(gcpu.hs));
+				gcpu.hs.wait = 0;
+				gcpu.hs.waiti = 0;
+				gcpu.hs.waits = 0;
 				gui_refresh();
 			}
 			if(LOWORD(wParam) == id_dpd_editloadmode){
@@ -713,7 +781,6 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					
 					for(Int i=0; (i<1024*1024*8)&&(i<maxsize); i++){
 						Uint8 val = fgetc(file);
-						printf("Byte getted is %d\n", val);
 						LICPU_writeBus8((&gcpu), i, val);
 					}
 					
@@ -755,6 +822,10 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 		/* Atualização da tela */
 		case WM_ENABLE:{
+			if(gui_unhandle){
+				return DefWindowProcW(hwnd, msg, wParam, lParam);
+			}
+			
 			for(Int i=0; i<guiregs_len; i++){
 				gui_write(guiregs[i].ui_txt_v, "0x%X", guiget_reg(i));
 			}
@@ -805,6 +876,10 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		
 		/* Verifica a entrada */
 		case WM_KEYDOWN:{
+			if(gui_unhandle){
+				return DefWindowProcW(hwnd, msg, wParam, lParam);
+			}
+			
 			if(wParam==VK_PRIOR){
 				guiset_mem_baseadr -= 64;
 				gui_refresh();
@@ -819,6 +894,10 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			}
 		}
 		break;
+	}
+	
+	if(gui_unhandle){
+		return DefWindowProcW(hwnd, msg, wParam, lParam);
 	}
 	
 	if((GetKeyState(1)&0x80)||(GetKeyState(2)&0x80)){

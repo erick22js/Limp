@@ -53,12 +53,16 @@ Uint32 LThread_join(LThread thread){
 }
 
 Bool LThread_destroy(LThread thread){
+	threads[thread].in_use = FALSE;
 	if(TerminateThread(threads[thread].handle, 0)){
-		threads[thread].in_use = FALSE;
-		CloseHandle(threads[thread].handle);
 		return TRUE;
 	}
+	CloseHandle(threads[thread].handle);
 	return FALSE;
+}
+
+void LThread_free(LThread thread){
+	threads[thread].in_use = FALSE;
 }
 
 #endif // LI_WINDOWS

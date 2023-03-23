@@ -57,6 +57,36 @@ void LIIsaDtb_opcode14_func07(LCpu *m_cpu){
 	*m_cpu->args.regd = LIAlu_ldiv(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
 }
 
+// BAA
+void LIIsaDtb_opcode14_func08(LCpu *m_cpu){
+	Uint32 cdata = *m_cpu->args.regb;
+	Uint32 data = 0;
+	data |= ((cdata%10)<<0x00); cdata /= 10;
+	data |= ((cdata%10)<<0x04); cdata /= 10;
+	data |= ((cdata%10)<<0x08); cdata /= 10;
+	data |= ((cdata%10)<<0x0C); cdata /= 10;
+	data |= ((cdata%10)<<0x10); cdata /= 10;
+	data |= ((cdata%10)<<0x14); cdata /= 10;
+	data |= ((cdata%10)<<0x18); cdata /= 10;
+	data |= ((cdata%10)<<0x1C); cdata /= 10;
+	*m_cpu->args.regd = data;
+}
+
+// ABA
+void LIIsaDtb_opcode14_func09(LCpu *m_cpu){
+	Uint32 cdata = *m_cpu->args.regb;
+	Uint32 data = 0;
+	data += ((cdata&0x0000000F)>>0x00)*1;
+	data += ((cdata&0x000000F0)>>0x04)*10;
+	data += ((cdata&0x00000F00)>>0x08)*100;
+	data += ((cdata&0x0000F000)>>0x0C)*1000;
+	data += ((cdata&0x000F0000)>>0x10)*10000;
+	data += ((cdata&0x00F00000)>>0x14)*100000;
+	data += ((cdata&0x0F000000)>>0x18)*1000000;
+	data += ((cdata&0xF0000000)>>0x1C)*10000000;
+	*m_cpu->args.regd = data;
+}
+
 
 extern void (*LIIsaDtb_opcode14[64])(LCpu *m_cpu) = {
 	[0x00] = LIIsaDtb_opcode14_func00,
@@ -67,8 +97,8 @@ extern void (*LIIsaDtb_opcode14[64])(LCpu *m_cpu) = {
 	[0x05] = LIIsaDtb_opcode14_func05,
 	[0x06] = LIIsaDtb_opcode14_func06,
 	[0x07] = LIIsaDtb_opcode14_func07,
-	[0x08] = LIIsaDtb_undefined,
-	[0x09] = LIIsaDtb_undefined,
+	[0x08] = LIIsaDtb_opcode14_func08,
+	[0x09] = LIIsaDtb_opcode14_func09,
 	[0x0A] = LIIsaDtb_undefined,
 	[0x0B] = LIIsaDtb_undefined,
 	[0x0C] = LIIsaDtb_undefined,

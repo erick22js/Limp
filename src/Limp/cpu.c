@@ -410,26 +410,82 @@ void LICpu_int_return(LCpu *m_cpu){
 Bool LCpu_requestInterruption(LCpu *m_cpu, LIPInterruption intr){ // Returns Bool state => TRUE if the interruption was successfull did
 	/* Detect the interruption type */
 	if(intr.selector>127){
+		if(m_cpu->hs.ext_req){
+			return FALSE;
+		}
+		m_cpu->hs.ext_req = TRUE;
+		
 		if(!getBit(m_cpu->sregs.est, LI_CPU_EI)){
+			while(m_cpu->hs.busy){}
+		}
+		else{
 			return FALSE;
 		}
 	}
 	Uint32 addr = LICPU_readBus32(m_cpu, (m_cpu->sregs.it + (intr.selector*2)));
 	LICpu_int_call(m_cpu, addr);
+	
+	if(intr.selector>127){
+		m_cpu->hs.ext_req = FALSE;
+	}
 	return TRUE;
 }
 
 
 void LICpu_step(LCpu *m_cpu){
-	Uint32 fetched = LCpu_fetch(m_cpu);
-	
-	LICpu_decode(m_cpu);
-	m_cpu->args.func(m_cpu);
-	m_cpu->sregs.lpc = m_cpu->sregs.epc;
+	if(!m_cpu->hs.wait){
+		Uint32 fetched = LCpu_fetch(m_cpu);
+		LICpu_decode(m_cpu);
+		m_cpu->args.func(m_cpu);
+		m_cpu->sregs.lpc = m_cpu->sregs.epc;
+	}
 }
 
-
 void LCpu_step(LCpu *m_cpu){
+	m_cpu->hs.busy = TRUE;
 	LICpu_step(m_cpu);
+	m_cpu->hs.busy = FALSE;
+}
+
+Uint32 LICpu_process(void* arg){
+	LCpu *m_cpu = (LCpu*)arg;
+	Uint32 ltime = 0;
+	
+	while(TRUE){
+		m_cpu->peri.running = TRUE;
+		
+		m_cpu->freq_i += m_cpu->freq_set;
+		while((m_cpu->freq_i>0)&&(!m_cpu->hs.halt)){
+			while(m_cpu->hs.ext_req);
+			m_cpu->hs.busy = TRUE;
+			for(Int s=0; s<128; s++){
+				LICpu_step(m_cpu);
+				m_cpu->freq_i--;
+			}
+			m_cpu->hs.busy = FALSE;
+		}
+		
+		while((LTime_getMicros()-ltime)<15625);
+		ltime = LTime_getMicros();
+		printf("MI pulse at microsecond: %d\n", ltime);
+		
+		m_cpu->peri.running = FALSE;
+		while(m_cpu->hs.halt){}
+	}
+	return 0;
+}
+
+void LCpu_execute(LCpu *m_cpu){
+	m_cpu->hs.halt = FALSE;
+	if(m_cpu->peri.t_exec==0){
+		m_cpu->peri.t_exec = LThread_create(LICpu_process, m_cpu);
+	}
+}
+
+void LCpu_stop(LCpu *m_cpu){
+	m_cpu->hs.halt = TRUE;
+	if(m_cpu->peri.t_exec!=0){
+		while(m_cpu->peri.running){/* OBS: Expect the compiler do not optimize here */};
+	}
 }
 

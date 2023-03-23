@@ -9,7 +9,7 @@ void LIIsaDtb_opcode01_func00(LCpu *m_cpu){
 		return;
 	}
 	
-	m_cpu->hs.halt = TRUE;
+	LCpu_stop(m_cpu);
 }
 
 void LIIsaDtb_opcode01_func01(LCpu *m_cpu){

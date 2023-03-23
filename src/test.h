@@ -4,6 +4,7 @@
 #include <Limp/limp.h>
 
 LBus gbus;
+LPci gpci;
 LCpu gcpu;
 
 #define GMEM_SIZE (1024*1024*8)
@@ -65,16 +66,17 @@ void m_write32_(LBus *bus, Uint32 addr, Uint32 data){
 
 void setup(){
 	LBus_init(&gbus);
-	
 	gbus.read8 = m_read8_;
 	gbus.read16 = m_read16_;
 	gbus.read32 = m_read32_;
-	
 	gbus.write8 = m_write8_;
 	gbus.write16 = m_write16_;
 	gbus.write32 = m_write32_;
 	
 	LCpu_init(&gcpu, &gbus);
+	gcpu.freq_set = 1024*1024*1; /* Setting the frequency of Cpu */
+	
+	LPci_init(&gpci, &gcpu);
 	
 }
 
@@ -96,7 +98,7 @@ void init(){
 }
 
 void close(){
-	LThread_destroy(thread);
+	
 }
 
 #include "gui.h"

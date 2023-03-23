@@ -229,13 +229,10 @@ void LIIsaFmt_jl(LCpu *m_cpu, LIPSignal signal){
 
 
 void LIIsaDtb_undefined(LCpu *m_cpu){
-	printf("# Undefined Instruction #\n");
 	LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
 }
 
-void LIIsaDtb_nop(LCpu *m_cpu){
-	printf("# No Operation Instruction #\n");
-}
+void LIIsaDtb_nop(LCpu *m_cpu){}
 
 
 
