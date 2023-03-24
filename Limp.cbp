@@ -37,6 +37,9 @@
 			<Add option="-lgdi32 -lcomdlg32 -lmingw32" />
 			<Add directory="lib" />
 		</Linker>
+		<Unit filename="header/LimpExtra/bus_std.h" />
+		<Unit filename="header/LimpExtra/extra.h" />
+		<Unit filename="header/LimpExtra/peri_stdout.h" />
 		<Unit filename="header/Limp/alu.h" />
 		<Unit filename="header/Limp/api.h" />
 		<Unit filename="header/Limp/bus.h" />
@@ -85,6 +88,12 @@
 		<Unit filename="header/Limp/peri.h" />
 		<Unit filename="header/Limp/thread.h" />
 		<Unit filename="header/Limp/time.h" />
+		<Unit filename="src/LimpExtra/bus_std.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/LimpExtra/peri_stdout.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Limp/alu.c">
 			<Option compilerVar="CC" />
 		</Unit>

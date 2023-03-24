@@ -27,21 +27,22 @@
 	<Limp/api.h>
 	<Limp/api.h>
 
-1679581880 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
+1679668195 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
 	<Limp/cpu.h>
 	<Limp/coproc.h>
 	<Limp/mmu.h>
 	<Limp/pci.h>
 
-1679578401 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
+1679668039 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
 	<Limp/defines.h>
 	<Limp/bus.h>
 	<Limp/alu.h>
 	<Limp/instructions/table.h>
 	<Limp/peri.h>
 
-1679580829 c:\users\erick\documents\meusprojetos\limp\src\test.h
+1679666108 c:\users\erick\documents\meusprojetos\limp\src\test.h
 	<Limp/limp.h>
+	<LimpExtra/extra.h>
 	"gui.h"
 
 1679576432 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\table.c
@@ -122,7 +123,7 @@
 	<string.h>
 	<string.h>
 
-1679576906 c:\users\erick\documents\meusprojetos\limp\src\gui.h
+1679666040 c:\users\erick\documents\meusprojetos\limp\src\gui.h
 	<windows.h>
 	<commctrl.h>
 	<wchar.h>
@@ -628,16 +629,16 @@
 	<Limp/defines.h>
 	<Limp/coproc.h>
 
-1678964604 c:\users\erick\documents\meusprojetos\limp\header\limp\pci.h
+1679668316 c:\users\erick\documents\meusprojetos\limp\header\limp\pci.h
 	<Limp/defines.h>
 	<Limp/peri.h>
 
-1679581416 c:\users\erick\documents\meusprojetos\limp\header\limp\peri.h
+1679665973 c:\users\erick\documents\meusprojetos\limp\header\limp\peri.h
 	<Limp/defines.h>
 	<Limp/time.h>
 	<Limp/thread.h>
 
-1678964403 source:c:\users\erick\documents\meusprojetos\limp\src\limp\pci.c
+1679668322 source:c:\users\erick\documents\meusprojetos\limp\src\limp\pci.c
 	<Limp/pci.h>
 	<Limp/cpu.h>
 
@@ -781,7 +782,7 @@
 	<Limp/defines.h>
 	<Limp/instructions/table.h>
 
-1679488903 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode08.c
+1679668104 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode08.c
 	<Limp/instructions/opcode08.h>
 	<Limp/cpu.h>
 
@@ -810,7 +811,7 @@
 	<Limp/instructions/opcode1D.h>
 	<Limp/cpu.h>
 
-1678964586 source:c:\users\erick\documents\meusprojetos\limp\src\limp\peri.c
+1679665833 source:c:\users\erick\documents\meusprojetos\limp\src\limp\peri.c
 	<Limp/peri.h>
 	<Limp/pci.h>
 
@@ -828,4 +829,20 @@
 1679581376 source:c:\users\erick\documents\meusprojetos\limp\src\limp\time.c
 	<time.h>
 	<Limp/time.h>
+
+1679670149 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_stdout.c
+	<LimpExtra/peri_stdout.h>
+
+1679663703 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_stdout.h
+	<Limp/limp.h>
+
+1679664368 c:\users\erick\documents\meusprojetos\limp\header\limpextra\extra.h
+	<LimpExtra/bus_std.h>
+	<LimpExtra/peri_stdout.h>
+
+1679664417 c:\users\erick\documents\meusprojetos\limp\header\limpextra\bus_std.h
+	<Limp/limp.h>
+
+1679664405 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\bus_std.c
+	<LimpExtra/bus_std.h>
 
