@@ -1,0 +1,2329 @@
+{
+  "0x0": {
+    "format": "JL",
+    "varyants": [
+      {
+        "mnemonic": "NOP",
+        "args": [],
+        "description": "Do not execute any operation"
+      }
+    ]
+  },
+  "0x1": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "HALT",
+        "args": [],
+        "description": "Halts the system execution"
+      },
+      {
+        "func": 1,
+        "mode": 0,
+        "mnemonic": "WAIT",
+        "args": [],
+        "description": "Waits for any interruption"
+      },
+      {
+        "func": 1,
+        "mode": 1,
+        "mnemonic": "WAITI",
+        "args": [
+          "imm8"
+        ],
+        "description": "Waits for a specific interruption of imm"
+      },
+      {
+        "func": 1,
+        "mode": 2,
+        "mnemonic": "WAITI",
+        "args": [
+          "regb"
+        ],
+        "description": "Waits for a specific interruption of regb"
+      }
+    ]
+  },
+  "0x2": {
+    "varyants": []
+  },
+  "0x3": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "POPAS",
+        "args": [],
+        "description": "Pops to EST register Application part"
+      },
+      {
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "POPSS",
+        "args": [],
+        "description": "Pops to EST register System part"
+      },
+      {
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "POPS",
+        "args": [],
+        "description": "Pops to EST register"
+      }
+    ]
+  },
+  "0x4": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "POPR",
+        "args": [
+          "regd"
+        ],
+        "description": "Pops a value from stack to regd"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "POPP",
+        "args": [
+          "regb",
+          "regd"
+        ],
+        "description": "Pops values from stack to a sequence of register from regd to regb"
+      }
+    ]
+  },
+  "0x5": {
+    "varyants": []
+  },
+  "0x6": {
+    "varyants": []
+  },
+  "0x7": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "LDMB",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Loads a byte data from memory address to register"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "LDMW",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Loads a word data from memory address to register"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "LDMD",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Loads a dword data from memory address to register"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "LDMQ",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Loads a dword data from memory address to double registers"
+      }
+    ]
+  },
+  "0x8": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "non-pm": true,
+        "mnemonic": "IN",
+        "args": [
+          "regd",
+          "regp"
+        ],
+        "description": "Get input from external device in port by regp to regd"
+      },
+      {
+        "func": 1,
+        "non-pm": true,
+        "mnemonic": "OUT",
+        "args": [
+          "regp",
+          "regb"
+        ],
+        "description": "Outputs value from regb to device in port regp"
+      },
+      {
+        "func": 2,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0RR",
+        "args": [
+          "regd",
+          "regp"
+        ],
+        "description": "Reads register by regp from coprocessor 0 to register regd"
+      },
+      {
+        "func": 2,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1RR",
+        "args": [
+          "regd",
+          "regp"
+        ],
+        "description": "Reads register by regp from coprocessor 1 to register regd"
+      },
+      {
+        "func": 2,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2RR",
+        "args": [
+          "regd",
+          "regp"
+        ],
+        "description": "Reads register by regp from coprocessor 2 to register regd"
+      },
+      {
+        "func": 2,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3RR",
+        "args": [
+          "regd",
+          "regp"
+        ],
+        "description": "Reads register by regp from coprocessor 3 to register regd"
+      },
+      {
+        "func": 3,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0WR",
+        "args": [
+          "regp",
+          "regb"
+        ],
+        "description": "Writes regb value to register by regp to coprocessor 0"
+      },
+      {
+        "func": 3,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1WR",
+        "args": [
+          "regp",
+          "regb"
+        ],
+        "description": "Writes regb value to register by regp to coprocessor 1"
+      },
+      {
+        "func": 3,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2WR",
+        "args": [
+          "regp",
+          "regb"
+        ],
+        "description": "Writes regb value to register by regp to coprocessor 2"
+      },
+      {
+        "func": 3,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3WR",
+        "args": [
+          "regp",
+          "regb"
+        ],
+        "description": "Writes regb value to register by regp to coprocessor 3"
+      },
+      {
+        "func": 4,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0DI",
+        "args": [],
+        "description": "Disables coprocessor 0"
+      },
+      {
+        "func": 4,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1DI",
+        "args": [],
+        "description": "Disables coprocessor 1"
+      },
+      {
+        "func": 4,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2DI",
+        "args": [],
+        "description": "Disables coprocessor 2"
+      },
+      {
+        "func": 4,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3DI",
+        "args": [],
+        "description": "Disables coprocessor 3"
+      },
+      {
+        "func": 5,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0EN",
+        "args": [],
+        "description": "Enables coprocessor 0"
+      },
+      {
+        "func": 5,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1EN",
+        "args": [],
+        "description": "Enables coprocessor 1"
+      },
+      {
+        "func": 5,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2EN",
+        "args": [],
+        "description": "Enables coprocessor 2"
+      },
+      {
+        "func": 5,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3EN",
+        "args": [],
+        "description": "Enables coprocessor 3"
+      },
+      {
+        "func": 6,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0CHKST",
+        "args": [
+          "regd"
+        ],
+        "description": "Reads the status of coprocessor 0 and stores in regd. Note: 0 = Not present; 1 = Enabled; -1 = Disabled"
+      },
+      {
+        "func": 6,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1CHKST",
+        "args": [
+          "regd"
+        ],
+        "description": "Reads the status of coprocessor 1 and stores in regd. Note: 0 = Not present; 1 = Enabled; -1 = Disabled"
+      },
+      {
+        "func": 6,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2CHKST",
+        "args": [
+          "regd"
+        ],
+        "description": "Reads the status of coprocessor 2 and stores in regd. Note: 0 = Not present; 1 = Enabled; -1 = Disabled"
+      },
+      {
+        "func": 6,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3CHKST",
+        "args": [
+          "regd"
+        ],
+        "description": "Reads the status of coprocessor 3 and stores in regd. Note: 0 = Not present; 1 = Enabled; -1 = Disabled"
+      },
+      {
+        "func": 7,
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "CP0CMD",
+        "args": [
+          "regb"
+        ],
+        "description": "Sends a command encoded in regb to coprocessor 0"
+      },
+      {
+        "func": 7,
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "CP1CMD",
+        "args": [
+          "regb"
+        ],
+        "description": "Sends a command encoded in regb to coprocessor 1"
+      },
+      {
+        "func": 7,
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "CP2CMD",
+        "args": [
+          "regb"
+        ],
+        "description": "Sends a command encoded in regb to coprocessor 2"
+      },
+      {
+        "func": 7,
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "CP3CMD",
+        "args": [
+          "regb"
+        ],
+        "description": "Sends a command encoded in regb to coprocessor 3"
+      },
+      {
+        "func": 8,
+        "non-pm": true,
+        "mnemonic": "INUP",
+        "args": [
+          "regd"
+        ],
+        "description": "Verify if input from port in regd is updated, if then, sets the OF flag, otherwise clears it"
+      }
+    ]
+  },
+  "0x9": {
+    "varyants": []
+  },
+  "0xa": {
+    "varyants": []
+  },
+  "0xb": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "PSHAS",
+        "args": [],
+        "description": "Pushes the EST Register Application part to stack"
+      },
+      {
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "PSHSS",
+        "args": [],
+        "description": "Pushes the EST Register System part to stack"
+      },
+      {
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "PSHS",
+        "args": [],
+        "description": "Pushes the EST Register to stack"
+      }
+    ]
+  },
+  "0xc": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "PSHI",
+        "args": [
+          "imm"
+        ],
+        "description": "Pushes a immediate value to stack"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "PSHR",
+        "args": [
+          "regb"
+        ],
+        "description": "Pushes regb value to stack"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "PSHP",
+        "args": [
+          "regb",
+          "regd"
+        ],
+        "description": "Pushes values from sequence regb to regd to stack"
+      }
+    ]
+  },
+  "0xd": {
+    "varyants": []
+  },
+  "0xe": {
+    "format": "CDI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "STSI",
+        "args": [
+          "regd",
+          "regb",
+          "rego"
+        ],
+        "description": "Stores value from regb to memory at regd, and increments rego"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "STSD",
+        "args": [
+          "regd",
+          "regb",
+          "rego"
+        ],
+        "description": "Stores value from regb to memory at regd, and decrements rego"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "MMSI",
+        "args": [
+          "regd",
+          "regb",
+          "rego"
+        ],
+        "description": "Stores value from memory at regb to memory at regd, and increments rego"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "MMSD",
+        "args": [
+          "regd",
+          "regb",
+          "rego"
+        ],
+        "description": "Stores value from memory at regb to memory at regd, and decrements rego"
+      }
+    ]
+  },
+  "0xf": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "STRB",
+        "args": [
+          "$amd",
+          "regd"
+        ],
+        "description": "Stores a byte register data to memory address"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "STRW",
+        "args": [
+          "$amd",
+          "regd"
+        ],
+        "description": "Stores a word register data to memory address"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "STRD",
+        "args": [
+          "$amd",
+          "regd"
+        ],
+        "description": "Stores a dword register data to memory address"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "STRQ",
+        "args": [
+          "$amd",
+          "regd"
+        ],
+        "description": "Stores a double dword registers data to memory address"
+      }
+    ]
+  },
+  "0x10": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "ADD",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Adds a value data to register"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "ADC",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Adds a value data with carry to register"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "SUB",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Subtracts a value data from register"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "SBB",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Subtracts a value with borrow to register"
+      }
+    ]
+  },
+  "0x11": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "MUL",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Multiplies a value data to register"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "HMUL",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Multiplies a value data with register, and store the higher dword part to register"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "DIV",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Divides a value data to register"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "MOD",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Modules a value data to register"
+      }
+    ]
+  },
+  "0x12": {
+    "varyants": []
+  },
+  "0x13": {
+    "varyants": []
+  },
+  "0x14": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "INC",
+        "args": [
+          "regd"
+        ],
+        "description": "Do a increment in regd"
+      },
+      {
+        "func": 1,
+        "mnemonic": "DEC",
+        "args": [
+          "regd"
+        ],
+        "description": "Do a decrement in regd"
+      },
+      {
+        "func": 2,
+        "mnemonic": "NEG",
+        "args": [
+          "regd"
+        ],
+        "description": "Do a subtraction of zero by regd, and stores"
+      },
+      {
+        "func": 3,
+        "mnemonic": "MADD",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "Multiply regd by regb, then adds regp and store at regd"
+      },
+      {
+        "func": 4,
+        "mnemonic": "MSUB",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "Multiply regd by regb, then subtracts regp and store at regd"
+      },
+      {
+        "func": 5,
+        "mnemonic": "MADC",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "Multiply regd by regb, then adds regp with carry and store at regd"
+      },
+      {
+        "func": 6,
+        "mnemonic": "MSBB",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "Multiply regd by regb, then subtracts regp with borrow and store at regd"
+      },
+      {
+        "func": 7,
+        "mnemonic": "LDIV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Divides regd by regb, but stores at regd the under integer (decimal part) value"
+      },
+      {
+        "func": 8,
+        "mnemonic": "BAA",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Adjusts the value in regb from binary to ascii and stores in regd"
+      },
+      {
+        "func": 9,
+        "mnemonic": "ABA",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Adjusts the value in regb from ascii to binary and stores in regd"
+      }
+    ]
+  },
+  "0x15": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "CMP",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a subtraction between a value data from register without saving the result, doing a comparation"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "CPB",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a subtraction with borrow between a value data from register without saving the result, doing a comparation"
+      }
+    ]
+  },
+  "0x16": {
+    "varyants": []
+  },
+  "0x17": {
+    "varyants": []
+  },
+  "0x18": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "AND",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do and bitwise value data to register"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "OR",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do or bitwise value data with register"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "XOR",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do xor bitwise value data to register"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "NAND",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do nand bitwise value data to register"
+      }
+    ]
+  },
+  "0x19": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "NOT",
+        "args": [
+          "regd"
+        ],
+        "description": "Inverts the bits values of regd"
+      },
+      {
+        "func": 1,
+        "mnemonic": "SETB",
+        "args": [
+          "regd",
+          "imm8"
+        ],
+        "description": "Sets the bit of regd at offset of imm"
+      },
+      {
+        "func": 2,
+        "mnemonic": "CLRB",
+        "args": [
+          "regd",
+          "imm8"
+        ],
+        "description": "Clears the bit of regd at offset of imm"
+      },
+      {
+        "func": 3,
+        "mnemonic": "SWAP",
+        "args": [
+          "regd"
+        ],
+        "description": "Swaps the bytes of regd, changing the endianess"
+      },
+      {
+        "func": 4,
+        "mnemonic": "SWAPB",
+        "args": [
+          "regd"
+        ],
+        "description": "Swaps the bits of regd, changing its format"
+      }
+    ]
+  },
+  "0x1a": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "TEST",
+        "args": [
+          "$amd"
+        ],
+        "description": "Test the data value and sets the bits acoordling"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "BIT",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do and bitwise between regd and data, doing a bit test, without store the result"
+      }
+    ]
+  },
+  "0x1b": {
+    "format": "AMI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "LSHF",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a left shift in regd by data"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "RSHF",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a right shift in regd by data"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "LROT",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a left rotate in regd by data"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "RROT",
+        "args": [
+          "regd",
+          "$amd"
+        ],
+        "description": "Do a right rotate in regd by data"
+      }
+    ]
+  },
+  "0x1c": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "FADD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, adds regb to regd"
+      },
+      {
+        "func": 1,
+        "mnemonic": "FADC",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, adds regb to regd with carry"
+      },
+      {
+        "func": 2,
+        "mnemonic": "FSUB",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, subtracts regb from regd"
+      },
+      {
+        "func": 3,
+        "mnemonic": "FSBB",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, subtracts regb from regd with borrow"
+      },
+      {
+        "func": 4,
+        "mnemonic": "FMUL",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, multiply regb to regd"
+      },
+      {
+        "func": 5,
+        "mnemonic": "FMADD",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "In Floating-Point format, multiply regb to regd and adds regp"
+      },
+      {
+        "func": 6,
+        "mnemonic": "FMADC",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "In Floating-Point format, multiply regb to regd and adds regp with carry"
+      },
+      {
+        "func": 7,
+        "mnemonic": "FMSUB",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "In Floating-Point format, multiply regb to regd and subtracts regp"
+      },
+      {
+        "func": 8,
+        "mnemonic": "FMSBB",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "In Floating-Point format, multiply regb to regd and subtracts regp with borrow"
+      },
+      {
+        "func": 9,
+        "mnemonic": "FDIV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, divides regb by regd"
+      },
+      {
+        "func": 10,
+        "mnemonic": "FMOD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, modulates regb by regd"
+      },
+      {
+        "func": 11,
+        "mnemonic": "FSCALE",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, scales regb in power of two by regb in dword format"
+      },
+      {
+        "func": 12,
+        "mnemonic": "FABS",
+        "args": [
+          "regd"
+        ],
+        "description": "In Floating-Point format, sets regd to its absolute value"
+      },
+      {
+        "func": 13,
+        "mnemonic": "FNEG",
+        "args": [
+          "regd"
+        ],
+        "description": "In Floating-Point format, do 0-regd and stores to regd"
+      },
+      {
+        "func": 14,
+        "mnemonic": "FPOW",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do pow of regd by regb"
+      },
+      {
+        "func": 15,
+        "mnemonic": "FSQRT",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do square root of regb and stores to regd"
+      },
+      {
+        "func": 16,
+        "mnemonic": "FCBRT",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do cubic root of regb and stores to regd"
+      },
+      {
+        "func": 17,
+        "mnemonic": "FQTRT",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do 4th root of regb and stores to regd"
+      },
+      {
+        "func": 18,
+        "mnemonic": "FCINT",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do a ceil of regd to int format and stores to regd"
+      },
+      {
+        "func": 19,
+        "mnemonic": "FXAM",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, examinates value of regb and store status in regd. Note: 0 = Zero; 1 = Normal; 2 = SubNormal; 3 = NaN; 4 = Infinity"
+      },
+      {
+        "func": 20,
+        "mnemonic": "FLOG2",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do a log in base 2 of regb and stores to regd"
+      },
+      {
+        "func": 21,
+        "mnemonic": "FLOG10",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do a log in base 10 of regb and stores to regd"
+      },
+      {
+        "func": 22,
+        "mnemonic": "FSIN",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do sine of regb and stores to regd"
+      },
+      {
+        "func": 23,
+        "mnemonic": "FCOS",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do cosine of regb and stores to regd"
+      },
+      {
+        "func": 24,
+        "mnemonic": "FTAN",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do tangent of regb and stores to regd"
+      },
+      {
+        "func": 25,
+        "mnemonic": "FASIN",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do arcsine of regb and stores to regd"
+      },
+      {
+        "func": 26,
+        "mnemonic": "FACOS",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do arcosine of regb and stores to regd"
+      },
+      {
+        "func": 27,
+        "mnemonic": "FATAN",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, do arctangent of regb and stores to regd"
+      },
+      {
+        "func": 28,
+        "mnemonic": "FATAN2",
+        "args": [
+          "regd",
+          "regb",
+          "regp"
+        ],
+        "description": "In Floating-Point format, do arctangent in y of regb and x of regp to regd"
+      },
+      {
+        "func": 29,
+        "mnemonic": "FFLR",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, rounds regb to floor and stores to regd"
+      },
+      {
+        "func": 30,
+        "mnemonic": "FRND",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, rounds regb and stores to regd"
+      },
+      {
+        "func": 31,
+        "mnemonic": "FCIL",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "In Floating-Point format, rounds regb to ceil and stores to regd"
+      },
+      {
+        "func": 56,
+        "mnemonic": "FCVUB",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to unsigned byte regd"
+      },
+      {
+        "func": 57,
+        "mnemonic": "FCVUW",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to unsigned word regd"
+      },
+      {
+        "func": 58,
+        "mnemonic": "FCVUD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to unsigned dword regd"
+      },
+      {
+        "func": 59,
+        "mnemonic": "FCVB",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to byte regd"
+      },
+      {
+        "func": 60,
+        "mnemonic": "FCVW",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to word regd"
+      },
+      {
+        "func": 61,
+        "mnemonic": "FCVD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from Floating-Point format regb to dword regd"
+      },
+      {
+        "func": 62,
+        "mnemonic": "FUDCV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from unsigned dword regb to Floating-Point format regd"
+      },
+      {
+        "func": 63,
+        "mnemonic": "FDCV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Convert from dword regb to Floating-Point format regd"
+      }
+    ]
+  },
+  "0x1d": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "FSTEQ",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is equal to regp"
+      },
+      {
+        "func": 1,
+        "mnemonic": "FSTNE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is not equal to regp"
+      },
+      {
+        "func": 2,
+        "mnemonic": "FSTLT",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is less than regp"
+      },
+      {
+        "func": 3,
+        "mnemonic": "FSTGT",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is greater than regp"
+      },
+      {
+        "func": 4,
+        "mnemonic": "FSTLE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is less or equal than regp"
+      },
+      {
+        "func": 5,
+        "mnemonic": "FSTGE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is greater or equal than regp"
+      },
+      {
+        "func": 6,
+        "mnemonic": "FSTEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is equal to zero"
+      },
+      {
+        "func": 7,
+        "mnemonic": "FSTNZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is not equal to zero"
+      },
+      {
+        "func": 8,
+        "mnemonic": "FSTLTZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is less than zero"
+      },
+      {
+        "func": 9,
+        "mnemonic": "FSTGTZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is greater than zero"
+      },
+      {
+        "func": 10,
+        "mnemonic": "FSTLEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is less or equal than zero"
+      },
+      {
+        "func": 11,
+        "mnemonic": "FSTGEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if in Floating-point regb is greater or equal than zero"
+      },
+      {
+        "func": 12,
+        "mnemonic": "FSTEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is equal to zero"
+      },
+      {
+        "func": 13,
+        "mnemonic": "FSTNZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is not equal to zero"
+      },
+      {
+        "func": 14,
+        "mnemonic": "FSTLTZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is less than zero"
+      },
+      {
+        "func": 15,
+        "mnemonic": "FSTGTZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is greater than zero"
+      },
+      {
+        "func": 16,
+        "mnemonic": "FSTLEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is less or equal than zero"
+      },
+      {
+        "func": 17,
+        "mnemonic": "FSTGEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if in Floating-point regb is greater or equal than zero"
+      }
+    ]
+  },
+  "0x1e": {
+    "varyants": []
+  },
+  "0x1f": {
+    "varyants": []
+  },
+  "0x20": {
+    "format": "ADI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "JA",
+        "args": [
+          "imm16<2"
+        ],
+        "description": "Jumps to a absolute address position"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "BA",
+        "args": [
+          "imm16<2"
+        ],
+        "description": "Branchs to a absolute address position"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "JR",
+        "args": [
+          "imm16<2"
+        ],
+        "description": "Jumps by a relative offset"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "BR",
+        "args": [
+          "imm16<2"
+        ],
+        "description": "Branchs by a relative offset"
+      }
+    ]
+  },
+  "0x21": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "RET",
+        "args": [],
+        "description": "Returns from a branch"
+      },
+      {
+        "func": 1,
+        "non-pm": true,
+        "mnemonic": "IRET",
+        "args": [],
+        "description": "Returns from a interruption"
+      },
+      {
+        "func": 2,
+        "mode": 0,
+        "mnemonic": "ENTER",
+        "args": [
+          "imm"
+        ],
+        "description": "Reserves a sized space stack for current procedure and stores offset in EFP"
+      },
+      {
+        "func": 2,
+        "mode": 1,
+        "mnemonic": "ENTERV",
+        "args": [
+          "regb"
+        ],
+        "description": "Reserves a sized variable space stack for current procedure and stores offset in EFP"
+      },
+      {
+        "func": 3,
+        "mnemonic": "LEAVE",
+        "args": [
+          "imm"
+        ],
+        "description": "Free the reserved space stack and return the old EFP and ESP values (May be called after using ENTER or ENTERV)"
+      },
+      {
+        "func": 4,
+        "mnemonic": "INT",
+        "args": [
+          "imm8"
+        ],
+        "description": "Calls for system interruption"
+      }
+    ]
+  },
+  "0x22": {
+    "format": "CDI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "JRA",
+        "args": [
+          "regb"
+        ],
+        "description": "Jumps to a absolute address by regp"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "BRA",
+        "args": [
+          "regp"
+        ],
+        "description": "Branchs to a absolute address by regp"
+      },
+      {
+        "mode": 2,
+        "non-pm": true,
+        "mnemonic": "JRAP",
+        "args": [
+          "regp"
+        ],
+        "description": "Jumps to a absolute address by regp in protected mode"
+      },
+      {
+        "mode": 3,
+        "non-pm": true,
+        "mnemonic": "BRAP",
+        "args": [
+          "regp"
+        ],
+        "description": "Branchs to a absolute address by regp in protected mode"
+      }
+    ]
+  },
+  "0x23": {
+    "format": "CDI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "JRR",
+        "args": [
+          "regb"
+        ],
+        "description": "Jumps by a relative offset by regp"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "BRR",
+        "args": [
+          "regp"
+        ],
+        "description": "Branchs by a relative offset by regp"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "XJP",
+        "args": [
+          "regb"
+        ],
+        "description": "Exchange value between regp and epc, doing a jump"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "XBR",
+        "args": [
+          "regb"
+        ],
+        "description": "Exchange value between regp and epc, doing a branch"
+      }
+    ]
+  },
+  "0x24": {
+    "format": "JL",
+    "varyants": [
+      {
+        "mnemonic": "JL",
+        "args": [
+          "imm<2"
+        ],
+        "description": "Do a long jump inside the current 256 MB Bank"
+      }
+    ]
+  },
+  "0x25": {
+    "format": "JL",
+    "varyants": [
+      {
+        "mnemonic": "BL",
+        "args": [
+          "imm<2"
+        ],
+        "description": "Do a long branch inside the current 256 MB Bank"
+      }
+    ]
+  },
+  "0x26": {
+    "format": "JL",
+    "varyants": [
+      {
+        "non-pm": true,
+        "mnemonic": "JLP",
+        "args": [
+          "imm<2"
+        ],
+        "description": "Do a long jump inside the current 256 MB Bank in protected mode"
+      }
+    ]
+  },
+  "0x27": {
+    "format": "JL",
+    "varyants": [
+      {
+        "non-pm": true,
+        "mnemonic": "BLP",
+        "args": [
+          "imm<2"
+        ],
+        "description": "Do a long branch inside the current 256 MB Bank in protected mode"
+      }
+    ]
+  },
+  "0x28": {
+    "varyants": []
+  },
+  "0x29": {
+    "varyants": []
+  },
+  "0x2a": {
+    "varyants": []
+  },
+  "0x2b": {
+    "varyants": []
+  },
+  "0x2c": {
+    "varyants": []
+  },
+  "0x2d": {
+    "varyants": []
+  },
+  "0x2e": {
+    "varyants": []
+  },
+  "0x2f": {
+    "varyants": []
+  },
+  "0x30": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "MOV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Moves a value from one register to another"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "MOVI",
+        "args": [
+          "regd",
+          "imm16"
+        ],
+        "description": "Moves a immediate value to a register"
+      }
+    ]
+  },
+  "0x31": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "CVBW",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Converts a byte data to sign extended word to register"
+      },
+      {
+        "mode": 1,
+        "mnemonic": "CVBD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Converts a byte data to sign extended dword to register"
+      },
+      {
+        "mode": 2,
+        "mnemonic": "CVWD",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Converts a word data to sign extended dword to register"
+      },
+      {
+        "mode": 3,
+        "mnemonic": "CVWDI",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Converts a word immediate data to sign extended dword to register"
+      }
+    ]
+  },
+  "0x32": {
+    "format": "CDI",
+    "varyants": [
+      {
+        "mode": 0,
+        "mnemonic": "MV",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Moves value from regb to regd conditionally"
+      }
+    ]
+  },
+  "0x33": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "XCHG",
+        "args": [
+          "regd",
+          "regb"
+        ],
+        "description": "Exchanges the value of regd by regb"
+      }
+    ]
+  },
+  "0x34": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "STEQ",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is equal to regp"
+      },
+      {
+        "func": 1,
+        "mnemonic": "STNE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is not equal to regp"
+      },
+      {
+        "func": 2,
+        "mnemonic": "STLT",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is less than regp"
+      },
+      {
+        "func": 3,
+        "mnemonic": "STGT",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is greater than regp"
+      },
+      {
+        "func": 4,
+        "mnemonic": "STLE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is less or equal than regp"
+      },
+      {
+        "func": 5,
+        "mnemonic": "STGE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is greater or equal than regp"
+      },
+      {
+        "func": 6,
+        "mnemonic": "STBL",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is below than regp"
+      },
+      {
+        "func": 7,
+        "mnemonic": "STAB",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is above than regp"
+      },
+      {
+        "func": 8,
+        "mnemonic": "STBE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is below or equal than regp"
+      },
+      {
+        "func": 9,
+        "mnemonic": "STAE",
+        "args": [
+          "regd",
+          "imm8",
+          "regb",
+          "regp"
+        ],
+        "description": "Stores a immediate value to register if regb is above or equal than regp"
+      },
+      {
+        "func": 10,
+        "mnemonic": "STEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is equal to zero"
+      },
+      {
+        "func": 11,
+        "mnemonic": "STNZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is not equal to zero"
+      },
+      {
+        "func": 12,
+        "mnemonic": "STLTZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is less than zero"
+      },
+      {
+        "func": 13,
+        "mnemonic": "STGTZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is greater than zero"
+      },
+      {
+        "func": 14,
+        "mnemonic": "STLEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is less or equal than zero"
+      },
+      {
+        "func": 15,
+        "mnemonic": "STGEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is greater or equal than zero"
+      },
+      {
+        "func": 16,
+        "mnemonic": "STBLZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is below than zero"
+      },
+      {
+        "func": 17,
+        "mnemonic": "STABZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is above than zero"
+      },
+      {
+        "func": 18,
+        "mnemonic": "STBEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is below or equal than zero"
+      },
+      {
+        "func": 19,
+        "mnemonic": "STAEZI",
+        "args": [
+          "regd",
+          "imm8",
+          "regb"
+        ],
+        "description": "Stores a immediate value to register if regb is above or equal than zero"
+      },
+      {
+        "func": 20,
+        "mnemonic": "STEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is equal to zero"
+      },
+      {
+        "func": 21,
+        "mnemonic": "STNZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is not equal to zero"
+      },
+      {
+        "func": 22,
+        "mnemonic": "STLTZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is less than zero"
+      },
+      {
+        "func": 23,
+        "mnemonic": "STGTZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is greater than zero"
+      },
+      {
+        "func": 24,
+        "mnemonic": "STLEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is less or equal than zero"
+      },
+      {
+        "func": 25,
+        "mnemonic": "STGEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is greater or equal than zero"
+      },
+      {
+        "func": 26,
+        "mnemonic": "STBLZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is below than zero"
+      },
+      {
+        "func": 27,
+        "mnemonic": "STABZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is above than zero"
+      },
+      {
+        "func": 28,
+        "mnemonic": "STBEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is below or equal than zero"
+      },
+      {
+        "func": 29,
+        "mnemonic": "STAEZ",
+        "args": [
+          "regd",
+          "regp",
+          "regb"
+        ],
+        "description": "Stores regp value to register if regb is above or equal than zero"
+      }
+    ]
+  },
+  "0x35": {
+    "format": "IR",
+    "varyants": [
+      {
+        "mode": 0,
+        "non-pm": true,
+        "mnemonic": "MVFR",
+        "args": [
+          "regd",
+          "imm"
+        ],
+        "description": "Moves value from extra register in index of imm in processor to regd"
+      },
+      {
+        "mode": 1,
+        "non-pm": true,
+        "mnemonic": "MVTR",
+        "args": [
+          "imm",
+          "regb"
+        ],
+        "description": "Moves value from regb to extra register in index of imm in processor"
+      }
+    ]
+  },
+  "0x36": {
+    "varyants": []
+  },
+  "0x37": {
+    "varyants": []
+  },
+  "0x38": {
+    "format": "SI",
+    "varyants": [
+      {
+        "func": 0,
+        "mnemonic": "STC",
+        "args": [],
+        "description": "Sets the flag CF"
+      },
+      {
+        "func": 1,
+        "mnemonic": "CLC",
+        "args": [],
+        "description": "Clears the flag CF"
+      },
+      {
+        "func": 2,
+        "mnemonic": "TGC",
+        "args": [],
+        "description": "Toggles the flag CF"
+      },
+      {
+        "func": 3,
+        "mnemonic": "STB",
+        "args": [],
+        "description": "Sets the flag BF"
+      },
+      {
+        "func": 4,
+        "mnemonic": "CLB",
+        "args": [],
+        "description": "Clears the flag BF"
+      },
+      {
+        "func": 5,
+        "mnemonic": "TGB",
+        "args": [],
+        "description": "Toggles the flag BF"
+      },
+      {
+        "func": 6,
+        "mnemonic": "STV",
+        "args": [],
+        "description": "Sets the flag VF"
+      },
+      {
+        "func": 7,
+        "mnemonic": "CLV",
+        "args": [],
+        "description": "Clears the flag VF"
+      },
+      {
+        "func": 8,
+        "mnemonic": "TGV",
+        "args": [],
+        "description": "Toggles the flag VF"
+      },
+      {
+        "func": 9,
+        "mnemonic": "STZ",
+        "args": [],
+        "description": "Sets the flag ZF"
+      },
+      {
+        "func": 10,
+        "mnemonic": "CLZ",
+        "args": [],
+        "description": "Clears the flag ZF"
+      },
+      {
+        "func": 11,
+        "mnemonic": "TGZ",
+        "args": [],
+        "description": "Toggles the flag ZF"
+      },
+      {
+        "func": 12,
+        "mnemonic": "STN",
+        "args": [],
+        "description": "Sets the flag NF"
+      },
+      {
+        "func": 13,
+        "mnemonic": "CLN",
+        "args": [],
+        "description": "Clears the flag NF"
+      },
+      {
+        "func": 14,
+        "mnemonic": "TGN",
+        "args": [],
+        "description": "Toggles the flag NF"
+      },
+      {
+        "func": 15,
+        "mnemonic": "STO",
+        "args": [],
+        "description": "Sets the flag OF"
+      },
+      {
+        "func": 16,
+        "mnemonic": "CLO",
+        "args": [],
+        "description": "Clears the flag OF"
+      },
+      {
+        "func": 17,
+        "mnemonic": "TGO",
+        "args": [],
+        "description": "Toggles the flag OF"
+      },
+      {
+        "func": 18,
+        "non-pm": true,
+        "mnemonic": "ENBI",
+        "args": [],
+        "description": "Enables interruption"
+      },
+      {
+        "func": 19,
+        "non-pm": true,
+        "mnemonic": "DSBI",
+        "args": [],
+        "description": "Disables interruption"
+      },
+      {
+        "func": 20,
+        "non-pm": true,
+        "mnemonic": "ENBV",
+        "args": [],
+        "description": "Enables virtual mode"
+      },
+      {
+        "func": 21,
+        "non-pm": true,
+        "mnemonic": "DSBV",
+        "args": [],
+        "description": "Disables virtual mode"
+      }
+    ]
+  },
+  "0x39": {
+    "varyants": []
+  },
+  "0x3a": {
+    "varyants": []
+  },
+  "0x3b": {
+    "varyants": []
+  },
+  "0x3c": {
+    "varyants": []
+  },
+  "0x3d": {
+    "varyants": []
+  },
+  "0x3e": {
+    "varyants": []
+  },
+  "0x3f": {
+    "varyants": []
+  }
+}
