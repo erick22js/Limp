@@ -29,8 +29,10 @@ void LPeri_init(LPeri *peri);
 */
 
 Bool LPeri_plug(LPeri *peri, LPci *m_pci);
+Bool LPeri_plugAt(LPeri *peri, LPci *m_pci, Uint8 port);
 Bool LPeri_unplug(LPeri *peri);
 
+Bool LPeri_inUpdtd(LPeri *peri);
 Uint32 LPeri_in(LPeri *peri);
 void LPeri_out(LPeri *peri, Uint32 data);
 

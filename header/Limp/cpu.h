@@ -72,7 +72,8 @@ typedef struct LCpu{
 		Uint32 *regd, *regb, *regi, *regp, *rego;
 	}args;
 	
-	/* Running frequencies */
+	/* Execution properties */
+	Uint32 start_jmp;
 	Int freq_i;
 	Int freq_set;
 	
@@ -167,6 +168,7 @@ void LCpu_writeExReg(LCpu *m_cpu, Uint16 reg, Uint32 data);
 /* External Devices Access */
 
 Uint32 LCpu_in(LCpu *m_cpu, Uint8 port);
+Bool LCpu_inUpdtd(LCpu *m_cpu, Uint8 port);
 void LCpu_out(LCpu *m_cpu, Uint8 port, Uint32 data);
 
 
@@ -193,6 +195,8 @@ Bool LICpu_protectionThrown(LCpu *m_cpu); /* Returns TRUE if has throwed a inter
 
 
 /* Program Flow */
+
+void LCpu_reset(LCpu *m_cpu);
 
 void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr);
 void LCpu_jumpRel(LCpu *m_cpu, Sint32 addr);
