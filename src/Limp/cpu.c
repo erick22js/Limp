@@ -157,6 +157,13 @@ Uint32 LCpu_in(LCpu *m_cpu, Uint8 port){
 	return 0;
 }
 
+Bool LCpu_inUpdtd(LCpu *m_cpu, Uint8 port){
+	if(m_cpu->io.pci){
+		return LPci_cpu_readUpdtd(m_cpu->io.pci, port);
+	}
+	return FALSE;
+}
+
 void LCpu_out(LCpu *m_cpu, Uint8 port, Uint32 data){
 	if(m_cpu->io.pci){
 		LPci_cpu_write(m_cpu->io.pci, port, data);
@@ -373,6 +380,20 @@ Bool LICpu_protectionThrown(LCpu *m_cpu){
 
 /* Program Flow */
 
+void LCpu_reset(LCpu *m_cpu){
+	memset(&m_cpu->regs, 0, sizeof(m_cpu->regs));
+	memset(&m_cpu->sregs, 0, sizeof(m_cpu->sregs));
+	
+	m_cpu->hs.busy = FALSE;
+	m_cpu->hs.ext_req = FALSE;
+	m_cpu->hs.wait = FALSE;
+	m_cpu->hs.waiti = FALSE;
+	m_cpu->hs.waits = FALSE;
+	
+	m_cpu->sregs.lpc = m_cpu->start_jmp;
+	m_cpu->sregs.epc = m_cpu->start_jmp;
+}
+
 void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr){
 	m_cpu->sregs.lpc = addr;
 	m_cpu->sregs.epc = addr;
@@ -467,7 +488,7 @@ Uint32 LICpu_process(void* arg){
 		
 		while((LTime_getMicros()-ltime)<15625);
 		ltime = LTime_getMicros();
-		printf("MI pulse at microsecond: %d\n", ltime);
+		/*printf("MI pulse at microsecond: %d\n", ltime);*/
 		
 		m_cpu->peri.running = FALSE;
 		while(m_cpu->hs.halt){}

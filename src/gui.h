@@ -743,11 +743,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				gui_refresh();
 			}
 			if(LOWORD(wParam) == id_btn_reset){
-				memset(&gcpu.regs, 0, sizeof(gcpu.regs));
-				memset(&gcpu.sregs, 0, sizeof(gcpu.sregs));
-				gcpu.hs.wait = 0;
-				gcpu.hs.waiti = 0;
-				gcpu.hs.waits = 0;
+				LCpu_reset(&gcpu);
 				gui_refresh();
 			}
 			if(LOWORD(wParam) == id_dpd_editloadmode){
@@ -807,7 +803,6 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				if(GetSaveFileName(&ofn) == TRUE){ 
 					// use ofn.lpstrFile here
 					memcpy(defaultFile, ofn.lpstrFile, sizeof(defaultFile));
-					printf("Dumping to %s\n", ofn.lpstrFile);
 					
 					FILE *file = fopen(ofn.lpstrFile, "wb");
 					

@@ -82,6 +82,16 @@ void LIIsaDtb_opcode08_func07(LCpu *m_cpu){
 	LCpu_co_command(m_cpu, m_cpu->args.mod, *m_cpu->args.regb);
 }
 
+// INUP
+void LIIsaDtb_opcode08_func08(LCpu *m_cpu){
+	// Protected Mode Only
+	if(LICpu_protectionThrown(m_cpu)){
+		return;
+	}
+	
+	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_OF, LCpu_inUpdtd(m_cpu, *m_cpu->args.regd));
+}
+
 
 extern void (*LIIsaDtb_opcode08[64])(LCpu *m_cpu) = {
 	[0x00] = LIIsaDtb_opcode08_func00,
@@ -92,7 +102,7 @@ extern void (*LIIsaDtb_opcode08[64])(LCpu *m_cpu) = {
 	[0x05] = LIIsaDtb_opcode08_func05,
 	[0x06] = LIIsaDtb_opcode08_func06,
 	[0x07] = LIIsaDtb_opcode08_func07,
-	[0x08] = LIIsaDtb_undefined,
+	[0x08] = LIIsaDtb_opcode08_func08,
 	[0x09] = LIIsaDtb_undefined,
 	[0x0A] = LIIsaDtb_undefined,
 	[0x0B] = LIIsaDtb_undefined,

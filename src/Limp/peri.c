@@ -28,6 +28,17 @@ Bool LPeri_plug(LPeri *peri, LPci *m_pci){
 	return FALSE;
 }
 
+Bool LPeri_plugAt(LPeri *peri, LPci *m_pci, Uint8 port){
+	if(!peri->m_pci){
+		if(LPci_peri_plugAt(m_pci, peri, port)){
+			peri->port = port;
+			peri->m_pci = m_pci;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 Bool LPeri_unplug(LPeri *peri){
 	if(peri->m_pci){
 		LPci_peri_unplug(peri->m_pci, peri->port);
@@ -36,6 +47,9 @@ Bool LPeri_unplug(LPeri *peri){
 	}
 }
 
+Bool LPeri_inUpdtd(LPeri *peri){
+	return LPci_peri_readUpdtd(peri->m_pci, peri->port);
+}
 
 Uint32 LPeri_in(LPeri *peri){
 	return LPci_peri_read(peri->m_pci, peri->port);
