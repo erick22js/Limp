@@ -623,6 +623,7 @@ Int LSParser_process_file_(LSParser *parser){
                 LSsymLabel *label = Calloc(sizeof(LSsymLabel));
                 label->name = identifier;
                 label->address = parser->process_address_program;
+                //printf("Declaring tag '%s' with value 0x%x aka %d\n", identifier, label->address, label->address);
                 LLPush(parser->scope_in->label_first, parser->scope_in->label_last, label);
                 continue;
             }
@@ -634,6 +635,7 @@ Int LSParser_process_file_(LSParser *parser){
 			Throw(
 				LSExp_getInstructionSize(parser, mne, &size)
 			);
+			//printf("The mnemonic size is %d\n", size);
             parser->process_address_program += size;
             parser->process_address_binary += size;
             
@@ -958,7 +960,7 @@ Int LSParser_encode_file_(LSParser *parser){
 }
 
 Int LSParser_parsesrc_(LSParser *parser, LSFile *file){
-    /* Process and encode all the files to binary, while has file in stack */
+	/* Process and encode all the files to binary, while has file in stack */
     /* Process - Phase 1 */
     LSParser_pushFile_(parser, file, FALSE);
     LSParser_pushScope(parser, "#Global");

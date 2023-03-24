@@ -31,7 +31,7 @@ Int LSExp_leadDescriptor(LSToken *tk, LSKeywordType desctype, Uint32 *outv){
 Int LSExp_getInstructionSize(LSParser *parser, LSMnemonic *mne, Int *out_size){
     LSToken *tk = &parser->tkr.tk;
     *out_size = 4;
-    Uint32 value;
+    Uint32 value = 0;
     
     Throw(
 		LSParser_fetchToken(parser, FALSE)
@@ -765,7 +765,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic *mne, Int *out_size){
     LSToken *tk = &parser->tkr.tk;
     *out_size = 4;
-    Uint32 value;
+    Uint32 value = 0;
     
     memset(instr, 0, sizeof(LSsymInstruction));
     
