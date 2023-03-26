@@ -243,7 +243,7 @@ Int LSTokener_fetch(LSTokener *tkr){
     if(LSLexer_eof(tkr->file)){
         tkr->ended = TRUE;
     }
-    // LSToken_print(&tkr->tk);
+    //LSToken_print(&tkr->tk);
     return 0;
 }
 

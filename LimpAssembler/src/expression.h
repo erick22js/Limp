@@ -64,7 +64,7 @@ Int LSExp_getInstructionSize(LSParser *parser, LSMnemonic *mne, Int *out_size){
 }
 
 Bool LSExp_compatibleTypes(LSargValue given, LSargValue base){
-    if(given==base){
+	if(given==base){
         return TRUE;
     }
     
@@ -72,7 +72,7 @@ Bool LSExp_compatibleTypes(LSargValue given, LSargValue base){
         return given==LS_ARGVALUE_IMM8 || given==LS_ARGVALUE_IMM16 || given==LS_ARGVALUE_IMM32 || given==LS_ARGVALUE_IMM;
     }
     
-    if(base==LS_ARGVALUE_AMD){
+    if(base==LS_ARGVALUE_AMD || base==LS_ARGVALUE_VARY){
         return given!=LS_ARGVALUE_VOID;
     }
     
@@ -261,7 +261,15 @@ Int LSExp_fetchUnary(LSParser *parser, LSsymValue *res){
 		res->valtype = LS_ARGVALUE_IMM;
 	}
 	else if(tk->type==LS_TOKENTYPE_IDENTIFIER){
-		if(LSParser_hasSymbol(parser, tk->data.string, TRUE)){
+		LSsymArg *macro_arg = LSParser_getMacroArgument(parser, tk->data.string);
+		if(macro_arg){
+			if(macro_arg->valtype==LS_ARGVALUE_AMD){
+				res->arg = macro_arg;
+			}
+			res->data.u32 = macro_arg->value.imm;
+			res->valtype = macro_arg->valtype;
+		}
+		else if(LSParser_hasSymbol(parser, tk->data.string, TRUE)){
 			res->data.u32 = LSParser_getSymbol(parser, tk->data.string);
 			res->valtype = LS_ARGVALUE_IMM32;
 		}
@@ -748,8 +756,13 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
         Throw(
             LSExp_fetchExpression(parser, &res)
         );
-        arg->valtype = res.valtype;
-        arg->value.imm = res.data.u32;
+		arg->valtype = res.valtype;
+        if(res.valtype==LS_ARGVALUE_AMD){
+			*arg = *res.arg;
+        }
+        else{
+			arg->value.imm = res.data.u32;
+        }
     }
     
     Throw(
@@ -893,6 +906,43 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
         instr->args[i] = args[i];
     }
     instr->mnemonic = mne;
+    
+    return 0;
+}
+
+Int LSExp_fetchMacro(LSParser *parser, LSsymMacro *macro, LSsymMacroArgs *args){
+    LSToken *tk = &parser->tkr.tk;
+    
+    /* Arguments fetching */
+    /* For macros, the max arguments are 4 */
+    Uint32 args_total = 4;
+    for(Int i=0; i<4; i++){
+        /* Verify for match argument */
+        if(macro->args[i].type){
+            /* Fetches the current instruction */
+            Throw(
+                LSExp_fetchArgument(i==0, parser, &args->args[i])
+            );
+            if(!LSExp_compatibleTypes(args->args[i].valtype, macro->args[i].type)){
+                printf("$ Incompatible arguments! %d to %d\n", args->args[i].valtype, macro->args[i].type);
+                Error(LS_ERR_INCOMPATIBLEARG);
+            }
+        }
+        /* The arguments ends on current index */
+        else{
+            args_total = i;
+            break;
+        }
+    }
+    
+    /* Check if has reached the end of instruction */
+    Throw(
+		LSParser_previewToken(parser, FALSE)
+	);
+    if(!LSToken_endOfArgumentList(tk)){
+        printf("$ Incompatible arguments!\n");
+        Error(LS_ERR_UNEXPECTTK);
+    }
     
     return 0;
 }

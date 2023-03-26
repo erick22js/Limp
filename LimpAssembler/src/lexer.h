@@ -20,6 +20,20 @@ LSFile *LSLexer_openSrc(Char* string){
     return file;
 }
 
+LSFile *LSLexer_openSrcRestrict(Char* string, Uint32 seek, Uint32 end){
+    Int size = 0;
+    Char* cs = string;
+    while(*cs){
+        size++; cs++;
+    }
+    LSFile *file = LSFile_loadUserFileRestricted((Byte*)string, TRUE, seek, end);
+    if(file){
+        file->userdata = 0;
+        file->apidata = 0x00010001;
+    }
+    return file;
+}
+
 LSFile *LSLexer_openBuffer(Byte* buffer, Int length, Char* pspath){
     LSFile *file = LSFile_loadBuffer((Byte*)buffer, length, TRUE);
     if(file){

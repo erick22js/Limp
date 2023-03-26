@@ -1,25 +1,25 @@
 # depslib dependency file v1.0
-1679672163 source:c:\users\erick\documents\meusprojetos\limp\limpassembler\src\main.c
+1679683600 source:c:\users\erick\documents\meusprojetos\limp\limpassembler\src\main.c
 	<stdio.h>
 	"parser.h"
 
-1679671959 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\parser.h
+1679837861 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\parser.h
 	"tokener.h"
 	"symbols.h"
 	"encoder.h"
 	"rbuffer.h"
 	"expression.h"
 
-1679670077 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
+1679837822 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
 	"lexer.h"
 	"tokens.h"
 
-1679481217 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\lexer.h
+1679781396 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\lexer.h
 	"file.h"
 	"memory.h"
 	"error.h"
 
-1679566527 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\file.h
+1679781632 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\file.h
 	"api.h"
 	"dirhanddler.h"
 
@@ -28,10 +28,10 @@
 	<stdlib.h>
 	<string.h>
 
-1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\memory.h
+1679830846 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\memory.h
 	"api.h"
 
-1679490794 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\error.h
+1679784591 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\error.h
 	"api.h"
 
 1679565436 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokens.h
@@ -41,33 +41,33 @@
 	"db_general.h"
 	"db_instructions.h"
 
-1679229958 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
-	"api.h"
+1679833675 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
+	"db_instructions.h"
 
-1679309666 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
+1679783609 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
 	"api.h"
 	"instructions.h"
 
-1679410511 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
+1679837388 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
 	"api.h"
-	"db_general.h"
 	"db_instructions.h"
+	"db_general.h"
 
-1679492520 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\encoder.h
+1679837880 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\encoder.h
 	"api.h"
 	"wbuffer.h"
 
 1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\wbuffer.h
 	"file.h"
 
-1679671807 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
+1679837606 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
 	"tokener.h"
 	"symbols.h"
 	"parser.h"
 
 1679667886 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
 
-1679320396 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\dirhanddler.h
+1679672940 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\dirhanddler.h
 	"api.h"
 
 1679567086 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\rbuffer.h

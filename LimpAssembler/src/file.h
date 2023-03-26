@@ -19,6 +19,9 @@ typedef struct LSFile{
     
     /* Definition for user file type */
     FILE *file;
+    Uint32 file_seek;
+    Uint32 file_seek_set;
+    Uint32 file_end;
     
     /* General */
     Bool bufft; /* Is type buffer */
@@ -34,7 +37,7 @@ typedef struct LSFile{
     Uint32 apidata;
 }LSFile;
 
-LSFile lsg_files_[LS_MAX_FILES];
+LSFile lsg_files_[LS_MAX_FILES] = {0};
 
 
 /**
@@ -77,6 +80,34 @@ LSFile *LSFile_loadUserFile(Char* path, Bool read_mode){
         if(!file->file){
             return NULL;
         }
+        file->file_seek = 0;
+        file->file_seek_set = 0;
+        file->file_end = 0xFFFFFFFF;
+        LSDh_copy(file->path, path);
+        file->open = TRUE;
+        file->bufft = FALSE;
+        file->readm = read_mode;
+        file->latest_i = 0;
+        file->latest_feed = 0;
+        file->userdata = NULL;
+        file->apidata = NULL;
+        return file;
+    }
+    return NULL;
+}
+
+LSFile *LSFile_loadUserFileRestricted(Char* path, Bool read_mode, Uint32 seek, Uint32 end){
+    LSFile *file = LSIFile_firstNotOpen();
+    if(file){
+        memset(file, 0, sizeof(LSFile));
+        file->file = fopen(path, read_mode?"rb":"wb");
+        if(!file->file){
+            return NULL;
+        }
+        fseek(file->file, seek, SEEK_SET);
+        file->file_seek = seek;
+        file->file_seek_set = seek;
+        file->file_end = end;
         LSDh_copy(file->path, path);
         file->open = TRUE;
         file->bufft = FALSE;
@@ -102,7 +133,7 @@ Bool LSFile_eof(LSFile *file){
         return file->buffer_seek>=file->buffer_size;
     }
     else{
-        return feof(file->file);
+        return feof(file->file)||(file->file_seek>=file->file_end);
     }
 }
 
@@ -125,7 +156,13 @@ Int LSFile_getc(LSFile *file){
                 file->buffer_seek++;
             }
             else{
-                chr = fgetc(file->file);
+                if(file->file_seek<file->file_end){
+                	chr = fgetc(file->file);
+                }
+                else{
+					chr = EOF;
+                }
+                file->file_seek++;
             }
             file->latest[file->latest_i] = chr;
             file->latest_i++;
@@ -166,6 +203,7 @@ void LSFile_putc(LSFile *file, Byte chr){
         }
         else{
             fputc(chr, file->file);
+            file->file_seek++;
         }
     }
 }
@@ -176,6 +214,7 @@ void LSFile_seekBegin(LSFile *file, Int offset){
     }
     else{
         fseek(file->file, offset, SEEK_SET);
+        file->file_seek = ftell(file->file);
     }
 }
 
@@ -185,6 +224,7 @@ void LSFile_seekCurrent(LSFile *file, Int offset){
     }
     else{
         fseek(file->file, offset, SEEK_CUR);
+        file->file_seek = ftell(file->file);
     }
 }
 
@@ -194,6 +234,7 @@ void LSFile_seekEnd(LSFile *file, Int offset){
     }
     else{
         fseek(file->file, offset, SEEK_END);
+        file->file_seek = ftell(file->file);
     }
 }
 
@@ -211,7 +252,8 @@ void LSFile_rewind(LSFile *file){
         file->buffer_seek = 0;
     }
     else{
-        rewind(file->file);
+		fseek(file->file, file->file_seek_set, SEEK_SET);
+		file->file_seek = file->file_seek_set;
     }
 }
 

@@ -5,16 +5,19 @@
 
 
 #define LS_DYNAMICMEM_LENGTH 1024*1024*2 // 2 MB
+#define LS_STACKMEM_LENGTH 1024*128 // 128 KB
 
 
 typedef Uint32 LSDySPtr; // Limp Assembler Dynamic Stream Pointer :-)
 
 Byte lsg_dymem_b_[LS_DYNAMICMEM_LENGTH];
 Uint32 lsg_dymem_top_ = 4;
+Byte lsg_stmem_b_[LS_STACKMEM_LENGTH];
+Uint32 lsg_stmem_bot_ = LS_STACKMEM_LENGTH;
 
 
 /**
-    WORKING FUNCTIONS
+    DYNAMIC WORKING FUNCTIONS
 */
 
 void LSDyS_copyMem(void* dest, void* src, Int size){
@@ -97,6 +100,34 @@ Int LSDyS_getTotalMemAllocated(){
 #define WarpMemCmp(data, size, ptr, equalfunc) LSDyS_wrapMemCmp(data, size, ptr, equalFunc)
 #define WarpObj(data, ptr) LSDyS_wrapMem(data, sizeof(data), ptr)
 #define WarpObjCmp(data, ptr, equalfunc) LSDyS_wrapMemCmp(data, sizeof(data), ptr, equalFunc)
+
+
+/**
+	STACK WORKING FUNCTIONS
+*/
+
+void* LSDyS_stkPush(Int size){
+	lsg_stmem_bot_ -= size;
+	return &lsg_stmem_b_[lsg_stmem_bot_];
+}
+
+void* LSDyS_cpush(Int size){
+	void* datam = LSDyS_stkPush(size);
+	
+	Byte* dtb = (Byte*)datam;
+	while(size){
+		*dtb = 0;
+		dtb++;
+		size--;
+	}
+	return datam;
+}
+
+void LSDyS_stkPop(Int size){
+	lsg_stmem_bot_ += size;
+}
+
+#define Cpush(size) LSDyS_cpush(size)
 
 
 /**

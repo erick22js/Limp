@@ -10,7 +10,6 @@
 #define Error(code) {printf("\n############## Error %d throwed at file '%s' in line %d ##############\n\n", code, __FILE__, __LINE__); return code;}
 
 
-#define LS_ERR_INVALIDDESC 0x0001 /* Invalid Descriptor disposition */
 #define LS_ERR_EXPECTDESC 0x0002 /* Expected a descriptor */
 #define LS_ERR_EXPECTCLOSPAREN 0x0003 /* Expected a closin paren */
 #define LS_ERR_SYMBOLUNDEF 0x0004 /* Symbol is not defined */
@@ -32,6 +31,7 @@
 #define LS_ERR_EXPECTVALIDPREPNAME 0x0014 /* Expected a valid preprocessor name */
 #define LS_ERR_UNALOWEDPOSFIX 0x0015 /* Unallowed number posfix */
 #define LS_ERR_INCOMPATIBLEARG 0x0016 /* Incompatible arguments types */
+#define LS_ERR_INVALIDDESC 0x00017 /* Invalid Descriptor disposition */
 
 
 Char* LSErr_msgFromCode(Uint32 code){

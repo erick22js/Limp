@@ -1,7 +1,7 @@
 #ifndef limps_dbgeneral_h
 #define limps_dbgeneral_h
 
-#include "api.h"
+#include "db_instructions.h"
 
 
 typedef enum LSKeywordType{
@@ -10,6 +10,7 @@ typedef enum LSKeywordType{
     LS_KWTYPE_IMODE = 0x04,
     LS_KWTYPE_EFETCH = 0x08,
     LS_KWTYPE_ADRSIZE = 0x10,
+    LS_KWTYPE_ARGTYPE = 0x20,
 }LSKeywordType;
 
 typedef struct LSKeyword{
@@ -73,6 +74,10 @@ LSKeyword lsdb_keywords[] = {
     {"word", 1, LS_KWTYPE_ADRSIZE},
     {"dword", 2, LS_KWTYPE_ADRSIZE},
     {"qword", 3, LS_KWTYPE_ADRSIZE},
+    
+    {"imm", LS_ARGVALUE_IMM, LS_KWTYPE_ARGTYPE},
+    {"amd", LS_ARGVALUE_AMD, LS_KWTYPE_ARGTYPE},
+    {"reg", LS_ARGVALUE_REG, LS_KWTYPE_ARGTYPE},
 };
 Int lsdb_keywords_length = sizeof(lsdb_keywords)/sizeof(LSKeyword);
 

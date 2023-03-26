@@ -2,8 +2,8 @@
 #define limps_symbols_h
 
 #include "api.h"
-#include "db_general.h"
 #include "db_instructions.h"
+#include "db_general.h"
 
 
 
@@ -58,18 +58,6 @@ struct LSsymExpression{
     }opr1, opr2; /* Operands */
 };
 
-typedef struct LSsymValue{
-    LSargValue valtype;
-    union{
-        Uint8 u8;
-        Sint8 s8;
-        Uint16 u16;
-        Sint16 s16;
-        Uint32 u32;
-        Sint32 s32;
-    }data;
-}LSsymValue;
-
 
 /**
     Instruction Symbols
@@ -108,6 +96,19 @@ typedef struct LSsymArg{
         Uint32 imm;
     }value;
 }LSsymArg;
+
+typedef struct LSsymValue{
+    LSargValue valtype;
+    union{
+        Uint8 u8;
+        Sint8 s8;
+        Uint16 u16;
+        Sint16 s16;
+        Uint32 u32;
+        Sint32 s32;
+    }data;
+	LSsymArg *arg;
+}LSsymValue;
 
 
 /**
@@ -168,11 +169,38 @@ struct LSsymDefine;
 typedef struct LSsymDefine LSsymDefine;
 struct LSsymDefine{
 	Char* name;
-	Char* src;
-	Int src_len;
+	Char* src_path;
+	Uint32 seek;
+	Uint32 end;
 	
 	LSsymDefine *next;
 };
+
+
+/**
+	Defines Macro
+	Its arranjed in a linked list way
+*/
+
+struct LSsymMacro;
+typedef struct LSsymMacro LSsymMacro;
+struct LSsymMacro{
+	Char* name;
+	Char* src_path;
+	Uint32 seek;
+	Uint32 end;
+	
+	struct{
+		LSargValue type;
+		Char* name;
+	}args[4];
+	
+	LSsymMacro *next;
+};
+
+typedef struct LSsymMacroArgs{
+	LSsymArg args[4];
+}LSsymMacroArgs;
 
 
 /**
@@ -211,8 +239,13 @@ struct LSsymScope{
     LSsymDefine *def_first;
     LSsymDefine *def_last;
     
-    LSsymScope *father;
+    LSsymMacro *macro_first;
+    LSsymMacro *macro_last;
     
+    LSsymMacro *macro;
+    LSsymMacroArgs macro_args;
+    
+    LSsymScope *father;
     LSsymScope *next;
 };
 
