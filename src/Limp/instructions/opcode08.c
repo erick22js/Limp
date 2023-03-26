@@ -82,7 +82,6 @@ void LIIsaDtb_opcode08_func07(LCpu *m_cpu){
 	LCpu_co_command(m_cpu, m_cpu->args.mod, *m_cpu->args.regb);
 }
 
-// INUP
 void LIIsaDtb_opcode08_func08(LCpu *m_cpu){
 	// Protected Mode Only
 	if(LICpu_protectionThrown(m_cpu)){
@@ -90,6 +89,22 @@ void LIIsaDtb_opcode08_func08(LCpu *m_cpu){
 	}
 	
 	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_OF, LCpu_inUpdtd(m_cpu, *m_cpu->args.regd));
+	
+	switch(m_cpu->args.mod){
+		// INUP
+		case 0:{}
+		break;
+		
+		// INUS
+		case 1:{
+			LCpu_in(m_cpu, *m_cpu->args.regd);
+		}
+		break;
+		
+		default:{
+			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
+		}
+	}
 }
 
 
