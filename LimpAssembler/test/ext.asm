@@ -1,0 +1,2 @@
+movi ebx, value
+
