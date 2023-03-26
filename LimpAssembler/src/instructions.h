@@ -403,7 +403,17 @@ LSMnemonic lsdb_mnemonics[] = {
     },
     {
         "inup", 0x8, LS_INSTRTYPE_SI,
-        0, 0x8,
+        0x0, 0x8,
+        {
+            {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+        },
+    },
+    {
+        "inus", 0x8, LS_INSTRTYPE_SI,
+        0x1, 0x8,
         {
             {LS_ARGNAME_REGD, LS_ARGVALUE_REG},
             {0, 0},

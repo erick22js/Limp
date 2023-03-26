@@ -49,6 +49,69 @@ typedef struct LSParser{
 }LSParser;
 LSDySPtr lsgpsr_path_p = 0;
 
+
+/**
+	HAS GREAT SYMBOLS
+*/
+
+LSsymDefine *LSParser_getDefined(LSParser *parser, Char* name, Bool all_scopes){
+	LSsymScope *actscope = parser->scope_in;
+	while(actscope){
+		LSsymDefine *cdef = actscope->def_first;
+		while(cdef){
+			if(Str_equal(cdef->name, name)){
+				return cdef;
+			}
+			cdef = cdef->next;
+		}
+		actscope = actscope->father;
+		if(!all_scopes){
+			break;
+		}
+	}
+	return NULL;
+}
+
+LSsymMacro *LSParser_getMacro(LSParser *parser, Char* name, Bool all_scopes){
+	LSsymScope *actscope = parser->scope_in;
+	while(actscope){
+		LSsymMacro *cmacro = actscope->macro_first;
+		while(cmacro){
+			if(Str_equal(cmacro->name, name)){
+				return cmacro;
+			}
+			cmacro = cmacro->next;
+		}
+		actscope = actscope->father;
+		if(!all_scopes){
+			break;
+		}
+	}
+	return NULL;
+}
+
+LSsymArg *LSParser_getMacroArgument(LSParser *parser, Char* name){
+	LSsymMacro *macro = parser->scope_in->macro;
+	if(macro){
+		for(Int i=0; i<4; i++){
+			if(macro->args[i].type){
+				if(Str_equal(macro->args[i].name, name)){
+					return &parser->scope_in->macro_args.args[i];
+				}
+			}
+			else{
+				break;
+			}
+		}
+	}
+	return 0;
+}
+
+
+/**
+	HAS SYMBOLS
+*/
+
 Bool LSParser_hasLabel(LSsymScope *scope, Char* name){
 	LSsymLabel *clabel = scope->label_first;
 	while(clabel){
@@ -102,6 +165,9 @@ Bool LSParser_hasMacroAttribute(LSsymScope *scope, Char* name){
 Bool LSParser_hasSymbol(LSParser *parser, Char* name, Bool all_scopes){
 	LSsymScope *actscope = parser->scope_in;
 	if(LSParser_hasMacroAttribute(actscope, name)){
+		return TRUE;
+	}
+	if(LSParser_getDefined(parser, name, all_scopes)){
 		return TRUE;
 	}
 	while(actscope){
@@ -209,7 +275,7 @@ void LSParser_pushScope(LSParser *parser, Char* name){
 	scope->father = parser->scope_in;
 	parser->scope_in = scope;
 	if(parser->scope_current){
-		//printf("Entering from scope '%s' to '%s'\n", parser->scope_current->name, name);
+		//printf("Entering(Push) from scope '%s' to '%s'\n", parser->scope_current->name, name);
 		parser->scope_current->next = scope;
 	}
 	parser->scope_current = scope;
@@ -231,7 +297,7 @@ void LSParser_enterScope(LSParser *parser){
 
 Bool LSParser_leaveScope(LSParser *parser){
 	if(parser->scope_in->father){
-		//printf("Leaving from scope '%s' to '%s'\n", parser->scope_current->name, parser->scope_in->father->name);
+		//printf("Leaving from scope '%s' to '%s'\n", parser->scope_in->name, parser->scope_in->father->name);
 		parser->scope_in = parser->scope_in->father;
 		return TRUE;
 	}
@@ -263,11 +329,11 @@ Bool LSParser_pushFile_(LSParser *parser, LSFile *file, Bool internal, Bool news
 Bool LSParser_popFile_(LSParser *parser){
     if(parser->file_i){
         parser->file_i--;
+		if(parser->files[parser->file_i].newscope){
+			LSParser_leaveScope(parser);
+		}
         if(parser->file_i){
             LSLexer_close(parser->files[parser->file_i].file);
-        }
-        if(parser->files[parser->file_i].newscope){
-			LSParser_leaveScope(parser);
         }
         parser->files[parser->file_i].file = NULL;
         parser->tkr.file = parser->files[parser->file_i-1].file;
@@ -284,59 +350,6 @@ Bool LSParser_popFile_(LSParser *parser){
 	PREPROCESSOR HANDLING
 */
 
-LSsymDefine *LSParser_getDefined(LSParser *parser, Char* name, Bool all_scopes){
-	LSsymScope *actscope = parser->scope_in;
-	while(actscope){
-		LSsymDefine *cdef = actscope->def_first;
-		while(cdef){
-			if(Str_equal(cdef->name, name)){
-				return cdef;
-			}
-			cdef = cdef->next;
-		}
-		actscope = actscope->father;
-		if(!all_scopes){
-			break;
-		}
-	}
-	return NULL;
-}
-
-LSsymMacro *LSParser_getMacro(LSParser *parser, Char* name, Bool all_scopes){
-	LSsymScope *actscope = parser->scope_in;
-	while(actscope){
-		LSsymMacro *cmacro = actscope->macro_first;
-		while(cmacro){
-			if(Str_equal(cmacro->name, name)){
-				return cmacro;
-			}
-			cmacro = cmacro->next;
-		}
-		actscope = actscope->father;
-		if(!all_scopes){
-			break;
-		}
-	}
-	return NULL;
-}
-
-LSsymArg *LSParser_getMacroArgument(LSParser *parser, Char* name){
-	LSsymMacro *macro = parser->scope_in->macro;
-	if(macro){
-		for(Int i=0; i<4; i++){
-			if(macro->args[i].type){
-				if(Str_equal(macro->args[i].name, name)){
-					return &parser->scope_in->macro_args.args[i];
-				}
-			}
-			else{
-				break;
-			}
-		}
-	}
-	return 0;
-}
-
 Int LSParser_openDefinition(LSParser *parser, LSsymDefine *define){
 	if(define->src_path){
 		LSFile* file = LSLexer_openSrcRestrict(define->src_path, define->seek, define->end);
@@ -351,9 +364,6 @@ Int LSParser_fetchToken(LSParser *parser, Bool ignore_defines){
 		LSTokener_fetch(&parser->tkr)
 	);
 	if(parser->tkr.tk.type==LS_TOKENTYPE_EOF){
-		if(LSParser_hasCurrentFileOwnScope(parser)){
-			LSParser_leaveScope(parser);
-		}
 		if(parser->file_i>1){
 			LSParser_popFile_(parser);
 			parser->tkr.ended = FALSE;
@@ -382,9 +392,6 @@ Int LSParser_previewToken(LSParser *parser, Bool ignore_defines){
 		LSTokener_preview(&parser->tkr)
 	);
 	if(parser->tkr.tk.type==LS_TOKENTYPE_EOF){
-		if(LSParser_hasCurrentFileOwnScope(parser)){
-			LSParser_leaveScope(parser);
-		}
 		if(parser->file_i>1){
 			LSParser_popFile_(parser);
 			parser->tkr.ended = FALSE;
@@ -470,7 +477,7 @@ Int LSParser_fetchMacroParams(LSParser *parser, LSsymMacro *macro){
 			);
 			
 			if(!(tk->type==LS_TOKENTYPE_KEYWORD && tk->data.kw->type&LS_KWTYPE_ARGTYPE)){
-				Error(1);
+				Error(LS_ERR_EXPECTEDTYPEKEYWORD);
 			}
 			
 			macro->args[arg_i].type = tk->data.kw->code;
@@ -542,8 +549,8 @@ Int LSParser_process_file_(LSParser *parser){
             /* PROC: Define a macro */
             if(LSToken_isIdentifier(tk, "endmacro")){
 				if(!macro_def){
-					Error(1)
-				};
+					Error(LS_ERR_OUTSIDEENDMACRO);
+				}
 				macro_def = FALSE;
 				
 				p_program = &parser->process_address_program;
@@ -594,6 +601,10 @@ Int LSParser_process_file_(LSParser *parser){
 					}
 					Char* identifier = tk->data.string;
 					
+					if(LSParser_hasSymbol(parser, identifier, FALSE)){
+						Error(LS_ERR_SYMBOLALREADYDEF);
+					}
+					
 					Uint32 begin = LSLexer_tell(LSParser_getCurrentFile(parser));
 					Uint32 end = begin;
 					/* Retrieves the characters for symbol definition */
@@ -617,9 +628,6 @@ Int LSParser_process_file_(LSParser *parser){
 				}
 				/* PROC: Define a macro */
 				else if(LSToken_isIdentifier(tk, "macro")){
-					if(macro_def){
-						Error(1)
-					};
 					macro_def = TRUE;
 					
 					Throw(
@@ -630,6 +638,10 @@ Int LSParser_process_file_(LSParser *parser){
 						Error(LS_ERR_EXPECTIDENTIFIER);
 					}
 					Char* identifier = tk->data.string;
+					
+					if(LSParser_hasSymbol(parser, identifier, FALSE)){
+						Error(LS_ERR_SYMBOLALREADYDEF);
+					}
 					
 					memset(&macro, 0, sizeof(LSsymMacro));
 					Throw(
@@ -747,6 +759,16 @@ Int LSParser_process_file_(LSParser *parser){
 							LSParser_fetchToken(parser, FALSE)
 						);
 						name = tk->data.string;
+						
+						if(LSParser_hasSymbol(parser, name, FALSE)){
+							Error(LS_ERR_SYMBOLALREADYDEF);
+						}
+						
+						LSsymLabel *label = Calloc(sizeof(LSsymLabel));
+						label->name = name;
+						label->address = (*p_program);
+						//printf("Declaring tag '%s' with value 0x%x aka %d\n", identifier, label->address, label->address);
+						LLPush(parser->scope_in->label_first, parser->scope_in->label_last, label);
 					}
 					
 					LSParser_pushScope(parser, name);
@@ -859,6 +881,8 @@ Int LSParser_process_file_(LSParser *parser){
 							LSFile* file = LSLexer_openSrcRestrict(macro->src_path, macro->seek, macro->end);
 							LSParser_pushFile_(parser, file, TRUE, TRUE);
 							LSParser_pushScope(parser, "#macro");
+							
+							parser->tkr.ended = FALSE;
 							
 							parser->scope_in->macro = macro;
 							parser->scope_in->macro_args;
@@ -1206,6 +1230,8 @@ Int LSParser_encode_file_(LSParser *parser){
 							LSFile* file = LSLexer_openSrcRestrict(macro->src_path, macro->seek, macro->end);
 							LSParser_pushFile_(parser, file, TRUE, TRUE);
 							LSParser_enterScope(parser);
+							
+							parser->tkr.ended = FALSE;
 							
 							parser->scope_in->macro = macro;
 							parser->scope_in->macro_args = args;

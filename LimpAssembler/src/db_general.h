@@ -70,14 +70,14 @@ LSKeyword lsdb_keywords[] = {
     {"hw", 1, LS_KWTYPE_IMODE},
     {"sw", 2, LS_KWTYPE_IMODE},
     
-    {"byte", 0, LS_KWTYPE_ADRSIZE},
-    {"word", 1, LS_KWTYPE_ADRSIZE},
-    {"dword", 2, LS_KWTYPE_ADRSIZE},
-    {"qword", 3, LS_KWTYPE_ADRSIZE},
+    {"Byte", 0, LS_KWTYPE_ADRSIZE},
+    {"Word", 1, LS_KWTYPE_ADRSIZE},
+    {"Dword", 2, LS_KWTYPE_ADRSIZE},
+    {"Qword", 3, LS_KWTYPE_ADRSIZE},
     
-    {"imm", LS_ARGVALUE_IMM, LS_KWTYPE_ARGTYPE},
-    {"amd", LS_ARGVALUE_AMD, LS_KWTYPE_ARGTYPE},
-    {"reg", LS_ARGVALUE_REG, LS_KWTYPE_ARGTYPE},
+    {"Imm", LS_ARGVALUE_IMM, LS_KWTYPE_ARGTYPE},
+    {"Amd", LS_ARGVALUE_AMD, LS_KWTYPE_ARGTYPE},
+    {"Reg", LS_ARGVALUE_REG, LS_KWTYPE_ARGTYPE},
 };
 Int lsdb_keywords_length = sizeof(lsdb_keywords)/sizeof(LSKeyword);
 

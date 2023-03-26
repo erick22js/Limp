@@ -7,6 +7,10 @@
 #define LS_MAX_PATHSIZE 256
 
 
+#define LS_SEPDIR '/'
+
+#define LS_ISSEPDIR(chr) (chr=='\\' || chr=='/')
+
 void LSDh_zero(Char* dpath){
 	for(Int i=0; i<LS_MAX_PATHSIZE; i++){
 		dpath[i] = 0;
@@ -24,7 +28,7 @@ void LSDh_cext(Char* dpath, Char* extension){
 	Int dpos = LS_MAXH_PATHSIZE;
 	for(;dpos>=0; dpos--){
 		if(dpath[dpos]!=0){
-			if(dpath[dpos]!='/'){
+			if(!LS_ISSEPDIR(dpath[dpos])){
 				dpos++;
 			}
 			break;
@@ -49,7 +53,7 @@ void LSDh_cd(Char* dpath, Char* rel){
 	Int dpos = LS_MAXH_PATHSIZE;
 	for(;dpos>=0; dpos--){
 		if(dpath[dpos]!=0){
-			if(dpath[dpos]!='/'){
+			if(!LS_ISSEPDIR(dpath[dpos])){
 				dpos++;
 			}
 			break;
@@ -60,9 +64,9 @@ void LSDh_cd(Char* dpath, Char* rel){
 			rel++;
 			if((*rel)=='.'){
 				rel++;
-				if((*rel)=='/' || (*rel)==0){
+				if(LS_ISSEPDIR(*rel) || (*rel)==0){
 					dpos--;
-					while(dpath[dpos]!='/' && dpos>=0){
+					while(!LS_ISSEPDIR(dpath[dpos]) && dpos>=0){
 						dpath[dpos] = 0;
 						dpos--;
 					}
@@ -70,13 +74,13 @@ void LSDh_cd(Char* dpath, Char* rel){
 					continue;
 				}
 				else{
-					dpath[dpos] = '/';
+					dpath[dpos] = LS_SEPDIR;
 					dpos++;
 					dpath[dpos] = '.';
 					dpos++;
 					dpath[dpos] = '.';
 					dpos++;
-					while((*rel)!='/' && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
+					while(!LS_ISSEPDIR(*rel) && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
 						dpath[dpos] = *rel;
 						rel++, dpos++;
 					}
@@ -84,28 +88,28 @@ void LSDh_cd(Char* dpath, Char* rel){
 				}
 				
 			}
-			else if((*rel)=='/'){
+			else if(LS_ISSEPDIR(*rel)){
 				rel++;
 				continue;
 			}
 			else{
-				dpath[dpos] = '/';
+				dpath[dpos] = LS_SEPDIR;
 				dpos++;
 				dpath[dpos] = '.';
 				dpos++;
-				while((*rel)!='/' && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
+				while(!LS_ISSEPDIR(*rel) && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
 					dpath[dpos] = *rel;
 					rel++, dpos++;
 				}
 				continue;
 			}
 		}
-		else if((*rel)=='/'){
+		else if(LS_ISSEPDIR(*rel)){
 			rel++;
 		}
-		dpath[dpos] = '/';
+		dpath[dpos] = LS_SEPDIR;
 		dpos++;
-		while((*rel)!='/' && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
+		while(!LS_ISSEPDIR(*rel) && (*rel) && (dpos<LS_MAXH_PATHSIZE)){
 			dpath[dpos] = *rel;
 			rel++, dpos++;
 		}
@@ -117,13 +121,13 @@ void LSDh_up(Char* dpath){
 	Int dpos = LS_MAXH_PATHSIZE;
 	for(;dpos>=0; dpos--){
 		if(dpath[dpos]!=0){
-			if(dpath[dpos]!='/'){
+			if(!LS_ISSEPDIR(dpath[dpos])){
 				dpos++;
 			}
 			break;
 		}
 	}
-	while((dpos>=0)&&(dpath[dpos]!='/')){
+	while((dpos>=0) && !LS_ISSEPDIR(dpath[dpos])){
 		dpath[dpos] = 0;
 		dpos--;
 	}

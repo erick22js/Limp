@@ -32,6 +32,8 @@
 #define LS_ERR_UNALOWEDPOSFIX 0x0015 /* Unallowed number posfix */
 #define LS_ERR_INCOMPATIBLEARG 0x0016 /* Incompatible arguments types */
 #define LS_ERR_INVALIDDESC 0x00017 /* Invalid Descriptor disposition */
+#define LS_ERR_EXPECTEDTYPEKEYWORD 0x00018 /* Expected a Type keyword */
+#define LS_ERR_OUTSIDEENDMACRO 0x00019 /* Trying to define a endmacro in outside */
 
 
 Char* LSErr_msgFromCode(Uint32 code){
@@ -58,6 +60,7 @@ Char* LSErr_msgFromCode(Uint32 code){
 		case LS_ERR_EXPECTVALIDPREPNAME: return "Expected a valid preprocessor name";
 		case LS_ERR_UNALOWEDPOSFIX: return "Unallowed number posfix";
 		case LS_ERR_INCOMPATIBLEARG: return "Incompatible arguments types";
+		case LS_ERR_EXPECTEDTYPEKEYWORD: return "";
 	}
 	return "<Not catalogged error>";
 }
