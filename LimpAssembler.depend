@@ -1,0 +1,75 @@
+# depslib dependency file v1.0
+1679683600 source:c:\users\erick\documents\meusprojetos\limp\limpassembler\src\main.c
+	<stdio.h>
+	"parser.h"
+
+1679920928 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\parser.h
+	"tokener.h"
+	"symbols.h"
+	"encoder.h"
+	"rbuffer.h"
+	"expression.h"
+
+1680174138 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
+	"lexer.h"
+	"tokens.h"
+
+1679781396 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\lexer.h
+	"file.h"
+	"memory.h"
+	"error.h"
+
+1679781632 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\file.h
+	"api.h"
+	"dirhanddler.h"
+
+1679314600 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\api.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1679830846 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\memory.h
+	"api.h"
+
+1679859953 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\error.h
+	"api.h"
+
+1679565436 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokens.h
+	"api.h"
+	"memory.h"
+	"lexer.h"
+	"db_general.h"
+	"db_instructions.h"
+
+1680094309 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
+	"db_instructions.h"
+
+1679783609 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
+	"api.h"
+	"instructions.h"
+
+1679837388 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
+	"api.h"
+	"db_instructions.h"
+	"db_general.h"
+
+1679920955 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\encoder.h
+	"api.h"
+	"wbuffer.h"
+
+1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\wbuffer.h
+	"file.h"
+
+1680086888 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
+	"tokener.h"
+	"symbols.h"
+	"parser.h"
+
+1680174105 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
+
+1679857553 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\dirhanddler.h
+	"api.h"
+
+1679567086 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\rbuffer.h
+	"file.h"
+
