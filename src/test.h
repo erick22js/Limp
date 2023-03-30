@@ -28,7 +28,7 @@ void setup(){
 	/* PERIPHERICALs Setup */
 	LPStdout_init(&gstdout, &gbus, stdout);
 	LPeri_plugAt(&gstdout, &gpci, 0x10);
-	LPHd_init(&ghd, &gbus, "disk.img");
+	LPHd_init(&ghd, &gbus, "data/disk.img");
 	LPeri_plugAt(&ghd, &gpci, 0x12);
 }
 
