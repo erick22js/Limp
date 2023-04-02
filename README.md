@@ -4,4 +4,4 @@ My own virtual microprocessor customized
 
 # The Assembler
 
-Look for the Readme inside the folder LimpAssembler project for further details about.
+Look for the docs.pdf for further details about.
