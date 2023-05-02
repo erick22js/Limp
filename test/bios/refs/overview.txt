@@ -1,0 +1,49 @@
+==========================================================================================
+
+	Funções da BIOS
+
+- Inicializar todos os dispositivos de entrada e saída
+- Catalogar algum dispositivo de disco
+- Inicializar algum sistema de arquivos
+- Carregar um sistema operativo
+
+==========================================================================================
+
+	Inicializando dispositivos de entrada e saída
+
+- Definir o vetor de interrupções
+- Ativar as interupções
+- Produzir um delay aguardando pela interrupção do máximo de dispositivos possíveis
+- Aguardar que o disco esteja catalogado
+
+	Para a interrupção de cada dispositivos
+
+- Requisitar o tipo de dispositivo
+- Requisitar o seletor de interrupção
+- Baseado nessas informações, realizar seu tratamento
+	- Se for um disco, catalogar o dispositivo
+	- Se for uma saída padrão, catalogar o dispositivo
+	- Se for um display, catalogar o disposivo
+
+==========================================================================================
+
+	Inicializar algum sistema de arquivos
+
+- Ler a primeira entrada de 4KB no disco para a memória
+- Se contiver um sistema de arquivos, deve avançar
+	- Se não, formatar com um novo sistema de arquivos e avançar
+- Definir um tratador de interrupções para gerenciamento de arquivos da bios
+
+
+==========================================================================================
+
+	Carregar um sistema operativo
+
+- Ler dados de arquivo mestre no sistema de arquivos
+- Verificar por disponibilidade de sistema operativo
+	- Se houver, carregar arquivos necessários de inicialização na memória, e executar programa de entrada (passa o controle para o kernel)
+	- Se não houver, executar alguma interface básica de gerenciamento da BIOS
+
+
+
+

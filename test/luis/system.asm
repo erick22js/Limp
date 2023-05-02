@@ -17,29 +17,29 @@
 
 .scope setupPorts
 	// Setup all the interruption vector
-	movi eax, setupExtIntr
-	movi ess, 0x80
+	movi ax, setupExtIntr
+	movi ss, 0x80
 	loop_set_vectors:
-		dec ess
+		dec ss
 		// Calculating the address
-		movi ebx, intr_table
-		mov ecx, ess
-		add ecx, 0x80
-		mul ecx, 4
-		add ebx, ecx
+		movi bx, intr_table
+		mov cx, ss
+		add cx, 0x80
+		mul cx, 4
+		add bx, cx
 		// Storing the program offset for interruption
-		strd [ebx], eax
-		jr.onz<ess> @loop_set_vectors
+		strd [bx], ax
+		jr.onz<ss> @loop_set_vectors
 	// Attribute the interrupt table address
-	movi edx, intr_table
-	mvtit edx
+	movi dx, intr_table
+	mvtit dx
 	// Enable and expects for interruptions
 	enbi
 	// Executes a loop waiting for ports to connect
-	movi ecx, 0x1000
+	movi cx, 0x1000
 	loop_waiti:
-		dec ecx
-		jr.onz<ecx> @loop_waiti
+		dec cx
+		jr.onz<cx> @loop_waiti
 	ret
 .endscope
 
@@ -51,31 +51,31 @@
 	.endmacro
 	saveRegs
 	// Getting info of actual port
-	getPort eax
+	getPort ax
 	// Register in ports vector
 	.scope
-		outi eax, 0x10
-		waitPort eax
-		in edx, eax
-		mov ebx, eax
-		mul ebx, 4
-		add.d ebx, ports_d
-		strd.d [ebx], edx
+		outi ax, 0x10
+		waitPort ax
+		in dx, ax
+		mov bx, ax
+		mul bx, 4
+		add.d bx, ports_d
+		strd.d [bx], dx
 	.endscope
 	// Setup the main ports
 	.scope
-		movi ecx, 0
+		movi cx, 0
 		// Comparate is a stdout device
-		movi ess, mport_stdout
-		cmp edx, 1
-		mv.eq ecx, ess
+		movi ss, mport_stdout
+		cmp dx, 1
+		mv.eq cx, ss
 		// Comparate is a disk device
-		movi ess, mport_disk
-		cmp edx, 2
-		mv.eq ecx, ess
+		movi ss, mport_disk
+		cmp dx, 2
+		mv.eq cx, ss
 		// Stores the main port
-		jr.oez<ecx> @not_mport
-			strb [ecx], eax
+		jr.oez<cx> @not_mport
+			strb [cx], ax
 		not_mport:
 	.endscope
 	restoreRegs

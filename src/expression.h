@@ -162,6 +162,10 @@ Bool LSExp_compatibleTypes(LSargValue given, LSargValue base){
         return given!=LS_ARGVALUE_VOID;
     }
     
+    if(base==LS_ARGVALUE_REG){
+		return given==LS_ARGVALUE_REGS || given==LS_ARGVALUE_REGE;
+    }
+    
     return FALSE;
 }
 
@@ -555,7 +559,9 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
         Throw(
 			LSParser_fetchToken(parser, FALSE)
 		);
-        arg->valtype = LS_ARGVALUE_REG;
+        arg->valtype =
+			tk->data.kw->type&LS_KWTYPE_RSTANDARD?LS_ARGVALUE_REGS:
+			tk->data.kw->type&LS_KWTYPE_REXTRA?LS_ARGVALUE_REGE:LS_ARGVALUE_REG;
         arg->value.regindex = tk->data.kw->code;
     }
     /* Its a amd for memory */
@@ -567,7 +573,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 			LSParser_previewToken(parser, FALSE)
 		);
         
-        if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
+        if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)&&(tk->data.kw->type&LS_KWTYPE_RSTANDARD)){
 			Throw(
                 LSParser_fetchToken(parser, FALSE)
 			);
@@ -602,7 +608,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 				Throw(
 					LSParser_previewToken(parser, FALSE)
 				);
-				if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
+				if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)&&(tk->data.kw->type&LS_KWTYPE_RSTANDARD)){
 					Throw(
 						LSParser_fetchToken(parser, FALSE)
 					);
@@ -669,7 +675,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 						LSParser_fetchToken(parser, FALSE)
 					);
 					
-					if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
+					if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)&&(tk->data.kw->type&LS_KWTYPE_RSTANDARD)){
 						arg->value.amd.regi = tk->data.kw->code;
 					}
 					else{
@@ -770,7 +776,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 			Throw(
                 LSParser_fetchToken(parser, FALSE)
 			);
-			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
+			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)&&(tk->data.kw->type&LS_KWTYPE_RSTANDARD)){
 				arg->value.amd.type = LS_AMDTYPE_POINTERPREINCREMENT;
 				arg->value.amd.regb = tk->data.kw->code;
 			}
@@ -786,7 +792,7 @@ Int LSExp_fetchArgument(Bool first, LSParser *parser, LSsymArg *arg){
 			Throw(
                 LSParser_fetchToken(parser, FALSE)
 			);
-			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
+			if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)&&(tk->data.kw->type&LS_KWTYPE_RSTANDARD)){
 				arg->value.amd.type = LS_AMDTYPE_POINTERPREDECREMENT;
 				arg->value.amd.regb = tk->data.kw->code;
 			}
@@ -910,6 +916,7 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
                 
                 if((tk->type==LS_TOKENTYPE_KEYWORD)&&(tk->data.kw->type&LS_KWTYPE_REGISTER)){
                     instr->rego = tk->data.kw->code;
+                    instr->os = tk->data.kw->type&LS_KWTYPE_REXTRA?1:0;
                 }
                 else{
                     Error(LS_ERR_EXPECTREGNAME);
@@ -958,6 +965,7 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
     /* For instructions, the max arguments are 4 */
     LSsymArg args[4];
     Uint32 args_total = 4;
+    Uint32 reg_set = 2;
     for(Int i=0; i<4; i++){
         /* Verify for match argument */
         if(mne->args[i].encname){
@@ -968,6 +976,32 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
             if(!LSExp_compatibleTypes(args[i].valtype, mne->args[i].valtype)){
                 printf("$ Incompatible arguments! %d to %d\n", args[i].valtype, mne->args[i].valtype);
                 Error(LS_ERR_INCOMPATIBLEARG);
+            }
+            if(reg_set==2){
+				if(args[i].valtype==LS_ARGVALUE_REGS){
+					reg_set = 0;
+				}
+				else if(args[i].valtype==LS_ARGVALUE_REGE){
+					reg_set = 1;
+				}
+				else{
+					reg_set = 0;
+				}
+				instr->s = reg_set;
+            }
+            else if(reg_set==0){
+				if(args[i].valtype==LS_ARGVALUE_REGE){
+					/* TODO: Throw a error */
+					// Expected the same register set for instruction argument
+					Error(LS_ERR_EXPECTRSETS);
+				}
+            }
+            else{
+				if(args[i].valtype==LS_ARGVALUE_REGS){
+					/* TODO: Throw a error */
+					// Expected the same register set for instruction argument
+					Error(LS_ERR_EXPECTRSETE);
+				}
             }
         }
         /* The arguments ends on current index */

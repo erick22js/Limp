@@ -119,6 +119,8 @@ typedef struct LSsymValue{
 struct LSsymInstruction;
 typedef struct LSsymInstruction LSsymInstruction;
 struct LSsymInstruction{
+	Uint32 s:1;
+	Uint32 os:1;
     Uint32 args_len:4;
     Uint32 im:4;
     Uint32 f:4;

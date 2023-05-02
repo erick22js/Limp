@@ -34,6 +34,8 @@
 #define LS_ERR_INVALIDDESC 0x00017 /* Invalid Descriptor disposition */
 #define LS_ERR_EXPECTEDTYPEKEYWORD 0x00018 /* Expected a Type keyword */
 #define LS_ERR_OUTSIDEENDMACRO 0x00019 /* Trying to define a endmacro in outside */
+#define LS_ERR_EXPECTRSETS 0x0001A /* Expected the entire instruction to use the standard register set */
+#define LS_ERR_EXPECTRSETE 0x0001B /* Expected the entire instruction to use the extra register set */
 
 
 Char* LSErr_msgFromCode(Uint32 code){
@@ -60,7 +62,10 @@ Char* LSErr_msgFromCode(Uint32 code){
 		case LS_ERR_EXPECTVALIDPREPNAME: return "Expected a valid preprocessor name";
 		case LS_ERR_UNALOWEDPOSFIX: return "Unallowed number posfix";
 		case LS_ERR_INCOMPATIBLEARG: return "Incompatible arguments types";
-		case LS_ERR_EXPECTEDTYPEKEYWORD: return "";
+		case LS_ERR_EXPECTEDTYPEKEYWORD: return "Expected a Type keyword";
+		case LS_ERR_OUTSIDEENDMACRO: return "Trying to define a endmacro in outside";
+		case LS_ERR_EXPECTRSETS: return "Expected the entire instruction to use the standard register set";
+		case LS_ERR_EXPECTRSETE: return "Expected the entire instruction to use the extra register set";
 	}
 	return "<Not catalogged error>";
 }

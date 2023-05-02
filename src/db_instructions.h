@@ -16,6 +16,8 @@ typedef enum LSargValue{
     LS_ARGVALUE_IMM,
     LS_ARGVALUE_AMD,
     LS_ARGVALUE_REG,
+    LS_ARGVALUE_REGS,
+    LS_ARGVALUE_REGE,
     LS_ARGVALUE_VARY,
 }LSargValue;
 

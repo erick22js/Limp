@@ -2,12 +2,22 @@
 
 /* Saves all register (Except ESP) in stack */
 .macro saveRegs
-	pshp eax, efp
-	pshp ess, esd
+	pshr ax
+	pshr dx
+	pshr cx
+	pshr bx
+	pshr fp
+	pshr ss
+	pshr sd
 .endmacro
 
 /* Restores all registers (Except ESP) from stack */
 .macro restoreRegs
-	popp ess, esd
-	popp eax, efp
+	popr sd
+	popr ss
+	popr fp
+	popr bx
+	popr cx
+	popr dx
+	popr ax
 .endmacro

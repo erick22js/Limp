@@ -2,7 +2,7 @@
 .predef stack_size 0x100
 
 // Setting up the stack to start program
-movi esp, endprogram+stack_size
+movi sp, endprogram+stack_size
 jl _Main
 
 /* Includes the utilities and needed code */
@@ -15,14 +15,14 @@ jl _Main
 
 .scope _Main
 	ba setupPorts
-	movi esd, 0x10
-	movi ess, hellostr
-	movi ecx, hellostr_end-hellostr
+	movi sd, 0x10
+	movi ss, hellostr
+	movi cx, hellostr_end-hellostr
 	bl WriteToDisk
 	bl WriteToStdout
-	movi esd, 0x800
-	movi ess, 0x0
-	movi ecx, 0x40
+	movi sd, 0x800
+	movi ss, 0x0
+	movi cx, 0x40
 	bl ReadFromDisk
 	jr 0
 .endscope
