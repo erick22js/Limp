@@ -4,127 +4,181 @@
 
 // FSTEQ
 void LIIsaDtb_opcode1D_func00(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)==(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)==(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTNE
 void LIIsaDtb_opcode1D_func01(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)!=(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)!=(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLT
 void LIIsaDtb_opcode1D_func02(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)<(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGT
 void LIIsaDtb_opcode1D_func03(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)>(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLE
 void LIIsaDtb_opcode1D_func04(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<=(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)<=(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGE
 void LIIsaDtb_opcode1D_func05(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>=(*(Float32*)m_cpu->args.regp)){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)>=(*(Float32*)m_cpu->args.rp)){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTEZI
 void LIIsaDtb_opcode1D_func06(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)==0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)==0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTNZI
 void LIIsaDtb_opcode1D_func07(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)!=0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)!=0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLTZI
 void LIIsaDtb_opcode1D_func08(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)<0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGTZI
 void LIIsaDtb_opcode1D_func09(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)>0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLEZI
 void LIIsaDtb_opcode1D_func0A(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<=0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)<=0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGEZI
 void LIIsaDtb_opcode1D_func0B(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>=0){
-		*m_cpu->args.regd = m_cpu->args.imm;
+	if((*(Float32*)m_cpu->args.rb)>=0){
+		*m_cpu->args.rd = m_cpu->args.imm;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTEZ
 void LIIsaDtb_opcode1D_func0C(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)==0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)==0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTNZ
 void LIIsaDtb_opcode1D_func0D(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)!=0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)!=0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLTZ
 void LIIsaDtb_opcode1D_func0E(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)<0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGTZ
 void LIIsaDtb_opcode1D_func0F(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)>0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTLEZ
 void LIIsaDtb_opcode1D_func10(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)<=0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)<=0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 
 // FSTGEZ
 void LIIsaDtb_opcode1D_func11(LCpu *m_cpu){
-	if((*(Float32*)m_cpu->args.regb)>=0){
-		*m_cpu->args.regd = *m_cpu->args.regp;
+	if((*(Float32*)m_cpu->args.rb)>=0){
+		*m_cpu->args.rd = *m_cpu->args.rp;
+	}
+	else{
+		*m_cpu->args.rd = 0;
 	}
 }
 

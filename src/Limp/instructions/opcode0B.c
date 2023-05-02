@@ -5,38 +5,18 @@
 void LIIsaDtb_opcode0B(LCpu *m_cpu){
 	
 	switch(m_cpu->args.mod){
-		// PSHAS
+		// STRD
 		case 0:{
-			LCpu_push(m_cpu, m_cpu->sregs.est&0x0000FFFF);
+			LCpu_writeMem32(m_cpu, m_cpu->args.ea, *m_cpu->args.rd);
 		}
 		break;
 		
-		// PSHSS
+		// STRQ
 		case 1:{
-			// Protected Mode Only
-			if(LICpu_protectionThrown(m_cpu)){
-				return;
-			}
-			
-			LCpu_push(m_cpu, m_cpu->sregs.est&0xFFFF0000);
+			LCpu_writeMem32(m_cpu, m_cpu->args.ea, m_cpu->args.rd[0]);
+			LCpu_writeMem32(m_cpu, m_cpu->args.ea+4, m_cpu->args.rd[1]);
 		}
 		break;
-		
-		// PSHS
-		case 2:{
-			// Protected Mode Only
-			if(LICpu_protectionThrown(m_cpu)){
-				return;
-			}
-			
-			LCpu_push(m_cpu, m_cpu->sregs.est);
-		}
-		break;
-		
-		default:{
-			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		}
 	}
 	
 }
-

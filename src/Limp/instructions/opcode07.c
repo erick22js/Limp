@@ -5,34 +5,18 @@
 void LIIsaDtb_opcode07(LCpu *m_cpu){
 	
 	switch(m_cpu->args.mod){
-		// LDMB
-		case 0:{
-			*m_cpu->args.regd = LCpu_readMem8(m_cpu, m_cpu->args.ea);
-		}
-		break;
-		
-		// LDMW
-		case 1:{
-			*m_cpu->args.regd = LCpu_readMem16(m_cpu, m_cpu->args.ea);
-		}
-		break;
-		
 		// LDMD
-		case 2:{
-			*m_cpu->args.regd = LCpu_readMem32(m_cpu, m_cpu->args.ea);
+		case 0:{
+			*m_cpu->args.rd = LCpu_readMem32(m_cpu, m_cpu->args.ea);
 		}
 		break;
 		
 		// LDMQ
-		case 3:{
-			m_cpu->args.regd[0] = LCpu_readMem32(m_cpu, m_cpu->args.ea);
-			m_cpu->args.regd[1] = LCpu_readMem32(m_cpu, m_cpu->args.ea+4);
+		case 1:{
+			m_cpu->args.rd[0] = LCpu_readMem32(m_cpu, m_cpu->args.ea);
+			m_cpu->args.rd[1] = LCpu_readMem32(m_cpu, m_cpu->args.ea+4);
 		}
 		break;
-		
-		default:{
-			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		}
 	}
 	
 }

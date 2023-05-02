@@ -60,12 +60,13 @@ void bus_std_write32_(LBus *bus, Uint32 addr, Uint32 data){
 }
 
 
-void LBStd_init(LBus *bus){
+void LBStd_init(LBus *bus, Uint32 init_vec){
 	bus->read8 = bus_std_read8_;
 	bus->read16 = bus_std_read16_;
 	bus->read32 = bus_std_read32_;
 	bus->write8 = bus_std_write8_;
 	bus->write16 = bus_std_write16_;
 	bus->write32 = bus_std_write32_;
+	bus->start_jmp = init_vec;
 }
 

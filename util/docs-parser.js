@@ -29,14 +29,24 @@ var su_im = [
 function type_by_ta(ta){
 	switch(ta){
 		case "regd":
+		case "sregd":
+		case "eregd":
 			return "LS_ARGNAME_REGD";
 		case "regb":
+		case "sregb":
+		case "eregb":
 			return "LS_ARGNAME_REGB";
 		case "regi":
+		case "sregi":
+		case "eregi":
 			return "LS_ARGNAME_REGI";
 		case "regp":
+		case "sregp":
+		case "eregp":
 			return "LS_ARGNAME_REGP";
 		case "rego":
+		case "srego":
+		case "erego":
 			return "LS_ARGNAME_REGO";
 		case "$amd":
 			return "LS_ARGNAME_AMD";
@@ -53,6 +63,18 @@ function value_by_ta(ta){
 		case "regp":
 		case "rego":
 			return "LS_ARGVALUE_REG";
+		case "sregd":
+		case "sregb":
+		case "sregi":
+		case "sregp":
+		case "srego":
+			return "LS_ARGVALUE_REGS";
+		case "eregd":
+		case "eregb":
+		case "eregi":
+		case "eregp":
+		case "erego":
+			return "LS_ARGVALUE_REGE";
 		case "$amd":
 			return "LS_ARGVALUE_AMD";
 		default:
@@ -70,22 +92,29 @@ function value_by_ta(ta){
 	}
 }
 
+function tfg(flags, name){
+	return ""+name+":"+(flags[name]==null?".":"<font style='color:red;'><strong>"+(flags[name]==0?"0":flags[name]==1?"1":flags[name]==2?"^":"!")+"</strong></font>");
+}
+
 docs += "<body style='font-family:monospace; width:500px;'>";
-function writeDocs(mnemonic, type, args, description, non_pm, opcode, func, mode){
+function writeDocs(mnemonic, type, args, description, non_pm, opcode, func, mode, cyclebase, flags){
 	var argslist = "";
 	for(var i=0; i<args.length; i++){
 		argslist += " "+args[i]+(i<(args.length-1)?",":"");
 	}
+	
 	docs += `
 	<h1 style="font-size:20pt">`+mnemonic+`</h1>
     
-    <label><h3>`+type+` Format: `+(non_pm?"#Super Mode":"Protected Mode")+`</h3></label>
-    <label><h3>Opc: `+opcode+`&nbsp;&nbsp;&nbsp;&nbsp;`+(func!=null?"Func: "+func+"&nbsp;&nbsp;&nbsp;&nbsp;":"")+(mode!=null?"Mode: "+mode+"&nbsp;&nbsp;&nbsp;&nbsp;":"")+`</h3></label>
-    <br>
-    <br>
-    <center><b>`+mnemonic+(type=="IR"?"[.im]":"")+(type=="ADI"||type=="CDI"?"[.cond]":"")+(type=="AMI"||type=="SI"||type=="CDI"?"[.f]":"")+argslist+`</b></center><br><br>
+    <label><strong>`+type+` Format: `+(non_pm?"#Super Mode":"Protected Mode")+`</strong></label><br/>
+    <label><strong>Opc: `+opcode+`&nbsp;&nbsp;&nbsp;&nbsp;`+(func!=null?"Func: "+func+"&nbsp;&nbsp;&nbsp;&nbsp;":"")+(mode!=null?"Mode: "+mode+"&nbsp;&nbsp;&nbsp;&nbsp;":"")+`</strong></label><br/><br/>
+	<label>Cycles base: `+cyclebase+`</label><br/><br/>
+	<label>`+tfg(flags, "CF")+" "+tfg(flags, "BF")+" "+tfg(flags, "VF")+" "+tfg(flags, "ZF")+" "+tfg(flags, "NF")+" "+tfg(flags, "OF")+"&nbsp;&nbsp;&nbsp;&nbsp"+tfg(flags, "EI")+" "+tfg(flags, "PM")+" "+tfg(flags, "VM")+`</label><br/>
+    <br/>
+    <br/>
+    <center><strong>`+mnemonic+(type=="IR"?"[.im]":"")+(type=="ADI"||type=="CDI"?"[.cond]":"")+(type=="AMI"||type=="SI"||type=="CDI"?"[.f]":"")+argslist+`</strong></center><br/><br/>
     
-    <center>`+description+`</center><br><br>
+    <center>`+description+`</center><br/><br/>
     
     <hr>`;
 }
@@ -160,7 +189,9 @@ for(var i=0; i<mnemonics.length; i++){
 		mnemonics[i][1]["non-pm"],
 		mnemonics[i][0]["opc"],
 		mnemonics[i][1]["func"],
-		mnemonics[i][1]["mode"]);
+		mnemonics[i][1]["mode"],
+		mnemonics[i][1]["cyclebase"]||1,
+		mnemonics[i][1]["flags"]||{});
 }
 
 src += "};";

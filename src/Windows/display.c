@@ -12,9 +12,6 @@ typedef uint32_t u32;
 
 LRESULT CALLBACK WindowProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam) {
     switch(Message) {
-        case WM_KEYDOWN: {
-            switch(WParam) { case 'O': { DestroyWindow(Window); }; }
-        } break;
         case WM_DESTROY: { PostQuitMessage(0); } break;
         default: { return DefWindowProc(Window, Message, WParam,  LParam); }
     }
@@ -79,6 +76,7 @@ void WinCreateDisplay(WinDisplay *display, int mapwidth, int mapheight, int winw
 
 int WinRenderizeDisplay(WinDisplay *display){
 	MSG Message;
+	display->has_focus = GetForegroundWindow()==display->window;
 	while(PeekMessage(&Message, NULL, 0, 0, PM_REMOVE)) {
 		if(Message.message == WM_QUIT){return 0;}
 		TranslateMessage(&Message);

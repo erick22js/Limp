@@ -5,21 +5,18 @@
 void LIIsaDtb_opcode30(LCpu *m_cpu){
 	
 	switch(m_cpu->args.mod){
-		// MOV
+		// JA
 		case 0:{
-			*m_cpu->args.regd = *m_cpu->args.regb;
+			LCpu_jumpAbs(m_cpu, m_cpu->args.imm<<2);
 		}
 		break;
 		
-		// MOVI
+		// BA
 		case 1:{
-			*m_cpu->args.regd = m_cpu->args.imm;
+			LCpu_push(m_cpu, m_cpu->sregs.epc);
+			LCpu_jumpAbs(m_cpu, m_cpu->args.imm<<2);
 		}
 		break;
-		
-		default:{
-			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		}
 	}
 	
 }

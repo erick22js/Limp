@@ -13,7 +13,7 @@ Uint32 LIPStdout_process(void* arg){
 	LPStdout *peri = arg;
 	
 	while(!LPeri_interrupt(&peri->peri));
-	//Log("Stdout did it interruption!\n");
+	Log("Stdout did it interruption!\n");
 	
 	while(peri->active){
 		if(LPeri_inUpdtd(&peri->peri)){
@@ -22,6 +22,18 @@ Uint32 LIPStdout_process(void* arg){
 			switch(ir){
 				case 0x10:{ // Info
 					LPeri_out(&peri->peri, 1);
+				}
+				break;
+				case 0x11:{ // Brand
+					LPeri_out(&peri->peri, 0);
+				}
+				break;
+				case 0x12:{ // Branch
+					LPeri_out(&peri->peri, 0);
+				}
+				break;
+				case 0x13:{ // Version
+					LPeri_out(&peri->peri, 0);
 				}
 				break;
 				
@@ -50,6 +62,8 @@ Uint32 LIPStdout_process(void* arg){
 					while(!LPeri_inUpdtd(&peri->peri)){};
 					Uint32 size = LPeri_in(&peri->peri);
 					LPeri_out(&peri->peri, 1);
+					
+					Log("\nWriting message, ptr:0x%x with size:0x%x\n: ", pointer, size);
 					
 					while(size){
 						Uint32 chr = peri->peri.bus->read8(peri->peri.bus, pointer);

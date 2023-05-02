@@ -57,6 +57,7 @@ union{
 };
 Uint32 _gui_dialog_mode = 0;
 wchar_t* _gui_dialog_text = L"12";
+wchar_t* _gui_dialog_reference = L"Reference";
 void (*_gui_dialog_callback)() = NULL;
 
 
@@ -77,35 +78,42 @@ void _dialogLoad(){
 		switch(_gui_dialog_mode){
 			case 0:{ // Hexadecimal
 				sprintf(temp, "0x%x\0", _gui_dialog_value.numeric);
+				_gui_dialog_reference = L"Literal";
 			}
 			break;
 			case 1:{ // Decimal
 				sprintf(temp, "%u\0", _gui_dialog_value.numeric);
+				_gui_dialog_reference = L"Literal";
 			}
 			break;
 			case 2:{ // Octal
 				sprintf(temp, "0o%o\0", _gui_dialog_value.numeric);
+				_gui_dialog_reference = L"Literal";
 			}
 			break;
 			case 3:{ // Floating-Pointer
 				sprintf(temp, "0f%f\0", *(Float*)&_gui_dialog_value.numeric);
+				_gui_dialog_reference = L"Literal";
 			}
 			break;
 			case 4:{ // Format IR
-				sprintf(temp, ".ir 0x%X, %d, %d, %d, %d, 0x%X",
+				sprintf(temp, ".ir 0x%X, %d, %d, %d, %d, %d, 0x%X",
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
-							(_gui_dialog_value.numeric>>24)&0x3, // Mod
+							(_gui_dialog_value.numeric>>25)&0x1, // Selector
+							(_gui_dialog_value.numeric>>24)&0x1, // Mod
 							(_gui_dialog_value.numeric>>22)&0x3, // IM
 							(_gui_dialog_value.numeric>>19)&0x7, // RegD
 							(_gui_dialog_value.numeric>>16)&0x7, // RegB
 							_gui_dialog_value.numeric&0xFFFF // Imm
 				);
+				_gui_dialog_reference = L"IR Base, S, M, IM, RegD, RegB, Imm";
 			}
 			break;
 			case 5:{ // Format AMI
-				sprintf(temp, ".ami 0x%X, %d, 0x%X, %d, %d, %d, %d, %d, 0x%X",
+				sprintf(temp, ".ami 0x%X, %d, %d, 0x%X, %d, %d, %d, %d, %d, 0x%X",
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
-							(_gui_dialog_value.numeric>>24)&0x3, // Mod
+							(_gui_dialog_value.numeric>>25)&0x1, // Selector
+							(_gui_dialog_value.numeric>>24)&0x1, // Mod
 							(_gui_dialog_value.numeric>>20)&0xF, // AdrM
 							(_gui_dialog_value.numeric>>18)&0x3, // DSize
 							(_gui_dialog_value.numeric>>17)&0x1, // F
@@ -114,12 +122,14 @@ void _dialogLoad(){
 							(_gui_dialog_value.numeric>>8)&0x7, // RegB
 							_gui_dialog_value.numeric&0xFF // Imm
 				);
+				_gui_dialog_reference = L"AMI Base, S, M, AdrM, DSize, F, RegD, RegI, RegB, Imm";
 			}
 			break;
 			case 6:{ // Format SI
-				sprintf(temp, ".si 0x%X, %d, 0x%X, %d, %d, %d, %d, 0x%X",
+				sprintf(temp, ".si 0x%X, %d, %d, 0x%X, %d, %d, %d, %d, 0x%X",
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
-							(_gui_dialog_value.numeric>>24)&0x3, // Mod
+							(_gui_dialog_value.numeric>>25)&0x1, // Selector
+							(_gui_dialog_value.numeric>>24)&0x1, // Mod
 							(_gui_dialog_value.numeric>>18)&0x3F, // Func
 							(_gui_dialog_value.numeric>>17)&0x1, // F
 							(_gui_dialog_value.numeric>>14)&0x7, // RegD
@@ -127,29 +137,35 @@ void _dialogLoad(){
 							(_gui_dialog_value.numeric>>8)&0x7, // RegB
 							_gui_dialog_value.numeric&0xFF // Imm
 				);
+				_gui_dialog_reference = L"SI Base, S, M, Func, F, RegD, RegI, RegB, Imm";
 			}
 			break;
 			case 7:{ // Format ADI
-				sprintf(temp, ".adi 0x%X, %d, 0x%X, %d, 0x%X",
+				sprintf(temp, ".adi 0x%X, %d, %d, 0x%X, %d, 0x%X",
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
-							(_gui_dialog_value.numeric>>24)&0x3, // Mod
+							(_gui_dialog_value.numeric>>25)&0x1, // Selector
+							(_gui_dialog_value.numeric>>24)&0x1, // Mod
 							(_gui_dialog_value.numeric>>19)&0x1F, // Condition
 							(_gui_dialog_value.numeric>>16)&0x7, // RegO
 							_gui_dialog_value.numeric&0xFFFF // Imm
 				);
+				_gui_dialog_reference = L"ADI Base, S, M, Condition, RegO, Imm";
 			}
 			break;
 			case 8:{ // Format CDI
-				sprintf(temp, ".cdi 0x%X, %d, 0x%X, %d, %d, %d, %d, 0x%X",
+				sprintf(temp, ".cdi 0x%X, %d, %d, 0x%X, %d, %d, %d, %d, %d, 0x%X",
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
-							(_gui_dialog_value.numeric>>24)&0x3, // Mod
+							(_gui_dialog_value.numeric>>25)&0x1, // Selector
+							(_gui_dialog_value.numeric>>24)&0x1, // Mod
 							(_gui_dialog_value.numeric>>19)&0x1F, // Condition
+							(_gui_dialog_value.numeric>>18)&0x1, // O
 							(_gui_dialog_value.numeric>>17)&0x1, // F
 							(_gui_dialog_value.numeric>>14)&0x7, // RegD
 							(_gui_dialog_value.numeric>>11)&0x7, // RegO
 							(_gui_dialog_value.numeric>>8)&0x7, // RegB
 							_gui_dialog_value.numeric&0xFF // Imm
 				);
+				_gui_dialog_reference = L"CDI Base, S, M, Condition, RegO, F, RegD, RegO, RegB, Imm";
 			}
 			break;
 			case 9:{ // Format JL
@@ -157,10 +173,12 @@ void _dialogLoad(){
 							(_gui_dialog_value.numeric>>26)&0x3F, // Opcode
 							_gui_dialog_value.numeric&0x3FFFFFF // Imm
 				);
+				_gui_dialog_reference = L"JL Base, Imm";
 			}
 			break;
 			default:{ // Unknown
 				sprintf(temp, "unknown");
+				_gui_dialog_reference = L"-- Something went wrong :-(";
 			}
 		}
 		Int len = strlen(temp);
@@ -223,7 +241,8 @@ Int gui_dialogParseNumber_fetch(char **buffer){
 Int gui_dialogParseNumber_decIR(char **buffer){
 	Int value = 0;
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<26; // Opcode
-	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<24; // Mod
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<25; // S
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<24; // Mod
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<22; // Im
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<19; // RegD
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<16; // RegB
@@ -234,7 +253,8 @@ Int gui_dialogParseNumber_decIR(char **buffer){
 Int gui_dialogParseNumber_decAMI(char **buffer){
 	Int value = 0;
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<26; // Opcode
-	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<24; // Mod
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<25; // S
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<24; // Mod
 	value |= (gui_dialogParseNumber_fetch(buffer)&0xF)<<20; // AdrM
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<18; // DSize
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<17; // F
@@ -248,7 +268,8 @@ Int gui_dialogParseNumber_decAMI(char **buffer){
 Int gui_dialogParseNumber_decSI(char **buffer){
 	Int value = 0;
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<26; // Opcode
-	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<24; // Mod
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<25; // S
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<24; // Mod
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<18; // DSize
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<17; // F
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<14; // RegD
@@ -261,7 +282,8 @@ Int gui_dialogParseNumber_decSI(char **buffer){
 Int gui_dialogParseNumber_decADI(char **buffer){
 	Int value = 0;
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<26; // Opcode
-	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<24; // Mod
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<25; // S
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<24; // Mod
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x1F)<<19; // Condition
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<16; // RegO
 	value |= (gui_dialogParseNumber_fetch(buffer)&0xFFFF); // Imm
@@ -271,9 +293,10 @@ Int gui_dialogParseNumber_decADI(char **buffer){
 Int gui_dialogParseNumber_decCDI(char **buffer){
 	Int value = 0;
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x3F)<<26; // Opcode
-	value |= (gui_dialogParseNumber_fetch(buffer)&0x3)<<24; // Mod
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<25; // S
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<24; // Mod
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x1F)<<19; // Condition
-	value |= (1)<<18; // gap
+	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<18; // O
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x1)<<17; // F
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<14; // RegD
 	value |= (gui_dialogParseNumber_fetch(buffer)&0x7)<<11; // RegO
@@ -381,6 +404,8 @@ LRESULT CALLBACK dialogProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			SetFocus(ui_edit);
 			
 			gui_ui_button(L"Set", id_btn_set, 288, 64, 64, 20);
+			
+			gui_ui_text(_gui_dialog_reference, NO_ID, 16, 96, 256, 32);
 		}
 		break;
 		/* Eventos dispachados pelos elementos */
@@ -475,25 +500,25 @@ void gui_refresh(){
 Int guiset_reg_i = 0;
 void guiset_reg(){
 	Uint32 value = _gui_dialog_value.numeric;
-	if(guiset_reg_i==8){
+	if(guiset_reg_i==16){
 		gcpu.sregs.epc = value;
 	}
-	else if(guiset_reg_i==9){
+	else if(guiset_reg_i==17){
 		gcpu.sregs.efd = value;
 	}
 	else{
-		gcpu.regs.u[guiset_reg_i&7] = value;
+		gcpu.regs.u[guiset_reg_i&15] = value;
 	}
 }
 Uint32 guiget_reg(Uint32 index){
-	if(index==8){
+	if(index==16){
 		return gcpu.sregs.epc;
 	}
-	else if(index==9){
+	else if(index==17){
 		return gcpu.sregs.efd;
 	}
 	else{
-		return gcpu.regs.u[index&7];
+		return gcpu.regs.u[index&15];
 	}
 }
 
@@ -501,9 +526,17 @@ Uint32 guiset_mem_baseadr = 0;
 Uint32 guiset_mem_offset = 0;
 Uint32 guiset_mem_size = 8;
 Uint32 guiset_mem_coff = 0, guiset_mem_cadr = 0;
+Bool guiset_mem_trAddr = FALSE;
 void guiset_mem(){
 	Uint32 value = _gui_dialog_value.numeric;
 	Uint32 adr = guiset_mem_baseadr+guiset_mem_offset;
+	
+	if(guiset_mem_trAddr){
+		if(LICpu_tAddress(&gcpu, &adr, LIP_ADRESSACCESS_WRITE)){
+			return;
+		}
+	}
+	
 	if(guiset_mem_size==8){
 		LICPU_writeBus8((&gcpu), adr, value);
 	}
@@ -517,6 +550,13 @@ void guiset_memadr(){
 }
 Uint32 guiget_mem(Uint32 offset, Uint32 size){
 	Uint32 adr = guiset_mem_baseadr+offset;
+	
+	if(guiset_mem_trAddr){
+		if(LICpu_tAddress(&gcpu, &adr, 0)){
+			return 0;
+		}
+	}
+	
 	if(size==8){
 		return LICPU_readBus8((&gcpu), adr);
 	}
@@ -532,16 +572,24 @@ struct GuiReg{
 	Ui ui_txt_v;
 	Ui ui_btn;
 }guiregs[] = {
-	{L"EAX", 1},
-	{L"EDX", 2},
-	{L"ECX", 3},
-	{L"EBX", 4},
-	{L"EFP", 5},
-	{L"ESP", 6},
-	{L"ESS", 7},
-	{L"ESD", 8},
-	{L"EPC", 9},
-	{L"EFD", 10},
+	{L"AX", 1},
+	{L"DX", 2},
+	{L"CX", 3},
+	{L"BX", 4},
+	{L"FP", 5},
+	{L"SP", 6},
+	{L"SS", 7},
+	{L"SD", 8},
+	{L"R0", 9},
+	{L"R1", 10},
+	{L"R2", 11},
+	{L"R3", 12},
+	{L"R4", 13},
+	{L"R5", 14},
+	{L"R6", 15},
+	{L"R7", 16},
+	{L"PC", 17},
+	{L"FD", 18},
 };
 Int guiregs_len = sizeof(guiregs)/sizeof(struct GuiReg);
 
@@ -574,6 +622,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	static Int id_btn_start = 34;
 	static Int id_btn_stop = 35;
 	static Int id_dpd_editloadmode = 36;
+	static Int id_chk_enableTr = 37;
 	static Int id_btn_setadr = 48;
 	static Int id_btn_cells[12*16];
 	static Int id_menu_load = 64;
@@ -617,11 +666,12 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			
 			/* Register Panel */
 			for(Int i=0; i<guiregs_len; i++){
-				gui_ui_text(guiregs[i].name, NO_ID, 16, 32+(i*32), 64, 32);
-				guiregs[i].ui_txt_v = gui_ui_text(L"0x0", NO_ID, 80, 32+(i*32), 128, 32);
-				guiregs[i].ui_btn = gui_ui_button(L"Set", guiregs[i].id_btn_set, 228, 32+(i*32), 64, 20);
+				Int x = i&0x8?160:0;
+				Int ioff = i>0x7?i-0x8:i;
+				gui_ui_text(guiregs[i].name, NO_ID, 16+x, 32+(ioff*32), 24, 32);
+				guiregs[i].ui_txt_v = gui_ui_text(L"0x0", NO_ID, 44+x, 32+(ioff*32), 80, 32);
+				guiregs[i].ui_btn = gui_ui_button(L"Set", guiregs[i].id_btn_set, 128+x, 32+(ioff*32), 32, 20);
 			}
-			
 			
 			/* Flags Panel */
 			for(Int i=0; i<guiflags_len; i++){
@@ -629,30 +679,30 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				guiflags[i].ui_chk = gui_ui_checkbox(L"", guiflags[i].id_chk, 16+(i*32), 388, 32, 32);
 			}
 			
-			
 			/* Memory View Panel */
 			/* Adresses */
-			ui_btn_setadr = gui_ui_button(L"Address", id_btn_setadr, 320, 90, 64, 32);
+			ui_btn_setadr = gui_ui_button(L"Address", id_btn_setadr, 344, 90, 64, 32);
+			gui_ui_checkbox(L"Enable Translation", id_chk_enableTr, 176, 320, 148, 32);
 			for(Int i=0; i<adrs; i++){
-				ui_txt_adrs[i] = gui_ui_text(L"0x00000000", NO_ID, 320, 128+(i*24), 96, 24);
+				ui_txt_adrs[i] = gui_ui_text(L"0x00000000", NO_ID, 344, 128+(i*24), 96, 24);
 			}
 			/* Offsets */
 			for(Int i=0; i<ofs; i++){
 				//.ir 0x30, 1, 0, 0, 0, 0x4589
 				wchar_t txt[] = L"0";
 				txt[0] = i<10?L'0'+i:L'A'+((10-i));
-				gui_ui_text(txt, NO_ID, 412+(i*24), 104, 32, 24);
+				gui_ui_text(txt, NO_ID, 428+(i*24), 104, 32, 24);
 			}
 			/* Cells */
 			for(Int ai=0; ai<adrs; ai++){
 				for(Int oi=0; oi<ofs; oi++){
 					id_btn_cells[ai*ofs+oi] = 128+ai*ofs+oi;
-					ui_btn_cells[ai*ofs+oi] = gui_ui_text(L"00", id_btn_cells[ai*ofs+oi], 404+(oi*24), 128+(ai*24), 24, 24);
+					ui_btn_cells[ai*ofs+oi] = gui_ui_text(L"00", id_btn_cells[ai*ofs+oi], 420+(oi*24), 128+(ai*24), 24, 24);
 				}
 			}
 			
 			/* Control Panel */
-			ui_btn_step = gui_ui_button(L"Step", id_btn_step, 336, 32, 64, 32);
+			ui_btn_step = gui_ui_button(L"Step", id_btn_step, 344, 32, 64, 32);
 			ui_btn_reset = gui_ui_button(L"Reset", id_btn_reset, 416, 32, 64, 32);
 			ui_btn_start = gui_ui_button(L"Start", id_btn_start, 640, 32, 64, 32);
 			ui_btn_stop = gui_ui_button(L"Stop", id_btn_stop, 720, 32, 64, 32);
@@ -741,8 +791,15 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				if(LOWORD(wParam) == guiflags[i].id_chk){
 					Bool checked = !gui_is_checked(guiflags[i].id_chk);
 					gui_set_checked(guiflags[i].id_chk, checked);
-					gcpu.sregs.est = setVBit(gcpu.sregs.est, guiflags[i].offset, checked);
+					gcpu.sregs.st = setVBit(gcpu.sregs.st, guiflags[i].offset, checked);
+					gui_refresh();
 				}
+			}
+			if(LOWORD(wParam) == id_chk_enableTr){
+				Bool checked = !gui_is_checked(id_chk_enableTr);
+				gui_set_checked(id_chk_enableTr, checked);
+				guiset_mem_trAddr = checked;
+				gui_refresh();
 			}
 			if(LOWORD(wParam) == id_btn_setadr){
 				_gui_dialog_value.numeric = guiset_mem_baseadr;
@@ -836,7 +893,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				gui_write(guiregs[i].ui_txt_v, "0x%X", guiget_reg(i));
 			}
 			for(Int i=0; i<guiflags_len; i++){
-				gui_set_checked(guiflags[i].id_chk, (gcpu.sregs.est>>guiflags[i].offset)&1);
+				gui_set_checked(guiflags[i].id_chk, (gcpu.sregs.st>>guiflags[i].offset)&1);
 			}
 			for(Int i=0; i<adrs; i++){
 				gui_write(ui_txt_adrs[i], "%.8X", guiset_mem_baseadr+(i*16));
@@ -910,8 +967,8 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		POINT p;
 		if(GetCursorPos(&p)){
 			ScreenToClient(hwnd, &p);
-			if((p.x>=404)&&(p.x<788)&&(p.y>=128)&&(p.y<416)&&(!_gui_dialog_alreadyopen)){
-				Int x = (p.x-404)/24;
+			if((p.x>=420)&&(p.x<804)&&(p.y>=128)&&(p.y<416)&&(!_gui_dialog_alreadyopen)){
+				Int x = (p.x-420)/24;
 				Int y = (p.y-128)/24;
 				guiset_mem_offset = y*ofs+x;
 				guiset_mem_size = (GetKeyState(1)&0x80)?8:32;
@@ -937,7 +994,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	_szCmdLine = szCmdLine;
 	_CmdShow = CmdShow;
 	
-	/* Main Window Setup */
+	// Main Window Setup 
 	MSG  msg;    
 	WNDCLASSW wc = {0};
 	wc.lpszClassName = L"Gui";
@@ -956,10 +1013,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	
 	gui_refresh();
 	
-	/* Init GUI Processing */
+	/*
+	WinDisplay dis;
+	WinCreateDisplay(&dis, 320, 256, 640, 512);
+	*/
+	// Init GUI Processing 
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+		/*WinRenderizeDisplay(&dis);*/
 	}
 	
 	close();

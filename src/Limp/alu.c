@@ -9,7 +9,7 @@
 
 
 Uint32 LIAlu_add(LCpu *m_cpu, Uint32 v1, Uint32 v2, Bool wcarry){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	Bool g_cf = getBit(st, LI_CPU_CF);
 	
 	// Do the sum between values
@@ -30,13 +30,13 @@ Uint32 LIAlu_add(LCpu *m_cpu, Uint32 v1, Uint32 v2, Bool wcarry){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_sub(LCpu *m_cpu, Uint32 v1, Uint32 v2, Bool wborrow){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	Bool g_bf = getBit(st, LI_CPU_BF);
 	
 	// Do the subtraction between values
@@ -57,13 +57,13 @@ Uint32 LIAlu_sub(LCpu *m_cpu, Uint32 v1, Uint32 v2, Bool wborrow){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_mul(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the multiplication between values
 	Uint32 res = v1*v2;
@@ -76,13 +76,13 @@ Uint32 LIAlu_mul(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_hmul(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the quad multiplication between values
 	// Test and returns only the high dword
@@ -97,13 +97,13 @@ Uint32 LIAlu_hmul(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_div(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the division between values
 	Uint32 res = v1/v2;
@@ -116,13 +116,13 @@ Uint32 LIAlu_div(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_mod(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the modulation between values
 	Uint32 res = v1%v2;
@@ -135,13 +135,13 @@ Uint32 LIAlu_mod(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_ldiv(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the quad division between values
 	// Test and returns only the lower dword
@@ -157,14 +157,14 @@ Uint32 LIAlu_ldiv(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 
 Uint32 LIAlu_and(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the and bitwise between values
 	Uint32 res = v1&v2;
@@ -177,13 +177,13 @@ Uint32 LIAlu_and(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_nand(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the nand bitwise between values
 	Uint32 res = ~(v1&v2);
@@ -196,13 +196,13 @@ Uint32 LIAlu_nand(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_or(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the and bitwise between values
 	Uint32 res = v1|v2;
@@ -215,13 +215,13 @@ Uint32 LIAlu_or(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_xor(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the xor bitwise between values
 	Uint32 res = v1^v2;
@@ -234,13 +234,13 @@ Uint32 LIAlu_xor(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_not(LCpu *m_cpu, Uint32 v){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the negation between values
 	Uint32 res = ~v;
@@ -253,13 +253,13 @@ Uint32 LIAlu_not(LCpu *m_cpu, Uint32 v){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 void LIAlu_test(LCpu *m_cpu, Uint32 v){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the negation between values
 	Uint32 res = v;
@@ -272,13 +272,13 @@ void LIAlu_test(LCpu *m_cpu, Uint32 v){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 }
 
 
 
 Uint32 LIAlu_lshf(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the left shift between values
 	Uint32 res = v1<<v2;
@@ -291,13 +291,13 @@ Uint32 LIAlu_lshf(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_rshf(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the right shift between values
 	Uint32 res = v1>>v2;
@@ -310,13 +310,13 @@ Uint32 LIAlu_rshf(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_lrot(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the left rotation between values
 	Uint32 exc = v1>>(32-v2);
@@ -331,13 +331,13 @@ Uint32 LIAlu_lrot(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }
 
 Uint32 LIAlu_rrot(LCpu *m_cpu, Uint32 v1, Uint32 v2){
-	Uint32 st = m_cpu->sregs.est;
+	Uint32 st = m_cpu->sregs.st;
 	
 	// Do the right rotation between values
 	Uint32 exc = v1<<(32-v2);
@@ -352,7 +352,7 @@ Uint32 LIAlu_rrot(LCpu *m_cpu, Uint32 v1, Uint32 v2){
 	// Odd Flag
 	st = setVBit(st, LI_CPU_OF, getBit(res, 0));
 	
-	m_cpu->sregs.est = st;
+	m_cpu->sregs.st = st;
 	
 	return res;
 }

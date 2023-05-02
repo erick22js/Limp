@@ -31,15 +31,27 @@ Uint32 LIPHd_process(void* arg){
 	LPHd *peri = arg;
 	
 	while(!LPeri_interrupt(&peri->peri));
-	//Log("Hard Disk did it interruption!\n");
+	Log("Hard Disk did it interruption!\n");
 	
 	while(peri->active){
 		if(LPeri_inUpdtd(&peri->peri)){
 			Uint32 ir = LPeri_in(&peri->peri);
 			LPeri_out(&peri->peri, 1);
 			switch(ir){
-				case 0x10:{ // Info
+				case 0x10:{ // Type
 					LPeri_out(&peri->peri, 2);
+				}
+				break;
+				case 0x11:{ // Brand
+					LPeri_out(&peri->peri, 0);
+				}
+				break;
+				case 0x12:{ // Branch
+					LPeri_out(&peri->peri, 0);
+				}
+				break;
+				case 0x13:{ // Version
+					LPeri_out(&peri->peri, 0);
 				}
 				break;
 				

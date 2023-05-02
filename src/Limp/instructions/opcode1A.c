@@ -13,13 +13,9 @@ void LIIsaDtb_opcode1A(LCpu *m_cpu){
 		
 		// BIT
 		case 1:{
-			LIAlu_and(m_cpu, *m_cpu->args.regd, m_cpu->args.data);
+			LIAlu_and(m_cpu, *m_cpu->args.rd, m_cpu->args.data);
 		}
 		break;
-		
-		default:{
-			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		}
 	}
 	
 }

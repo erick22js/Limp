@@ -2,25 +2,11 @@
 #include <Limp/cpu.h>
 
 
+// BL
 void LIIsaDtb_opcode35(LCpu *m_cpu){
-	
-	switch(m_cpu->args.mod){
-		// MVFR
-		case 0:{
-			*m_cpu->args.regd = LCpu_readExReg(m_cpu, m_cpu->args.imm);
-		}
-		break;
-		
-		// MVTR
-		case 1:{
-			LCpu_writeExReg(m_cpu, m_cpu->args.imm, *m_cpu->args.regb);
-		}
-		break;
-		
-		default:{
-			LCpu_requestInterruption(m_cpu, LI_INT_INVALIDOPC);
-		}
-	}
-	
+	Uint32 adr = (m_cpu->args.imm<<2)|(m_cpu->sregs.lpc&0xF0000000);
+	LCpu_push(m_cpu, m_cpu->sregs.epc);
+	LCpu_jumpAbs(m_cpu, adr);
 }
+
 

@@ -4,62 +4,62 @@
 
 // INC
 void LIIsaDtb_opcode14_func00(LCpu *m_cpu){
-	*m_cpu->args.regd += 1;
+	*m_cpu->args.rd += 1;
 	
-	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_CF, !(*m_cpu->args.regd));
-	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_ZF, !(*m_cpu->args.regd));
+	m_cpu->sregs.st = setVBit(m_cpu->sregs.st, LI_CPU_CF, !(*m_cpu->args.rd));
+	m_cpu->sregs.st = setVBit(m_cpu->sregs.st, LI_CPU_ZF, !(*m_cpu->args.rd));
 }
 
 // DEC
 void LIIsaDtb_opcode14_func01(LCpu *m_cpu){
-	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_BF, !(*m_cpu->args.regd));
+	m_cpu->sregs.st = setVBit(m_cpu->sregs.st, LI_CPU_BF, !(*m_cpu->args.rd));
 	
-	*m_cpu->args.regd -= 1;
+	*m_cpu->args.rd -= 1;
 	
-	m_cpu->sregs.est = setVBit(m_cpu->sregs.est, LI_CPU_ZF, !(*m_cpu->args.regd));
+	m_cpu->sregs.st = setVBit(m_cpu->sregs.st, LI_CPU_ZF, !(*m_cpu->args.rd));
 }
 
 // NEG
 void LIIsaDtb_opcode14_func02(LCpu *m_cpu){
-	*m_cpu->args.regd = -(*m_cpu->args.regd);
+	*m_cpu->args.rd = -(*m_cpu->args.rd);
 }
 
 // MADD
 void LIIsaDtb_opcode14_func03(LCpu *m_cpu){
-	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
-	Uint32 add = LIAlu_add(m_cpu, mul, *m_cpu->args.regp, FALSE);
-	*m_cpu->args.regd = add;
+	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.rd, *m_cpu->args.rb);
+	Uint32 add = LIAlu_add(m_cpu, mul, *m_cpu->args.rp, FALSE);
+	*m_cpu->args.rd = add;
 }
 
 // MSUB
 void LIIsaDtb_opcode14_func04(LCpu *m_cpu){
-	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
-	Uint32 sub = LIAlu_sub(m_cpu, mul, *m_cpu->args.regp, FALSE);
-	*m_cpu->args.regd = sub;
+	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.rd, *m_cpu->args.rb);
+	Uint32 sub = LIAlu_sub(m_cpu, mul, *m_cpu->args.rp, FALSE);
+	*m_cpu->args.rd = sub;
 }
 
 // MADC
 void LIIsaDtb_opcode14_func05(LCpu *m_cpu){
-	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
-	Uint32 add = LIAlu_add(m_cpu, mul, *m_cpu->args.regp, TRUE);
-	*m_cpu->args.regd = add;
+	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.rd, *m_cpu->args.rb);
+	Uint32 add = LIAlu_add(m_cpu, mul, *m_cpu->args.rp, TRUE);
+	*m_cpu->args.rd = add;
 }
 
 // MSBB
 void LIIsaDtb_opcode14_func06(LCpu *m_cpu){
-	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
-	Uint32 sub = LIAlu_sub(m_cpu, mul, *m_cpu->args.regp, TRUE);
-	*m_cpu->args.regd = sub;
+	Uint32 mul = LIAlu_mul(m_cpu, *m_cpu->args.rd, *m_cpu->args.rb);
+	Uint32 sub = LIAlu_sub(m_cpu, mul, *m_cpu->args.rp, TRUE);
+	*m_cpu->args.rd = sub;
 }
 
 // LDIV
 void LIIsaDtb_opcode14_func07(LCpu *m_cpu){
-	*m_cpu->args.regd = LIAlu_ldiv(m_cpu, *m_cpu->args.regd, *m_cpu->args.regb);
+	*m_cpu->args.rd = LIAlu_ldiv(m_cpu, *m_cpu->args.rd, *m_cpu->args.rb);
 }
 
 // BAA
 void LIIsaDtb_opcode14_func08(LCpu *m_cpu){
-	Uint32 cdata = *m_cpu->args.regb;
+	Uint32 cdata = *m_cpu->args.rb;
 	Uint32 data = 0;
 	data |= ((cdata%10)<<0x00); cdata /= 10;
 	data |= ((cdata%10)<<0x04); cdata /= 10;
@@ -69,12 +69,12 @@ void LIIsaDtb_opcode14_func08(LCpu *m_cpu){
 	data |= ((cdata%10)<<0x14); cdata /= 10;
 	data |= ((cdata%10)<<0x18); cdata /= 10;
 	data |= ((cdata%10)<<0x1C); cdata /= 10;
-	*m_cpu->args.regd = data;
+	*m_cpu->args.rd = data;
 }
 
 // ABA
 void LIIsaDtb_opcode14_func09(LCpu *m_cpu){
-	Uint32 cdata = *m_cpu->args.regb;
+	Uint32 cdata = *m_cpu->args.rb;
 	Uint32 data = 0;
 	data += ((cdata&0x0000000F)>>0x00)*1;
 	data += ((cdata&0x000000F0)>>0x04)*10;
@@ -84,7 +84,7 @@ void LIIsaDtb_opcode14_func09(LCpu *m_cpu){
 	data += ((cdata&0x00F00000)>>0x14)*100000;
 	data += ((cdata&0x0F000000)>>0x18)*1000000;
 	data += ((cdata&0xF0000000)>>0x1C)*10000000;
-	*m_cpu->args.regd = data;
+	*m_cpu->args.rd = data;
 }
 
 

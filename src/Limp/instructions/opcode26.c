@@ -2,15 +2,20 @@
 #include <Limp/cpu.h>
 
 
-// JLP
 void LIIsaDtb_opcode26(LCpu *m_cpu){
-	// Protected Mode Only
-	if(LICpu_protectionThrown(m_cpu)){
-		return;
+	
+	switch(m_cpu->args.mod){
+		// MVFC
+		case 0:{
+			*m_cpu->args.rd = LCpu_readCache(m_cpu, m_cpu->args.imm);
+		}
+		break;
+		
+		// MVTC
+		case 1:{
+			LCpu_writeCache(m_cpu, m_cpu->args.imm, *m_cpu->args.rb);
+		}
+		break;
 	}
 	
-	Uint32 adr = (m_cpu->args.imm<<2)|(m_cpu->sregs.lpc&0xF0000000);
-	LCpu_jumpAbs(m_cpu, adr);
-	
-	m_cpu->sregs.est = setBit(m_cpu->sregs.est, LI_CPU_PM);
 }

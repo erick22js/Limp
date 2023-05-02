@@ -4,22 +4,22 @@
 
 // NOT
 void LIIsaDtb_opcode19_func00(LCpu *m_cpu){
-	*m_cpu->args.regd = ~(*m_cpu->args.regd);
+	*m_cpu->args.rd = LIAlu_not(m_cpu, *m_cpu->args.rd);
 }
 
 // SETB
 void LIIsaDtb_opcode19_func01(LCpu *m_cpu){
-	*m_cpu->args.regd = setBit(*m_cpu->args.regd, m_cpu->args.imm);
+	*m_cpu->args.rd = setBit(*m_cpu->args.rd, m_cpu->args.imm);
 }
 
 // CLRB
 void LIIsaDtb_opcode19_func02(LCpu *m_cpu){
-	*m_cpu->args.regd = clrBit(*m_cpu->args.regd, m_cpu->args.imm);
+	*m_cpu->args.rd = clrBit(*m_cpu->args.rd, m_cpu->args.imm);
 }
 
 // SWAP
 void LIIsaDtb_opcode19_func03(LCpu *m_cpu){
-	Uint32 data = *m_cpu->args.regd;
+	Uint32 data = *m_cpu->args.rd;
 	Uint8 *buffer = &data;
 	Uint8 swap[4] = {
 		[0] = buffer[3],
@@ -27,22 +27,22 @@ void LIIsaDtb_opcode19_func03(LCpu *m_cpu){
 		[2] = buffer[1],
 		[3] = buffer[0]
 	};
-	*m_cpu->args.regd = *(Uint32*)swap;
+	*m_cpu->args.rd = *(Uint32*)swap;
 }
 
 // SWAPB
 void LIIsaDtb_opcode19_func04(LCpu *m_cpu){
-	Uint32 data = *m_cpu->args.regd;
+	Uint32 data = *m_cpu->args.rd;
 	Uint32 swap = 
-		(getBit(data, 0)<<31) | (getBit(data, 1)<<30) | (getBit(data, 2)<<29) | (getBit(data, 3)<<28) | 
-		(getBit(data, 4)<<27) | (getBit(data, 5)<<26) | (getBit(data, 6)<<25) | (getBit(data, 7)<<24) | 
-		(getBit(data, 8)<<23) | (getBit(data, 9)<<22) | (getBit(data, 10)<<21)| (getBit(data, 11)<<20)| 
-		(getBit(data, 12)<<19)| (getBit(data, 13)<<18)| (getBit(data, 14)<<17)| (getBit(data, 15)<<16)| 
-		(getBit(data, 16)<<15)| (getBit(data, 17)<<14)| (getBit(data, 18)<<13)| (getBit(data, 19)<<12)| 
-		(getBit(data, 20)<<11)| (getBit(data, 21)<<10)| (getBit(data, 22)<<9) | (getBit(data, 23)<<8) | 
-		(getBit(data, 24)<<7) | (getBit(data, 25)<<6) | (getBit(data, 26)<<5) | (getBit(data, 27)<<4) | 
-		(getBit(data, 28)<<3) | (getBit(data, 29)<<2) | (getBit(data, 30)<<1) | (getBit(data, 31)<<0);
-	*m_cpu->args.regd = swap;
+		(getBit(data, 0)<<31) | (getBit(data, 1)<<29) | (getBit(data, 2)<<27) | (getBit(data, 3)<<25) | 
+		(getBit(data, 4)<<23) | (getBit(data, 5)<<21) | (getBit(data, 6)<<19) | (getBit(data, 7)<<17) | 
+		(getBit(data, 8)<<15) | (getBit(data, 9)<<13) | (getBit(data, 10)<<11)| (getBit(data, 11)<<9) | 
+		(getBit(data, 12)<<7) | (getBit(data, 13)<<5) | (getBit(data, 14)<<3) | (getBit(data, 15)<<1) | 
+		(getBit(data, 16)>>1) | (getBit(data, 17)>>3) | (getBit(data, 18)>>5) | (getBit(data, 19)>>7) | 
+		(getBit(data, 20)>>9) | (getBit(data, 21)>>11)| (getBit(data, 22)>>13)| (getBit(data, 23)>>15)| 
+		(getBit(data, 24)>>17)| (getBit(data, 25)>>19)| (getBit(data, 26)>>21)| (getBit(data, 27)>>23)| 
+		(getBit(data, 28)>>25)| (getBit(data, 29)>>27)| (getBit(data, 30)>>29)| (getBit(data, 31)>>31);
+	*m_cpu->args.rd = swap;
 }
 
 
