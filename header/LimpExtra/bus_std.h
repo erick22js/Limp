@@ -15,7 +15,7 @@ void bus_std_write8_(LBus *bus, Uint32 addr, Uint8 data);
 void bus_std_write16_(LBus *bus, Uint32 addr, Uint16 data);
 void bus_std_write32_(LBus *bus, Uint32 addr, Uint32 data);
 
-void LBStd_init(LBus *bus);
+void LBStd_init(LBus *bus, Uint32 init_vec);
 
 
 #endif // limpextra_bus_std_h

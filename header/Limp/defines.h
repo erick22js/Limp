@@ -22,7 +22,7 @@ typedef struct LPeri LPeri;
 
 typedef enum LIPSignal{
 	LPROCS_NONE = 0x0000,
-	LPROCS_ONLYADDRESS = 0x0001,
+	LPROCS_ONLYADDRESS = 0x0001
 }LIPSignal;
 
 typedef struct LIPInterruption{
@@ -30,6 +30,9 @@ typedef struct LIPInterruption{
 }LIPInterruption;
 
 typedef enum LIPAdressAccess{
+	LIP_ADRESSACCESS_RRW = 0x08, /* Restricts Read/Write operation */
+	LIP_ADRESSACCESS_FRW = 0x10, /* Filter Read/Write */
+	LIP_ADRESSACCESS_FE = 0x20, /* Filter Execution */
 	LIP_ADRESSACCESS_WRITE = 0x100000, /* 0=read; 1=write */
 	LIP_ADRESSACCESS_EXECUTE = 0x200000, /* 0=data; 1=code */
 }LIPAdressAccess;

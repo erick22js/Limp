@@ -5,8 +5,9 @@
 
 
 typedef struct LBus{
-	
 	void* datap;
+	
+	Uint32 start_jmp;
 	
 	Uint8 (*read8)(struct LBus *bus, Uint32 addr);
 	Uint16 (*read16)(struct LBus *bus, Uint32 addr);

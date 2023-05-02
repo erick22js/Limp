@@ -13,34 +13,44 @@ typedef struct LCpu{
 	union{
 		/* Names */
 		struct{
-			Uint32 eax;
-			Uint32 edx;
-			Uint32 ecx;
-			Uint32 ebx;
-			Uint32 efp;
-			Uint32 esp;
-			Uint32 ess;
-			Uint32 esd;
+			Uint32 ax;
+			Uint32 dx;
+			Uint32 cx;
+			Uint32 bx;
+			Uint32 fp;
+			Uint32 sp;
+			Uint32 ss;
+			Uint32 sd;
+			Uint32 e0;
+			Uint32 e1;
+			Uint32 e2;
+			Uint32 e3;
+			Uint32 e4;
+			Uint32 e5;
+			Uint32 e6;
+			Uint32 e7;
 		}n;
 		
 		/* Basis Types */
-		/* Has one extra register for memory security */
-		Uint32 u[9];
-		Sint32 s[9];
-		Float32 f[9];
+		/* Has blank spaced register for memory access security */
+		Uint32 u[16];
+		Sint32 s[16];
+		Float32 f[16];
 	}regs;
 	
 	/* Extra Registers */
-	Uint32 *exregs;
-	Uint32 exregs_length;
+	Uint32 *cache;
+	Uint32 cache_length;
 	
 	struct{
 		Uint32 epc;
 		Uint32 lpc;
-		Uint32 est;
+		Uint32 st;
 		Uint32 efd;
 		
 		Uint32 it; /* Interruption Table Address */
+		
+		Uint32 ssiv; /* Stack setter on Interruption at virtual mode */
 	}sregs;
 	
 	/* Hardware States */
@@ -67,15 +77,19 @@ typedef struct LCpu{
 	struct{
 		void (*func)(LCpu *m_cpu);
 		void (**subfuncs)(LCpu *m_cpu);
-		Uint32 mod, im, adrm, dsize, cond, f, imm;
+		Uint32 selector, mod, im, adrm, dsize, cond, f, imm;
 		Uint32 ea, data;
-		Uint32 *regd, *regb, *regi, *regp, *rego;
+		Uint32 *rd, *rb, *ri, *rp, *ro;
+		Uint32 regd, regb, regi, regp, rego;
 	}args;
 	
 	/* Execution properties */
-	Uint32 start_jmp;
-	Int freq_i;
-	Int freq_set;
+	/* Cycling properties */
+	struct{
+		Int cycles; /* The counter for cycling */
+		Int cpb_set; /* Cycles per Busy state */
+		Int bpp_set; /* Busy states per Phase */
+	}cy;
 	
 	/* Cpu can be a Peripherical component */
 	LPeri peri;
@@ -109,6 +123,12 @@ extern const LIPInterruption LI_INT_INVDATAACCESS;
 extern const LIPInterruption LI_INT_INVCODEACCESS;
 extern const LIPInterruption LI_INT_ZERODIVISION;
 extern const LIPInterruption LI_INT_DEBUGGING;
+extern const LIPInterruption LI_INT_COPROC0;
+extern const LIPInterruption LI_INT_COPROC1;
+extern const LIPInterruption LI_INT_COPROC2;
+extern const LIPInterruption LI_INT_COPROC3;
+extern const LIPInterruption LI_INT_BIOSRESERVED1;
+extern const LIPInterruption LI_INT_BIOSRESERVED2;
 
 
 
@@ -119,6 +139,8 @@ extern const LIPInterruption LI_INT_DEBUGGING;
 
 void LCpu_init(LCpu *m_cpu, LBus *m_bus);
 
+Bool LCpu_conMmu(LCpu *m_cpu, LMmu *m_mmu);
+Int LCpu_conCop(LCpu *m_cpu, LCoproc *cop);
 
 
 /**
@@ -143,6 +165,7 @@ void LCpu_init(LCpu *m_cpu, LBus *m_bus);
 	(m_cpu->io.bus->write32(m_cpu->io.bus, addr&(~3), data))
 
 Inline Int LCpu_tAddress(LCpu *m_cpu, Uint32 *addr, LIPAdressAccess mode);
+Inline Int LICpu_tAddress(LCpu *m_cpu, Uint32 *addr, LIPAdressAccess mode);
 
 Uint8 LCpu_readMem8(LCpu *m_cpu, Uint32 addr);
 Uint16 LCpu_readMem16(LCpu *m_cpu, Uint32 addr);
@@ -153,16 +176,18 @@ void LCpu_writeMem16(LCpu *m_cpu, Uint32 addr, Uint16 data);
 void LCpu_writeMem32(LCpu *m_cpu, Uint32 addr, Uint32 data);
 
 Uint32 LCpu_pop(LCpu *m_cpu);
-
 void LCpu_push(LCpu *m_cpu, Uint32 data);
+
+Uint32 LICpu_pop(LCpu *m_cpu);
+void LICpu_push(LCpu *m_cpu, Uint32 data);
 
 Uint32 LCpu_fetch(LCpu *m_cpu);
 
 
 /* Extra Registers */
 
-Uint32 LCpu_readExReg(LCpu *m_cpu, Uint16 reg);
-void LCpu_writeExReg(LCpu *m_cpu, Uint16 reg, Uint32 data);
+Uint32 LCpu_readCache(LCpu *m_cpu, Uint32 reg);
+void LCpu_writeCache(LCpu *m_cpu, Uint32 reg, Uint32 data);
 
 
 /* External Devices Access */

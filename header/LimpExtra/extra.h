@@ -3,8 +3,11 @@
 
 
 #include <LimpExtra/bus_std.h>
+#include <LimpExtra/mmu.h>
 #include <LimpExtra/peri_stdout.h>
 #include <LimpExtra/peri_hd.h>
+#include <LimpExtra/peri_vga.h>
+#include <LimpExtra/peri_key.h>
 
 
 /**

@@ -5,7 +5,7 @@
 #include <Limp/instructions/table.h>
 
 
-void LIIsaDtb_opcode24(LCpu *m_cpu);
+extern void (*LIIsaDtb_opcode24[64])(LCpu *m_cpu);
 
 
 #endif // limp_instructions_opcode24_h

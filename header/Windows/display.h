@@ -8,6 +8,7 @@
 typedef struct WinDisplay{
 	WNDCLASS wclass;
 	HWND window;
+	_Bool has_focus;
 	HDC ctx;
 	int client_width, client_height;
 	BITMAPINFO bitmap_info;

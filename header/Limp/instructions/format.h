@@ -14,7 +14,8 @@
 
 /* IR */
 
-#define LIDFmt_IR_mod(fdt) ((fdt>>24)&0x3)
+#define LIDFmt_IR_selector(fdt) ((fdt>>25)&0x1)
+#define LIDFmt_IR_mod(fdt) ((fdt>>24)&0x1)
 #define LIDFmt_IR_im(fdt) ((fdt>>22)&0x3)
 #define LIDFmt_IR_regd(fdt) ((fdt>>19)&0x7)
 #define LIDFmt_IR_regb(fdt) ((fdt>>16)&0x7)
@@ -23,7 +24,8 @@
 
 /* AMI */
 
-#define LIDFmt_AMI_mod(fdt) ((fdt>>24)&0x3)
+#define LIDFmt_AMI_selector(fdt) ((fdt>>25)&0x1)
+#define LIDFmt_AMI_mod(fdt) ((fdt>>24)&0x1)
 #define LIDFmt_AMI_adrm(fdt) ((fdt>>20)&0xF)
 #define LIDFmt_AMI_dsize(fdt) ((fdt>>18)&0x3)
 #define LIDFmt_AMI_f(fdt) ((fdt>>17)&0x1)
@@ -35,7 +37,8 @@
 
 /* SI */
 
-#define LIDFmt_SI_mod(fdt) ((fdt>>24)&0x3)
+#define LIDFmt_SI_selector(fdt) ((fdt>>25)&0x1)
+#define LIDFmt_SI_mod(fdt) ((fdt>>24)&0x1)
 #define LIDFmt_SI_func(fdt) ((fdt>>18)&0x3F)
 #define LIDFmt_SI_f(fdt) ((fdt>>17)&0x1)
 #define LIDFmt_SI_regd(fdt) ((fdt>>14)&0x7)
@@ -46,7 +49,8 @@
 
 /* ADI */
 
-#define LIDFmt_ADI_mod(fdt) ((fdt>>24)&0x3)
+#define LIDFmt_ADI_selector(fdt) ((fdt>>25)&0x1)
+#define LIDFmt_ADI_mod(fdt) ((fdt>>24)&0x1)
 #define LIDFmt_ADI_cond(fdt) ((fdt>>19)&0x1F)
 #define LIDFmt_ADI_rego(fdt) ((fdt>>16)&0x7)
 #define LIDFmt_ADI_imm(fdt) (fdt&0xFFFF)
@@ -54,9 +58,10 @@
 
 /* CDI */
 
-#define LIDFmt_CDI_mod(fdt) ((fdt>>24)&0x3)
+#define LIDFmt_CDI_selector(fdt) ((fdt>>25)&0x1)
+#define LIDFmt_CDI_mod(fdt) ((fdt>>24)&0x1)
 #define LIDFmt_CDI_cond(fdt) ((fdt>>19)&0x1F)
-#define LIDFmt_CDI_gap_(fdt) ((fdt>>18)&0x1)
+#define LIDFmt_CDI_oselector(fdt) ((fdt>>18)&0x1)
 #define LIDFmt_CDI_f(fdt) ((fdt>>17)&0x1)
 #define LIDFmt_CDI_regd(fdt) ((fdt>>14)&0x7)
 #define LIDFmt_CDI_rego(fdt) ((fdt>>11)&0x7)

@@ -78,6 +78,9 @@ typedef double Float64;
 #define castS8T32(data) ((Uint32)((Sint32)((Sint8)((Uint8)(data)))))
 #define castS16T32(data) ((Uint32)((Sint32)((Sint16)((Uint16)(data)))))
 
+#define isBetween(v, b, e) (((v)>=(b))&&((v)<=(e)))
+
+
 extern Atomic(Bool) _Log_lock;
 #define Log(...){\
 		while(_Log_lock);\
