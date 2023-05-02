@@ -1,7 +1,5 @@
 # Limp
 
-My own virtual microprocessor customized
+My own virtual machine, able to develop simply systems
 
-# The Assembler
-
-Look for the docs for further details about.
+OBS: The system was setted to run at 16MHz speed, any memory access consumes 1Hz
