@@ -10,7 +10,7 @@
 	"rbuffer.h"
 	"expression.h"
 
-1680174138 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
+1680617594 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokener.h
 	"lexer.h"
 	"tokens.h"
 
@@ -31,7 +31,7 @@
 1679830846 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\memory.h
 	"api.h"
 
-1679859953 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\error.h
+1681306877 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\error.h
 	"api.h"
 
 1679565436 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\tokens.h
@@ -41,31 +41,31 @@
 	"db_general.h"
 	"db_instructions.h"
 
-1680094309 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
+1683024744 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
 	"db_instructions.h"
 
-1679783609 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
+1681303302 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
 	"api.h"
 	"instructions.h"
 
-1679837388 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
+1681304367 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\symbols.h
 	"api.h"
 	"db_instructions.h"
 	"db_general.h"
 
-1679920955 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\encoder.h
+1681306983 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\encoder.h
 	"api.h"
 	"wbuffer.h"
 
 1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\wbuffer.h
 	"file.h"
 
-1680086888 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
+1681306923 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
 	"tokener.h"
 	"symbols.h"
 	"parser.h"
 
-1680174105 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
+1683026719 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
 
 1679857553 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\dirhanddler.h
 	"api.h"
