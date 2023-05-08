@@ -974,18 +974,15 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
                 LSExp_fetchArgument(i==0, parser, &args[i])
             );
             if(!LSExp_compatibleTypes(args[i].valtype, mne->args[i].valtype)){
-                printf("$ Incompatible arguments! %d to %d\n", args[i].valtype, mne->args[i].valtype);
+                printf("$ Incompatible arguments i=%d! %d to %d\n", i, args[i].valtype, mne->args[i].valtype);
                 Error(LS_ERR_INCOMPATIBLEARG);
             }
-            if(reg_set==2){
+            if(reg_set==2 && mne->args[i].valtype!=LS_ARGVALUE_REGS && mne->args[i].valtype!=LS_ARGVALUE_REGE){
 				if(args[i].valtype==LS_ARGVALUE_REGS){
 					reg_set = 0;
 				}
 				else if(args[i].valtype==LS_ARGVALUE_REGE){
 					reg_set = 1;
-				}
-				else{
-					reg_set = 0;
 				}
 				instr->s = reg_set;
             }
@@ -996,7 +993,7 @@ Int LSExp_fetchInstruction(LSParser *parser, LSsymInstruction *instr, LSMnemonic
 					Error(LS_ERR_EXPECTRSETS);
 				}
             }
-            else{
+            else if(reg_set==1){
 				if(args[i].valtype==LS_ARGVALUE_REGS){
 					/* TODO: Throw a error */
 					// Expected the same register set for instruction argument

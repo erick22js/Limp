@@ -10,36 +10,39 @@
 
 	MEMORY SCHEME
 
-	0x0000..0x1FFF => Code
-	0x2000..0x20FF => Stack
-	0x2100 => Main stdout Device
-	0x2104 => Main disk Device
-	0x2108 => Main key Device
-	0x210C => Main display Device
-	0x2400..0x2800 => Interruption Vector
-	0x2800..0x3480 => Display characters
+	0x8000..0xFFFF => Code
+	
+	0x7000..0x7FFC => Stack
+	0x4100 => Main stdout Device
+	0x4104 => Main disk Device
+	0x4108 => Main key Device
+	0x410C => Main display Device
+	0x4400..0x4800 => Interruption Vector
+	0x4800..0x5480 => Display characters
 
 *****************************************/
+
+.adr 0x8000
 
 /**
 	CONSTANTS
 */
-.define intVec 0x2400 ; The address of interruption vector
-.define mdevStdout 0x2100 ; Main Stdout Device
-.define mdevDisk 0x2104 ; Main Disk Device
-.define mdevKey 0x2108 ; Main Key Device
-.define mdevDisplay 0x210C ; Main Display Device
+.define intVec 0x4400 ; The address of interruption vector
+.define mdevStdout 0x4100 ; Main Stdout Device
+.define mdevDisk 0x4104 ; Main Disk Device
+.define mdevKey 0x4108 ; Main Key Device
+.define mdevDisplay 0x410C ; Main Display Device
 
-.define dcharsvec 0x2200 ; Vector for VGA characters showing
+.define dcharsvec 0x4200 ; Vector for VGA characters showing
 
-.define displaychars 0x2800 ; Display Characters
+.define displaychars 0x4800 ; Display Characters
 
 
 /**
 	ENTRY EXECUTION
 */
 /* Setup Stack pointer */
-movi sp, 0x20FC
+movi sp, 0x7FFC
 
 /**
 	INITIALIZES THE INTERRUPTION VECTOR
@@ -131,6 +134,54 @@ movi sp, 0x20FC
 	BASIC INTERRUPT FOR KEYBOARD
 */
 .scope intrKey
+	// Retrieving the interruption vector to register BX
+	mvfst bx
+	rshf bx, 24
+	
+	// Retrieving the port wich requested interruption to register AX
+	mov ax, bx
+	sub ax, 0x80
+	
+	// Waiting for port to send message
+	_:
+		inup ax
+		jr.co @_
+	in dx, ax
+	clo
+	
+	// Storing status to CX
+	mov cx, dx
+	rshf cx, 8
+	and dx, 0xFF
+	and cx, 0xFF
+	
+	// Decoding dx offsets
+	mvrse e1, dx ; e1 = line
+	mov e2, e1 ; e2 = row
+	rshf e1, 4
+	and e2, 0xF
+	
+	// Calculating offset in screen
+	; (line*40 + row)*4 + displaychars
+	mov e3, e1
+	mul e3, 40
+	add e3, e2
+	mul e3, 4
+	add.d e3, displaychars
+	mvres sd, e3 ; Moving result to standard set
+	
+	// Retrieving and updating data
+	ldmd ax, [sd]
+	and.d ax, 0xFFFF
+	jr.onz<cx> @down
+	up:
+		or.d ax, 0xFF0000
+		jr @edown
+	down:
+		or.d ax, 0xC3F00000
+	edown:
+	strd [sd], ax
+	
 	iret
 .endscope
 
@@ -147,17 +198,13 @@ movi sp, 0x20FC
 	// Setup characters vector to display device
 	.scope
 		outi ax, 0x28
-		_1:
-			inus ax
-			jr.co @_1
-		clo
 		outi.d ax, dcharsvec
 		_2:
 			inus ax
 			jr.co @_2
 		clo
 	.endscope
-	// Puting the Display in Video Mode
+	// Puting the Display in Terminal Mode
 	.scope
 		outi ax, 0x23
 		_:
@@ -174,18 +221,32 @@ movi sp, 0x20FC
 		clo
 	.endscope
 	// Video is Ready!
-	// Printing a little string
-	movi sd, displaychars
-	movi ss, HelloStr
-	cprint:
-		ldmb dx, [ss]
-		jr.oez<dx> @ecprint
-		or.d dx, 0x003F0000
-		strd.d [sd], dx
-		add sd, 4
-		inc ss
-		jr @cprint
-	ecprint:
+	// Printing all characters
+	movi ax, 0 ; Offset
+	movi e1, 0 ; Line
+	LineL:
+		movi e2, 0 ; Reset the x offset
+		RowL:
+			// Calculating offset in screen
+			; (line*40 + row)*4 + displaychars
+			mov e3, e1
+			mul e3, 40
+			add e3, e2
+			mul e3, 4
+			add.d e3, displaychars
+			mvres sd, e3 ; Moving result to standard set
+			movi.d dx, 0x003F0000
+			or dx, ax
+			strd.d [sd], dx ; Storing character data to display
+			inc ax ; Advance character index
+			inc e2 ; Advance in row
+			// Proceeds only if is not end of table width
+			cmp e2, 16
+			jr.ne @RowL
+		inc e1 ; Advance in line
+		// Proceeds only if is not end of table height
+		cmp e1, 16
+		jr.ne @LineL
 	jr 0
 .endscope
 

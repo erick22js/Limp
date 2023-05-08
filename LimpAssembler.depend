@@ -44,7 +44,7 @@
 1683024744 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_general.h
 	"db_instructions.h"
 
-1681303302 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
+1683463735 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\db_instructions.h
 	"api.h"
 	"instructions.h"
 
@@ -60,12 +60,12 @@
 1679206190 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\wbuffer.h
 	"file.h"
 
-1681306923 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
+1683464418 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\expression.h
 	"tokener.h"
 	"symbols.h"
 	"parser.h"
 
-1683026719 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
+1683031315 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\instructions.h
 
 1679857553 c:\users\erick\documents\meusprojetos\limp\limpassembler\src\dirhanddler.h
 	"api.h"
