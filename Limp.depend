@@ -1,20 +1,11 @@
 # depslib dependency file v1.0
-1678968783 source:c:\users\erick\documents\meusprojetos\limp\src\main.c
-	<stdio.h>
-	<stdlib.h>
-	"test.h"
+1683203370 source:c:\users\erick\documents\meusprojetos\limp\src\main.c
 	<stdio.h>
 	<stdlib.h>
 	"test.h"
 
-1679580925 c:\users\erick\documents\meusprojetos\limp\header\limp\limp.h
-	<Limp/cpu.h>
-	<Limp/coproc.h>
-	<Limp/mmu.h>
-	<Limp/pci.h>
-	<Limp/peri.h>
-	<Limp/time.h>
-	<Limp/thread.h>
+1683206657 c:\users\erick\documents\meusprojetos\limp\header\limp\limp.h
+	<Limp/emu.h>
 	<Limp/cpu.h>
 	<Limp/coproc.h>
 	<Limp/mmu.h>
@@ -36,23 +27,23 @@
 	<Limp/bus.h>
 	<Limp/bus.h>
 
-1680791703 c:\users\erick\documents\meusprojetos\limp\header\limp\bus.h
+1683548497 c:\users\erick\documents\meusprojetos\limp\header\limp\bus.h
 	<Limp/api.h>
 
-1681386825 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
+1683548254 source:c:\users\erick\documents\meusprojetos\limp\src\limp\cpu.c
 	<Limp/cpu.h>
 	<Limp/coproc.h>
 	<Limp/mmu.h>
 	<Limp/pci.h>
 
-1681388151 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
+1683207941 c:\users\erick\documents\meusprojetos\limp\header\limp\cpu.h
 	<Limp/defines.h>
 	<Limp/bus.h>
 	<Limp/alu.h>
 	<Limp/instructions/table.h>
 	<Limp/peri.h>
 
-1682686146 c:\users\erick\documents\meusprojetos\limp\src\test.h
+1683548650 c:\users\erick\documents\meusprojetos\limp\src\test.h
 	<Limp/limp.h>
 	<LimpExtra/extra.h>
 	"gui.h"
@@ -124,7 +115,7 @@
 	<Limp/defines.h>
 	<Limp/defines.h>
 
-1681386205 c:\users\erick\documents\meusprojetos\limp\header\limp\defines.h
+1683548474 c:\users\erick\documents\meusprojetos\limp\header\limp\defines.h
 	<Limp/api.h>
 	<Limp/bus.h>
 
@@ -177,7 +168,7 @@
 	<string.h>
 	<string.h>
 
-1682688625 c:\users\erick\documents\meusprojetos\limp\src\gui.h
+1683548256 c:\users\erick\documents\meusprojetos\limp\src\gui.h
 	<windows.h>
 	<commctrl.h>
 	<wchar.h>
@@ -897,20 +888,16 @@
 	<Limp/defines.h>
 	<Limp/coproc.h>
 
-1680170924 c:\users\erick\documents\meusprojetos\limp\header\limp\pci.h
-	<Limp/defines.h>
-	<Limp/peri.h>
+1683548275 c:\users\erick\documents\meusprojetos\limp\header\limp\pci.h
 	<Limp/defines.h>
 	<Limp/peri.h>
 
-1680616046 c:\users\erick\documents\meusprojetos\limp\header\limp\peri.h
+1683551711 c:\users\erick\documents\meusprojetos\limp\header\limp\peri.h
 	<Limp/defines.h>
 	<Limp/time.h>
 	<Limp/thread.h>
 
-1680095780 source:c:\users\erick\documents\meusprojetos\limp\src\limp\pci.c
-	<Limp/pci.h>
-	<Limp/cpu.h>
+1683290659 source:c:\users\erick\documents\meusprojetos\limp\src\limp\pci.c
 	<Limp/pci.h>
 	<Limp/cpu.h>
 
@@ -1062,7 +1049,7 @@
 	<Limp/defines.h>
 	<Limp/instructions/table.h>
 
-1681296817 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode01.c
+1683290386 source:c:\users\erick\documents\meusprojetos\limp\src\limp\instructions\opcode01.c
 	<Limp/instructions/opcode01.h>
 	<Limp/cpu.h>
 
@@ -1104,9 +1091,7 @@
 	<Limp/instructions/opcode1D.h>
 	<Limp/cpu.h>
 
-1680168638 source:c:\users\erick\documents\meusprojetos\limp\src\limp\peri.c
-	<Limp/peri.h>
-	<Limp/pci.h>
+1683285760 source:c:\users\erick\documents\meusprojetos\limp\src\limp\peri.c
 	<Limp/peri.h>
 	<Limp/pci.h>
 
@@ -1132,11 +1117,10 @@
 	<time.h>
 	<Limp/time.h>
 
-1682680483 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_stdout.c
+1683551907 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_stdout.c
 	<LimpExtra/peri_stdout.h>
 
-1680168821 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_stdout.h
-	<Limp/limp.h>
+1683285870 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_stdout.h
 	<Limp/limp.h>
 
 1682598301 c:\users\erick\documents\meusprojetos\limp\header\limpextra\extra.h
@@ -1147,10 +1131,13 @@
 	<LimpExtra/peri_vga.h>
 	<LimpExtra/peri_key.h>
 
-1680791815 c:\users\erick\documents\meusprojetos\limp\header\limpextra\bus_std.h
+1683550255 c:\users\erick\documents\meusprojetos\limp\header\limpextra\bus_std.h
 	<Limp/limp.h>
 
-1680791831 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\bus_std.c
+1683552595 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\bus_std.c
+	<stdio.h>
+	<LimpExtra/bus_std.h>
+	<stdio.h>
 	<LimpExtra/bus_std.h>
 
 1682681072 c:\users\erick\documents\meusprojetos\limp\header\windows\display.h
@@ -1160,13 +1147,11 @@
 1682681524 source:c:\users\erick\documents\meusprojetos\limp\src\windows\display.c
 	<Windows/display.h>
 
-1680168684 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_hd.h
-	<Limp/limp.h>
-	<Limp/bus.h>
+1683293469 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_hd.h
 	<Limp/limp.h>
 	<Limp/bus.h>
 
-1682680489 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_hd.c
+1683551893 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_hd.c
 	<LimpExtra/peri_hd.h>
 
 1680093565 source:c:\users\erick\documents\meusprojetos\limp\src\limp\api.c
@@ -1321,22 +1306,28 @@
 	<Limp/instructions/opcode3C.h>
 	<Limp/cpu.h>
 
-1682686359 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_vga.h
+1683456478 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_vga.h
 	<Limp/limp.h>
 	<Limp/bus.h>
 	<Windows/display.h>
 
-1682689228 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_vga.c
+1683552214 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_vga.c
 	<LimpExtra/peri_vga.h>
 	"vga_font.h"
 
-1682598513 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_key.h
+1683460048 c:\users\erick\documents\meusprojetos\limp\header\limpextra\peri_key.h
 	<Limp/limp.h>
 	<Limp/bus.h>
 	<LimpExtra/peri_vga.h>
 
-1682689301 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_key.c
+1683551902 source:c:\users\erick\documents\meusprojetos\limp\src\limpextra\peri_key.c
 	<LimpExtra/peri_key.h>
 
 1682683898 c:\users\erick\documents\meusprojetos\limp\src\limpextra\vga_font.h
+
+1683207775 c:\users\erick\documents\meusprojetos\limp\header\limp\emu.h
+	<Limp/defines.h>
+
+1683207796 source:c:\users\erick\documents\meusprojetos\limp\src\limp\emu.c
+	<Limp/emu.h>
 

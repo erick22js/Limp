@@ -48,13 +48,6 @@ Bool LPeri_unplug(LPeri *peri){
 	}
 }
 
-Bool LPeri_inUpdtd(LPeri *peri){
-	return LPci_peri_readUpdtd(peri->m_pci, peri->port);
-}
-
-Uint32 LPeri_in(LPeri *peri){
-	return LPci_peri_read(peri->m_pci, peri->port);
-}
 
 void LPeri_out(LPeri *peri, Uint32 data){
 	LPci_peri_write(peri->m_pci, peri->port, data);

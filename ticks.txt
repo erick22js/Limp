@@ -1,0 +1,6 @@
+
+SECOND = 262144 STAMPs
+
+CPU STAMP = 2 STAMPs
+
+

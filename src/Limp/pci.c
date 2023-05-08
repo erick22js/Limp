@@ -29,8 +29,11 @@ Uint32 LPci_cpu_read(LPci *m_pci, Uint8 port){
 }
 
 void LPci_cpu_write(LPci *m_pci, Uint8 port, Uint32 data){
+	LPeri *peri = m_pci->io_signals[port&0x7F].peripherical;
 	m_pci->io_signals[port&0x7F].input = data;
-	m_pci->io_signals[port&0x7F].input_chg = TRUE;
+	if(peri && peri->send){
+		peri->send(peri, data);
+	}
 }
 
 
@@ -68,15 +71,6 @@ void LPci_peri_unplug(LPci *m_pci, Uint8 port){
 	m_pci->io_signals[port].output = 0;
 }
 
-
-Bool LPci_peri_readUpdtd(LPci *m_pci, Uint8 port){
-	return m_pci->io_signals[port&0x7F].input_chg;
-}
-
-Uint32 LPci_peri_read(LPci *m_pci, Uint8 port){
-	m_pci->io_signals[port&0x7F].input_chg = FALSE;
-	return m_pci->io_signals[port&0x7F].input;
-}
 
 void LPci_peri_write(LPci *m_pci, Uint8 port, Uint32 data){
 	m_pci->io_signals[port&0x7F].output_chg = TRUE;

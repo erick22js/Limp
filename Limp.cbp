@@ -50,6 +50,7 @@
 		<Unit filename="header/Limp/coproc.h" />
 		<Unit filename="header/Limp/cpu.h" />
 		<Unit filename="header/Limp/defines.h" />
+		<Unit filename="header/Limp/emu.h" />
 		<Unit filename="header/Limp/instructions/format.h" />
 		<Unit filename="header/Limp/instructions/opcode01.h" />
 		<Unit filename="header/Limp/instructions/opcode02.h" />
@@ -142,6 +143,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/cpu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Limp/emu.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Limp/instructions/opcode01.c">

@@ -580,14 +580,14 @@ struct GuiReg{
 	{L"SP", 6},
 	{L"SS", 7},
 	{L"SD", 8},
-	{L"R0", 9},
-	{L"R1", 10},
-	{L"R2", 11},
-	{L"R3", 12},
-	{L"R4", 13},
-	{L"R5", 14},
-	{L"R6", 15},
-	{L"R7", 16},
+	{L"E0", 9},
+	{L"E1", 10},
+	{L"E2", 11},
+	{L"E3", 12},
+	{L"E4", 13},
+	{L"E5", 14},
+	{L"E6", 15},
+	{L"E7", 16},
 	{L"PC", 17},
 	{L"FD", 18},
 };
@@ -740,7 +740,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		/* Eventos dispachados pelos elementos */
 		case WM_COMMAND:{
 			if(LOWORD(wParam) == id_btn_stop){
-				LCpu_stop(&gcpu);
+				emu_stopped = TRUE;//LCpu_stop(&gcpu);
 				gui_unhandle = FALSE;
 				EnableWindow(ui_btn_stop, FALSE);
 				EnableWindow(ui_btn_start, TRUE);
@@ -758,7 +758,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				lock = FALSE;
 			}
 			if(LOWORD(wParam) == id_btn_start){
-				LCpu_execute(&gcpu);
+				emu_stopped = FALSE;//LCpu_execute(&gcpu);
 				gui_unhandle = TRUE;
 				EnableWindow(ui_btn_stop, TRUE);
 				EnableWindow(ui_btn_start, FALSE);
@@ -965,7 +965,7 @@ LRESULT CALLBACK guiProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	
 	if((GetKeyState(1)&0x80)||(GetKeyState(2)&0x80)){
 		POINT p;
-		if(GetCursorPos(&p)){
+		if(GetCursorPos(&p)&&(GetForegroundWindow()==hwnd)){
 			ScreenToClient(hwnd, &p);
 			if((p.x>=420)&&(p.x<804)&&(p.y>=128)&&(p.y<416)&&(!_gui_dialog_alreadyopen)){
 				Int x = (p.x-420)/24;
@@ -1011,6 +1011,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	setup();
 	init();
 	
+	guiset_mem_baseadr = gbus.entry_jmp;
+	
 	gui_refresh();
 	
 	/*
@@ -1021,7 +1023,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		/*WinRenderizeDisplay(&dis);*/
 	}
 	
 	close();

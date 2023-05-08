@@ -27,12 +27,39 @@ const LIPInterruption LI_INT_BIOSRESERVED2 = {15};
 
 
 /**
+	EMULATION FUNCTIONS
+*/
+
+void LCpu_emuStamp(void *obj){
+	LCpu *m_cpu = obj;
+	
+	for(Int i=0; i<64; i++){
+		if(!m_cpu->hs.halt){
+			LCpu_step(m_cpu);
+		}
+	}
+}
+
+void LCpu_emuStep(void *obj){
+	LCpu *m_cpu = obj;
+	
+	if(!m_cpu->hs.halt){
+		LCpu_step(m_cpu);
+	}
+}
+
+
+/**
 	OBJECT FUNCTIONS
 */
 
 
 void LCpu_init(LCpu *m_cpu, LBus *m_bus){
 	memset(m_cpu, 0, sizeof(LCpu));
+	
+	/* Sets emulation methods */
+	m_cpu->emu.emuStamp = LCpu_emuStamp;
+	m_cpu->emu.emuStep = LCpu_emuStep;
 	
 	/* Sets the default cycling to 16MHz */
 	m_cpu->cy.cpb_set = 128;
@@ -481,11 +508,11 @@ void LCpu_reset(LCpu *m_cpu){
 	m_cpu->hs.waits = FALSE;
 	
 	if(m_cpu->mmu){
-		m_cpu->sregs.lpc = m_cpu->io.bus->start_jmp;
-		m_cpu->sregs.epc = m_cpu->io.bus->start_jmp;
+		m_cpu->sregs.lpc = m_cpu->io.bus->entry_jmp;
+		m_cpu->sregs.epc = m_cpu->io.bus->entry_jmp;
 	}
 	
-	m_cpu->hs.halt = TRUE;
+	//m_cpu->hs.halt = TRUE;
 }
 
 void LCpu_jumpAbs(LCpu *m_cpu, Uint32 addr){
@@ -600,6 +627,7 @@ Uint32 LICpu_process(void* arg){
 		phase_i += m_cpu->cy.bpp_set;
 		/* Process each phase (if not halt) */
 		while((phase_i>0) && (!halted)){
+			m_cpu->hs.halt = FALSE;
 			/* Between each busy state, handdle any external requested interruption */
 			while(m_cpu->hs.ext_req);
 			
@@ -642,22 +670,31 @@ Uint32 LICpu_process(void* arg){
 }
 
 void LCpu_execute(LCpu *m_cpu){
+	m_cpu->hs.halt = FALSE;
+	/* // Legacy Threaded Code
 	if(m_cpu->hs.halt){
 		m_cpu->hs.halt = FALSE;
 		if(m_cpu->peri.t_exec==0){
 			m_cpu->peri.t_exec = LThread_create(LICpu_process, m_cpu);
 		}
+		while(!m_cpu->hs.busy){
+			m_cpu->hs.halt = FALSE;
+		};
 	}
+	*/
 }
 
 void LCpu_stop(LCpu *m_cpu){
+	m_cpu->hs.halt = TRUE;
+	/* // Legacy Threaded Code
 	if(!m_cpu->hs.halt){
 		m_cpu->hs.halt = TRUE;
 		if(m_cpu->peri.t_exec!=0){
 			while(m_cpu->hs.busy){
-				//m_cpu->hs.halt = TRUE;
+				m_cpu->hs.halt = TRUE;
 			};
 		}
 	}
+	*/
 }
 

@@ -2,9 +2,221 @@
 
 
 
+void LPHd_emuStamp(void *obj){
+	LPHd *peri = obj;
+	
+	switch(peri->peri.state){
+		case 0:{
+			if(LPeri_interrupt(&peri->peri)){
+				peri->peri.state = 1; // Exits the initial state
+			}
+		}
+		break;
+		
+		case 0x14:{
+			if(peri->peri.acu[1]){
+				long seek = peri->peri.acu[0];
+				seek *= 1024;
+				peri->seek = seek%peri->img_size;
+				fseek(peri->img, peri->seek, SEEK_SET);
+				LPeri_out(&peri->peri, 1);
+				peri->peri.state = 1;
+			}
+		}
+		break;
+		case 0x15:{
+			if(peri->peri.acu[1]){
+				long seek = peri->peri.acu[0];
+				seek *= 1024;
+				peri->seek += seek;
+				peri->seek %= peri->img_size;
+				fseek(peri->img, peri->seek, SEEK_CUR);
+				LPeri_out(&peri->peri, 1);
+				peri->peri.state = 1;
+			}
+		}
+		break;
+		
+		case 0x1A:{
+			long pointer = peri->peri.acu[0];
+			pointer = pointer*1024 + 1024-peri->peri.acu[2];
+			for(Int i=0; i<128&&peri->peri.acu[1]&&peri->peri.acu[2]; i++){
+				Uint8 data = peri->peri.bus->read8(peri->peri.bus, pointer);
+				if(peri->seek>=peri->img_size){
+					peri->seek %= peri->img_size;
+					fseek(peri->img, peri->seek, SEEK_SET);
+				}
+				fputc(data, peri->img);
+				pointer++;
+				peri->seek++;
+				peri->peri.acu[2]--;
+			}
+			if(!peri->peri.acu[2]){
+				peri->peri.acu[2] = 1024;
+				peri->peri.acu[1]--;
+				peri->peri.acu[0]++;
+			}
+			if(!peri->peri.acu[1]){
+				LPeri_out(&peri->peri, 1);
+				peri->peri.state = 1;
+			}
+		}
+		break;
+		
+		case 0x1E:{
+			long pointer = peri->peri.acu[0];
+			pointer = pointer*1024 + 1024-peri->peri.acu[2];
+			for(Int i=0; i<128&&peri->peri.acu[1]&&peri->peri.acu[2]; i++){
+				Uint8 data = fgetc(peri->img);
+				if(peri->seek>=peri->img_size){
+					peri->seek %= peri->img_size;
+					fseek(peri->img, peri->seek, SEEK_SET);
+				}
+				peri->peri.bus->write8(peri->peri.bus, pointer, data);
+				pointer++;
+				peri->seek++;
+				peri->peri.acu[2]--;
+			}
+			if(!peri->peri.acu[2]){
+				peri->peri.acu[2] = 1024;
+				peri->peri.acu[1]--;
+				peri->peri.acu[0]++;
+			}
+			if(!peri->peri.acu[1]){
+				LPeri_out(&peri->peri, 1);
+				peri->peri.state = 1;
+			}
+		}
+		break;
+	}
+}
+
+
+void LPHd_send(LPeri *peri, Uint32 data){
+	switch(peri->state){
+		case 1:{ // The Lobby state
+			switch(data){
+				case 0x10:{ // Info
+					LPeri_out(peri, 2);
+				}
+				break;
+				case 0x11:{ // Brand
+					LPeri_out(peri, 0);
+				}
+				break;
+				case 0x12:{ // Branch
+					LPeri_out(peri, 0);
+				}
+				break;
+				case 0x13:{ // Version
+					LPeri_out(peri, 0);
+				}
+				break;
+				
+				case 0x14:{ // Seek set the disk
+					/*
+						[0] = offset
+						[1] = status
+					*/
+					peri->acu[1] = 0;
+					peri->state = 0x14;
+				}
+				break;
+				case 0x15:{ // Seek current the disk
+					/*
+						[0] = offset
+						[1] = status
+					*/
+					peri->acu[1] = 0;
+					peri->state = 0x15;
+				}
+				break;
+				case 0x18:{ // Sends a pointer to memory and size of writing
+					/*
+						[0] = pointer (in 1KB)
+						[1] = size (in 1KB)
+						[2] = move offset
+					*/
+					peri->state = 0x18;
+				}
+				break;
+				case 0x1C:{ // Sends a pointer to memory and size of reading
+					/*
+						[0] = pointer (in 1KB)
+						[1] = size (in 1KB)
+						[2] = move offset
+					*/
+					peri->state = 0x1C;
+				}
+				break;
+			}
+		}
+		break;
+		
+		case 0x14:{ // Seek set the disk
+			if(!peri->acu[1]){
+				peri->acu[0] = data;
+				peri->acu[1] = 1;
+			}
+		}
+		break;
+		case 0x15:{ // Seek current the disk
+			if(!peri->acu[1]){
+				peri->acu[0] = data;
+				peri->acu[1] = 1;
+			}
+		}
+		break;
+		
+		case 0x18:{
+			peri->acu[0] = data;
+			peri->state = 0x19;
+		}
+		break;
+		case 0x19:{
+			peri->acu[1] = data;
+			peri->acu[2] = 1024;
+			peri->state = 0x1A;
+		}
+		break;
+		
+		case 0x1C:{
+			peri->acu[0] = data;
+			peri->state = 0x1D;
+		}
+		break;
+		case 0x1D:{
+			peri->acu[1] = data;
+			peri->acu[2] = 1024;
+			peri->state = 0x1E;
+		}
+		break;
+	}
+}
+
+
+Uint8 LPHd_readByte(LPeri *peri, Uint32 offs){
+	LPHd *hd = peri->api_data;
+	
+	Uint32 mem[4] = {
+		hd->img_size>>10
+	};
+	if(offs<sizeof(mem)){
+		return ((Uint8*)mem)[offs];
+	}
+	else{
+		return 0;
+	}
+}
+
+void LPHd_writeByte(LPeri *peri, Uint32 offs, Uint8 data){
+	
+}
+
 void LPHd_init(LPHd *peri, LBus *bus, Char* img_path){
 	memset(peri, 0, sizeof(LPHd));
 	LPeri_init(&peri->peri, bus);
+	peri->peri.api_data = peri;
 	
 	/* Loading the Storage Image */
 	Open: {
@@ -24,153 +236,11 @@ void LPHd_init(LPHd *peri, LBus *bus, Char* img_path){
 			goto Open;
 		}
 	}
-}
-
-
-Uint32 LIPHd_process(void* arg){
-	LPHd *peri = arg;
 	
-	while(!LPeri_interrupt(&peri->peri));
-	Log("Hard Disk did it interruption!\n");
-	
-	while(peri->active){
-		if(LPeri_inUpdtd(&peri->peri)){
-			Uint32 ir = LPeri_in(&peri->peri);
-			LPeri_out(&peri->peri, 1);
-			switch(ir){
-				case 0x10:{ // Type
-					LPeri_out(&peri->peri, 2);
-				}
-				break;
-				case 0x11:{ // Brand
-					LPeri_out(&peri->peri, 0);
-				}
-				break;
-				case 0x12:{ // Branch
-					LPeri_out(&peri->peri, 0);
-				}
-				break;
-				case 0x13:{ // Version
-					LPeri_out(&peri->peri, 0);
-				}
-				break;
-				
-				case 0x14:{ // Seek set the disk
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 offset = LPeri_in(&peri->peri);
-					peri->seek = offset%peri->img_size;
-					fseek(peri->img, peri->seek, SEEK_SET);
-					LPeri_out(&peri->peri, 1);
-				}
-				break;
-				case 0x15:{ // Seek current the disk
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 offset = LPeri_in(&peri->peri);
-					peri->seek += offset;
-					peri->seek %= peri->img_size;
-					fseek(peri->img, peri->seek, SEEK_SET);
-					LPeri_out(&peri->peri, 1);
-				}
-				break;
-				case 0x18:{ // Sends a stream of u8 chars
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 size = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(size){
-						// Retrieves the input and sends confirm message
-						while(!LPeri_inUpdtd(&peri->peri)){};
-						Uint32 chr = LPeri_in(&peri->peri);
-						LPeri_out(&peri->peri, 1);
-						
-						// Put character and updates stream
-						fputc(chr, peri->img);
-						peri->seek = (peri->seek+1)%peri->img_size;
-						fseek(peri->img, peri->seek, SEEK_SET);
-						fflush(peri->img);
-						size--;
-					}
-				}
-				break;
-				case 0x19:{ // Reads a stream of u8 chars
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 size = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(size){
-						// Confirms the send message
-						while(!LPeri_inUpdtd(&peri->peri)){};
-						LPeri_in(&peri->peri);
-						
-						// Retrieves the character from stream and outputs
-						Uint32 chr = fgetc(peri->img);
-						LPeri_out(&peri->peri, chr);
-						peri->seek = (peri->seek+1)%peri->img_size;
-						fseek(peri->img, peri->seek, SEEK_SET);
-						size--;
-					}
-				}
-				break;
-				case 0x1C:{ // Sends a pointer to memory and size of writing
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 pointer = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 size = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(size){
-						Uint32 chr = peri->peri.bus->read8(peri->peri.bus, pointer);
-						
-						// Put character and updates stream
-						fputc(chr, peri->img);
-						peri->seek = (peri->seek+1)%peri->img_size;
-						fseek(peri->img, peri->seek, SEEK_SET);
-						pointer++;
-						size--;
-					}
-					fflush(peri->img);
-					LPeri_out(&peri->peri, 1);
-				}
-				break;
-				case 0x1D:{ // Sends a pointer to memory and size of reading
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 pointer = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(!LPeri_inUpdtd(&peri->peri)){};
-					Uint32 size = LPeri_in(&peri->peri);
-					LPeri_out(&peri->peri, 1);
-					
-					while(size){
-						// Put character and updates stream
-						Uint32 chr = fgetc(peri->img);
-						peri->seek = (peri->seek+1)%peri->img_size;
-						fseek(peri->img, peri->seek, SEEK_SET);
-						
-						peri->peri.bus->write8(peri->peri.bus, pointer, chr);
-						
-						pointer++;
-						size--;
-					}
-					fflush(peri->img);
-					LPeri_out(&peri->peri, 1);
-				}
-				break;
-			}
-		}
-	}
-	
-	LThread_free(peri->peri.t_exec);
-	
-	return 0;
-}
-
-void LPHd_execute(LPHd *peri){
-	peri->active = TRUE;
-	if(!peri->peri.t_exec){
-		peri->peri.t_exec = LThread_create(&LIPHd_process, peri);
-	}
+	/* Setup Methods */
+	peri->peri.emu.emuStamp = LPHd_emuStamp;
+	peri->peri.send = LPHd_send;
+	peri->peri.readByte = LPHd_readByte;
+	peri->peri.writeByte = LPHd_writeByte;
 }
 
