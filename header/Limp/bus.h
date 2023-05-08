@@ -4,10 +4,15 @@
 #include <Limp/api.h>
 
 
+struct LPci;
+typedef struct LPci LPci;
+
 typedef struct LBus{
 	void* datap;
 	
-	Uint32 start_jmp;
+	Uint32 entry_jmp;
+	
+	LPci *pci;
 	
 	Uint8 (*read8)(struct LBus *bus, Uint32 addr);
 	Uint16 (*read16)(struct LBus *bus, Uint32 addr);

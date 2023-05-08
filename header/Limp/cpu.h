@@ -9,6 +9,7 @@
 
 
 typedef struct LCpu{
+	LEmulable emu;
 	
 	union{
 		/* Names */
@@ -33,9 +34,9 @@ typedef struct LCpu{
 		
 		/* Basis Types */
 		/* Has blank spaced register for memory access security */
-		Uint32 u[16];
-		Sint32 s[16];
-		Float32 f[16];
+		Uint32 u[17];
+		Sint32 s[17];
+		Float32 f[17];
 	}regs;
 	
 	/* Extra Registers */

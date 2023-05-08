@@ -13,7 +13,5 @@ typedef struct LPStdout{
 
 void LPStdout_init(LPStdout *peri, LBus *bus, FILE *file);
 
-void LPStdout_execute(LPStdout *peri);
-
 
 #endif // limpextra_peri_stdout_h

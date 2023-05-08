@@ -1,6 +1,7 @@
 #ifndef limp_h
 #define limp_h
 
+#include <Limp/emu.h>
 #include <Limp/cpu.h>
 #include <Limp/coproc.h>
 #include <Limp/mmu.h>

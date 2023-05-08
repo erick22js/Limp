@@ -5,6 +5,11 @@
 #include <Limp/bus.h>
 
 
+typedef struct LEmulable{
+	void (*emuStamp)(void* obj);
+	void (*emuStep)(void* obj);
+}LEmulable;
+
 struct LCpu;
 typedef struct LCpu LCpu;
 
@@ -13,9 +18,6 @@ typedef struct LCoproc LCoproc;
 
 struct LMmu;
 typedef struct LMmu LMmu;
-
-struct LPci;
-typedef struct LPci LPci;
 
 struct LPeri;
 typedef struct LPeri LPeri;

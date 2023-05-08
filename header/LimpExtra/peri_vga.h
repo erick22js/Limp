@@ -14,14 +14,21 @@ typedef struct LPVga{
 	
 	Bool enable_render;
 	Bool pixel_mode;
+	Uint32 vector_control;
+	/*
 	Int vector_terminal;
 	Int vector_pixel;
+	*/
+	
+	// Process control registers
+	Uint32 ctrl_l;
+	Uint32 ctrl_r;
+	Uint32 ctrl_char;
+	Uint32 ctrl_pi;
 }LPVga;
 
 
-void LPVga_init(LPVga *peri, LBus *bus, Int wid, Int hei, Int wwid, Int whei);
-
-void LPVga_execute(LPVga *peri);
+void LPVga_init(LPVga *peri, LBus *bus, Int wwid, Int whei);
 
 
 #endif // limpextra_peri_vga_h

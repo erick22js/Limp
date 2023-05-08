@@ -11,12 +11,13 @@ typedef struct LPKey{
 	LPeri peri;
 	Bool active;
 	LPVga *vga;
+	
+	Uint8 vkeys[256];
+	Uint8 vi;
 }LPKey;
 
 
 void LPKey_init(LPKey *peri, LBus *bus, LPVga *vga);
-
-void LPKey_execute(LPKey *peri);
 
 
 #endif // limpextra_peri_key_h
